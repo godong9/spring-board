@@ -33,6 +33,9 @@ public class UserDao {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "fb_id")
+    private String fbId;
+
     @Column(name = "password")
     private String password;
 

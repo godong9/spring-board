@@ -42,9 +42,23 @@ public class UserServiceTests {
     }
 
     @Test
-    public void success_save_insert() {
+    public void success_save_insert_with_password() {
         // given
         UserDto testUserDto = getTestUserDto();
+
+        // when
+        UserDao testUserDao = userService.save(testUserDto);
+
+        // then
+        assertUserDtoAndUserDao(testUserDto, testUserDao);
+    }
+
+    @Test
+    public void success_save_insert_with_fbId() {
+        // given
+        UserDto testUserDto = getTestUserDto();
+        testUserDto.setPassword(null);
+        testUserDto.setFbId("fbtest");
 
         // when
         UserDao testUserDao = userService.save(testUserDto);
@@ -106,6 +120,7 @@ public class UserServiceTests {
         assertEquals(userDto.getEmail(), userDao.getEmail());
         assertEquals(userDto.getPassword(), userDao.getPassword());
         assertEquals(userDto.getProfileImg(), userDao.getProfileImg());
+        assertEquals(userDto.getFbId(), userDao.getFbId());
         assertNotNull(userDao.getCreatedAt());
         assertNotNull(userDao.getUpdatedAt());
     }

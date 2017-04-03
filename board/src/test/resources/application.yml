@@ -3,6 +3,9 @@ server:
   context-path: /
 
 spring:
+  jackson:
+    property-naming-strategy: com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy
+    deserialization.fail-on-unknown-properties: false
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
   jpa:

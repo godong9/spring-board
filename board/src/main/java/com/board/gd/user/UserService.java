@@ -24,6 +24,7 @@ public class UserService {
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .email(userDto.getEmail())
+                .fbId(userDto.getFbId())
                 .password(userDto.getPassword())
                 .profileImg(userDto.getProfileImg())
                 .build();
