@@ -14,8 +14,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-
-
     public UserDao findOne(Integer id) {
         return userRepository.findOne(id);
     }
@@ -30,7 +28,7 @@ public class UserService {
                 .profileImg(userDto.getProfileImg())
                 .build();
 
-        return userRepository.saveAndFlush(userDao);
+        return userRepository.save(userDao);
     }
 
     public List<UserDao> findAll() {

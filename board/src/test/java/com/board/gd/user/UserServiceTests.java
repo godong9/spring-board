@@ -42,7 +42,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void success_save() {
+    public void success_save_insert() {
         // given
         UserDto testUserDto = getTestUserDto();
 
@@ -51,6 +51,23 @@ public class UserServiceTests {
 
         // then
         assertUserDtoAndUserDao(testUserDto, testUserDao);
+    }
+
+    @Test
+    public void success_save_update() {
+        // given
+        UserDto testUserDto = getTestUserDto();
+        String changedName = "change";
+
+        // when
+        UserDao testUserDao = userService.save(testUserDto);
+        testUserDto.setId(testUserDao.getId());
+        testUserDto.setName(changedName);
+        UserDao changedTestUserDao = userService.save(testUserDto);
+
+        // then
+        assertEquals(testUserDao.getId(), changedTestUserDao.getId());
+        assertEquals(changedTestUserDao.getName(), changedName);
     }
 
     @Test
