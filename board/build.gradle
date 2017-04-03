@@ -24,5 +24,20 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-tomcat')
+	compile('org.springframework.boot:spring-boot-starter-jdbc')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-devtools')
+	compile('mysql:mysql-connector-java')
+	compile('org.projectlombok:lombok')
+	compile('com.google.guava:guava:21.0')
+	compile('com.getsentry.raven:raven-logback:7.8.3')
+	compile('org.apache.commons:commons-lang3:3.5')
+
+	compile('com.querydsl:querydsl-core')
+	compile('com.querydsl:querydsl-jpa')
+	compile('com.querydsl:querydsl-apt')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
