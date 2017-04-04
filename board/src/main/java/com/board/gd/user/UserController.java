@@ -22,6 +22,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * @api {post} /users/signup Request User signup
+     * @apiName UserSignup
+     * @apiGroup User
+     *
+     * @apiParam {String} name 이름
+     * @apiParam {String} email 이메일
+     * @apiParam {String} password 패스워드
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {Object} user 유저 객체
+     * @apiSuccess {String} user.id 유저 id
+     * @apiSuccess {String} user.name 유저 이름
+     */
     @PostMapping("/users/signup")
     public UserResult userSignup(@RequestBody @Valid UserForm userForm) {
         User user = userService.save(modelMapper.map(userForm, UserDto.class));

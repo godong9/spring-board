@@ -21,6 +21,14 @@ repositories {
 	mavenCentral()
 }
 
+task generateJavadoc(type: Javadoc) {
+	options.addStringOption("locale","ko_KR")
+	options.addStringOption("encoding","UTF-8")
+	options.addStringOption("charset","UTF-8")
+	options.addStringOption("docencoding","UTF-8")
+
+	source = sourceSets.main.allJava
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
