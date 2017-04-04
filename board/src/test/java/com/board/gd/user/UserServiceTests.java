@@ -22,7 +22,6 @@ public class UserServiceTests {
     @Autowired
     private UserService userService;
 
-
     @Before
     public void setUp() {
         userService.deleteAll();

@@ -40,6 +40,6 @@ public class UserController {
     @PostMapping("/users/signup")
     public UserResult userSignup(@RequestBody @Valid UserForm userForm) {
         User user = userService.save(modelMapper.map(userForm, UserDto.class));
-        return UserResult.from(user, "success");
+        return UserResult.from(user, null);
     }
 }
