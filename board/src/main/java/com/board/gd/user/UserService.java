@@ -14,25 +14,27 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDao findOne(Integer id) {
+    public User findOne(Integer id) {
         return userRepository.findOne(id);
     }
 
     @Transactional
-    public UserDao save(UserDto userDto) {
-        UserDao userDao = UserDao.builder()
+    public User save(UserDto userDto) {
+        return userRepository.save(User.builder()
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .fbId(userDto.getFbId())
                 .password(userDto.getPassword())
                 .profileImg(userDto.getProfileImg())
-                .build();
-
-        return userRepository.save(userDao);
+                .build());
     }
 
-    public List<UserDao> findAll() {
+    public long count() {
+        return userRepository.count();
+    }
+
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 

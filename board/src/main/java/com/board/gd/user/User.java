@@ -1,5 +1,6 @@
 package com.board.gd.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 @EntityListeners({AuditingEntityListener.class})
-public class UserDao {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -33,20 +34,24 @@ public class UserDao {
     @Column(name = "email")
     private String email;
 
+    @JsonIgnore
     @Column(name = "fb_id")
     private String fbId;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Column(name = "profile_img")
     private String profileImg;
 
+    @JsonIgnore
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonIgnore
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable=false)

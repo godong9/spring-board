@@ -32,14 +32,28 @@ public class UserServiceTests {
     public void success_findOne() {
         // given
         UserDto testUserDto = getTestUserDto();
-        UserDao testUserDao = userService.save(testUserDto);
+        User testUser = userService.save(testUserDto);
 
         // when
-        UserDao userDao = userService.findOne(testUserDao.getId());
+        User user = userService.findOne(testUser.getId());
 
         // then
-        assertUserDtoAndUserDao(testUserDto, userDao);
+        assertUserDtoAndUserDao(testUserDto, user);
     }
+
+    @Test
+    public void fail_findOne() {
+        // given
+        UserDto testUserDto = getTestUserDto();
+        User testUser = userService.save(testUserDto);
+
+        // when
+        User user = userService.findOne(-1);
+
+        // then
+        assertEquals(user, null);
+    }
+
 
     @Test
     public void success_save_insert_with_password() {
@@ -47,10 +61,10 @@ public class UserServiceTests {
         UserDto testUserDto = getTestUserDto();
 
         // when
-        UserDao testUserDao = userService.save(testUserDto);
+        User testUser = userService.save(testUserDto);
 
         // then
-        assertUserDtoAndUserDao(testUserDto, testUserDao);
+        assertUserDtoAndUserDao(testUserDto, testUser);
     }
 
     @Test
@@ -61,10 +75,10 @@ public class UserServiceTests {
         testUserDto.setFbId("fbtest");
 
         // when
-        UserDao testUserDao = userService.save(testUserDto);
+        User testUser = userService.save(testUserDto);
 
         // then
-        assertUserDtoAndUserDao(testUserDto, testUserDao);
+        assertUserDtoAndUserDao(testUserDto, testUser);
     }
 
     @Test
@@ -74,14 +88,40 @@ public class UserServiceTests {
         String changedName = "change";
 
         // when
-        UserDao testUserDao = userService.save(testUserDto);
-        testUserDto.setId(testUserDao.getId());
+        User testUser = userService.save(testUserDto);
+        testUserDto.setId(testUser.getId());
         testUserDto.setName(changedName);
-        UserDao changedTestUserDao = userService.save(testUserDto);
+        User changedTestUser = userService.save(testUserDto);
 
         // then
-        assertEquals(testUserDao.getId(), changedTestUserDao.getId());
-        assertEquals(changedTestUserDao.getName(), changedName);
+        assertEquals(testUser.getId(), changedTestUser.getId());
+        assertEquals(changedTestUser.getName(), changedName);
+    }
+
+    @Test
+    public void success_count_0() {
+        // given
+
+        // when
+        Long userCount = userService.count();
+
+        // then
+        assertEquals(Math.toIntExact(userCount), 0);
+    }
+
+    @Test
+    public void success_count_2() {
+        // given
+        UserDto testUserDto1 = getTestUserDto();
+        UserDto testUserDto2 = getTestUserDto();
+        userService.save(testUserDto1);
+        userService.save(testUserDto2);
+
+        // when
+        Long userCount = userService.count();
+
+        // then
+        assertEquals(Math.toIntExact(userCount), 2);
     }
 
     @Test
@@ -93,10 +133,10 @@ public class UserServiceTests {
         userService.save(testUserDto2);
 
         // when
-        List<UserDao> testUserDaoList = userService.findAll();
+        List<User> testUserList = userService.findAll();
 
         // then
-        assertEquals(testUserDaoList.size(), 2);
+        assertEquals(testUserList.size(), 2);
     }
 
     @Test
@@ -111,18 +151,18 @@ public class UserServiceTests {
         userService.deleteAll();
 
         // then
-        List<UserDao> testUserDaoList = userService.findAll();
-        assertEquals(testUserDaoList.size(), 0);
+        List<User> testUserList = userService.findAll();
+        assertEquals(testUserList.size(), 0);
     }
 
-    public void assertUserDtoAndUserDao(UserDto userDto, UserDao userDao) {
-        assertEquals(userDto.getName(), userDao.getName());
-        assertEquals(userDto.getEmail(), userDao.getEmail());
-        assertEquals(userDto.getPassword(), userDao.getPassword());
-        assertEquals(userDto.getProfileImg(), userDao.getProfileImg());
-        assertEquals(userDto.getFbId(), userDao.getFbId());
-        assertNotNull(userDao.getCreatedAt());
-        assertNotNull(userDao.getUpdatedAt());
+    public void assertUserDtoAndUserDao(UserDto userDto, User user) {
+        assertEquals(userDto.getName(), user.getName());
+        assertEquals(userDto.getEmail(), user.getEmail());
+        assertEquals(userDto.getPassword(), user.getPassword());
+        assertEquals(userDto.getProfileImg(), user.getProfileImg());
+        assertEquals(userDto.getFbId(), user.getFbId());
+        assertNotNull(user.getCreatedAt());
+        assertNotNull(user.getUpdatedAt());
     }
 
     public UserDto getTestUserDto() {
