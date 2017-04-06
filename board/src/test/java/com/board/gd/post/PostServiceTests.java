@@ -1,5 +1,6 @@
 package com.board.gd.post;
 
+import com.board.gd.exception.PostException;
 import com.board.gd.user.User;
 import com.board.gd.user.UserDto;
 import com.board.gd.user.UserService;
@@ -29,6 +30,18 @@ public class PostServiceTests {
     @Before
     public void setUp() {
         postService.deleteAll();
+    }
+
+    @Test(expected = PostException.class)
+    public void fail_save_insert() {
+        // given
+        PostDto testPostDto = getTestPostDto(-1L);
+
+        // when
+        Post post = postService.save(testPostDto);
+
+        // then
+        assertPostDtoAndPost(testPostDto, post);
     }
 
     @Test

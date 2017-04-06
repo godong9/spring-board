@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class UserResult {
     private String status;
-    private String msg;
+    private String message;
     private JsonUser user;
 
     @Data
@@ -33,14 +33,14 @@ public class UserResult {
         return UserResult.builder()
                 .status(HttpStatus.OK.toString())
                 .user(jsonUser)
-                .msg(msg)
+                .message(msg)
                 .build();
     }
 
     public static UserResult from(HttpStatus status, String msg) {
         return UserResult.builder()
                 .status(status.toString())
-                .msg(msg)
+                .message(msg)
                 .build();
     }
 }

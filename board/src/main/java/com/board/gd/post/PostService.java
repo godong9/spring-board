@@ -4,6 +4,8 @@ package com.board.gd.post;
  * Created by gd.godong9 on 2017. 4. 4.
  */
 
+import com.board.gd.exception.PostException;
+import com.board.gd.exception.UserException;
 import com.board.gd.user.User;
 import com.board.gd.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class PostService {
 
     public Post save(PostDto postDto) {
         User user = userService.findOne(postDto.getUserId());
+        if (user == null) {
+            throw new PostException();
+        }
         return postRepository.save(Post.builder()
                 .id(postDto.getId())
                 .type(postDto.getType())
