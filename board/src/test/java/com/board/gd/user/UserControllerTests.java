@@ -43,7 +43,7 @@ public class UserControllerTests {
         form.setPassword(userPassword);
 
         given(userService.save(any(UserDto.class))).willReturn(User.builder()
-                .id(1)
+                .id(1L)
                 .name(userName)
                 .password(userPassword)
                 .email(userEmail)

@@ -9,12 +9,13 @@ import java.util.List;
 /**
  * Created by gd.godong9 on 2017. 4. 3.
  */
+
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User findOne(Integer id) {
+    public User findOne(Long id) {
         return userRepository.findOne(id);
     }
 

@@ -47,7 +47,7 @@ public class UserServiceTests {
         User testUser = userService.save(testUserDto);
 
         // when
-        User user = userService.findOne(-1);
+        User user = userService.findOne(-1L);
 
         // then
         assertEquals(user, null);

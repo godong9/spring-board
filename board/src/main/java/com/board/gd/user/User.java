@@ -26,7 +26,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -54,17 +54,6 @@ public class User {
     @JsonIgnore
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", updatable=false)
+    @Column(name = "created_at", updatable = false)
     private Date createdAt;
-
-    @PrePersist
-    void onCreate() {
-        this.setCreatedAt(new Date());
-        this.setUpdatedAt(new Date());
-    }
-
-    @PreUpdate
-    void onPersist() {
-        this.setUpdatedAt(new Date());
-    }
 }

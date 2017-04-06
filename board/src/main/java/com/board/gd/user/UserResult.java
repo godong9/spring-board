@@ -17,12 +17,22 @@ import org.springframework.http.HttpStatus;
 public class UserResult {
     private String status;
     private String msg;
-    private User user;
+    private JsonUser user;
+
+    @Data
+    private static class JsonUser {
+        private Long id;
+        private String name;
+    }
 
     public static UserResult from(User user, String msg) {
+        JsonUser jsonUser = new JsonUser();
+        jsonUser.setId(user.getId());
+        jsonUser.setName(user.getName());
+
         return UserResult.builder()
                 .status(HttpStatus.OK.toString())
-                .user(user)
+                .user(jsonUser)
                 .msg(msg)
                 .build();
     }
