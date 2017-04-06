@@ -37,7 +37,7 @@ public class UserServiceTests {
         User user = userService.findOne(testUser.getId());
 
         // then
-        assertUserDtoAndUserDao(testUserDto, user);
+        assertUserDtoAndUser(testUserDto, user);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class UserServiceTests {
         User testUser = userService.save(testUserDto);
 
         // then
-        assertUserDtoAndUserDao(testUserDto, testUser);
+        assertUserDtoAndUser(testUserDto, testUser);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class UserServiceTests {
         User testUser = userService.save(testUserDto);
 
         // then
-        assertUserDtoAndUserDao(testUserDto, testUser);
+        assertUserDtoAndUser(testUserDto, testUser);
     }
 
     @Test
@@ -154,7 +154,16 @@ public class UserServiceTests {
         assertEquals(testUserList.size(), 0);
     }
 
-    public void assertUserDtoAndUserDao(UserDto userDto, User user) {
+    public UserDto getTestUserDto() {
+        UserDto userDto = new UserDto();
+        userDto.setName("test");
+        userDto.setEmail("test@test.com");
+        userDto.setPassword("test");
+        userDto.setProfileImg("http://test.com/test.jpg");
+        return userDto;
+    }
+
+    public void assertUserDtoAndUser(UserDto userDto, User user) {
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getEmail(), user.getEmail());
         assertEquals(userDto.getPassword(), user.getPassword());
@@ -162,14 +171,5 @@ public class UserServiceTests {
         assertEquals(userDto.getFbId(), user.getFbId());
         assertNotNull(user.getCreatedAt());
         assertNotNull(user.getUpdatedAt());
-    }
-
-    public UserDto getTestUserDto() {
-        UserDto testUser = new UserDto();
-        testUser.setName("test");
-        testUser.setEmail("test@test.com");
-        testUser.setPassword("test");
-        testUser.setProfileImg("http://test.com/test.jpg");
-        return testUser;
     }
 }
