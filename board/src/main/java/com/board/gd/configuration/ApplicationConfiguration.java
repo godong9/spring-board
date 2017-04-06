@@ -1,4 +1,4 @@
-package com.board.gd;
+package com.board.gd.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -17,4 +17,5 @@ public class ApplicationConfiguration {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 }

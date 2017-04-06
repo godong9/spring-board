@@ -3,10 +3,13 @@ package com.board.gd.user;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -21,6 +24,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * @api {post} /users/signup Request User signup
@@ -40,6 +46,16 @@ public class UserController {
     @PostMapping("/users/signup")
     public UserResult userSignup(@RequestBody @Valid UserForm userForm) {
         User user = userService.save(modelMapper.map(userForm, UserDto.class));
+        HttpSession session = request.getSession(true);
+        session.setAttribute("user", user);
+
+        return UserResult.from(user, null);
+    }
+
+    @GetMapping("/users/me")
+    public UserResult getUserMe() {
+        User user = (User)request.getAttribute("user");
+
         return UserResult.from(user, null);
     }
 }
