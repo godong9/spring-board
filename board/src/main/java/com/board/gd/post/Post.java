@@ -57,7 +57,7 @@ public class Post {
     @JsonIgnore
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     private Date createdAt;
 
 }

@@ -37,7 +37,7 @@ public class UserControllerTests {
         String userName = "test";
         String userPassword = "test";
         String userEmail = "test@test.com";
-        UserForm form = new UserForm();
+        SignupForm form = new SignupForm();
         form.setName(userName);
         form.setEmail(userEmail);
         form.setPassword(userPassword);

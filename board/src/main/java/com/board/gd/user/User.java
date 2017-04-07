@@ -1,6 +1,6 @@
 package com.board.gd.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.beans.DefaultProperty;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -34,26 +34,22 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @JsonIgnore
-    @Column(name = "fb_id")
-    private String fbId;
-
-    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Column(name = "profile_img")
     private String profileImg;
 
-    @JsonIgnore
+    @Column(name = "enabled")
+    private Boolean enabled;
+
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @JsonIgnore
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at")
     private Date createdAt;
 }

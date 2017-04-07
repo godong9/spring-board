@@ -1,11 +1,16 @@
 package com.board.gd.user;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class UserServiceTests {
     @Autowired
     private UserService userService;
@@ -28,9 +34,22 @@ public class UserServiceTests {
     }
 
     @Test
+    public void fail_findOne_when_invalid_id() {
+        // given
+        UserDto testUserDto = getTestUserDto("test1");
+        User testUser = userService.save(testUserDto);
+
+        // when
+        User user = userService.findOne(-1L);
+
+        // then
+        assertEquals(user, null);
+    }
+
+    @Test
     public void success_findOne() {
         // given
-        UserDto testUserDto = getTestUserDto();
+        UserDto testUserDto = getTestUserDto("test1");
         User testUser = userService.save(testUserDto);
 
         // when
@@ -41,37 +60,9 @@ public class UserServiceTests {
     }
 
     @Test
-    public void fail_findOne() {
-        // given
-        UserDto testUserDto = getTestUserDto();
-        User testUser = userService.save(testUserDto);
-
-        // when
-        User user = userService.findOne(-1L);
-
-        // then
-        assertEquals(user, null);
-    }
-
-
-    @Test
     public void success_save_insert_with_password() {
         // given
-        UserDto testUserDto = getTestUserDto();
-
-        // when
-        User testUser = userService.save(testUserDto);
-
-        // then
-        assertUserDtoAndUser(testUserDto, testUser);
-    }
-
-    @Test
-    public void success_save_insert_with_fbId() {
-        // given
-        UserDto testUserDto = getTestUserDto();
-        testUserDto.setPassword(null);
-        testUserDto.setFbId("fbtest");
+        UserDto testUserDto = getTestUserDto("test1");
 
         // when
         User testUser = userService.save(testUserDto);
@@ -83,7 +74,7 @@ public class UserServiceTests {
     @Test
     public void success_save_update() {
         // given
-        UserDto testUserDto = getTestUserDto();
+        UserDto testUserDto = getTestUserDto("test1");
         String changedName = "change";
 
         // when
@@ -111,8 +102,8 @@ public class UserServiceTests {
     @Test
     public void success_count_2() {
         // given
-        UserDto testUserDto1 = getTestUserDto();
-        UserDto testUserDto2 = getTestUserDto();
+        UserDto testUserDto1 = getTestUserDto("test1");
+        UserDto testUserDto2 = getTestUserDto("test2");
         userService.save(testUserDto1);
         userService.save(testUserDto2);
 
@@ -126,8 +117,8 @@ public class UserServiceTests {
     @Test
     public void success_findAll() {
         // given
-        UserDto testUserDto1 = getTestUserDto();
-        UserDto testUserDto2 = getTestUserDto();
+        UserDto testUserDto1 = getTestUserDto("test1");
+        UserDto testUserDto2 = getTestUserDto("test2");
         userService.save(testUserDto1);
         userService.save(testUserDto2);
 
@@ -141,8 +132,8 @@ public class UserServiceTests {
     @Test
     public void success_deleteAll() {
         // given
-        UserDto testUserDto1 = getTestUserDto();
-        UserDto testUserDto2 = getTestUserDto();
+        UserDto testUserDto1 = getTestUserDto("test1");
+        UserDto testUserDto2 = getTestUserDto("test2");
         userService.save(testUserDto1);
         userService.save(testUserDto2);
 
@@ -154,10 +145,10 @@ public class UserServiceTests {
         assertEquals(testUserList.size(), 0);
     }
 
-    public UserDto getTestUserDto() {
+    public UserDto getTestUserDto(String name) {
         UserDto userDto = new UserDto();
-        userDto.setName("test");
-        userDto.setEmail("test@test.com");
+        userDto.setName(name);
+        userDto.setEmail(name + "@test.com");
         userDto.setPassword("test");
         userDto.setProfileImg("http://test.com/test.jpg");
         return userDto;
@@ -168,7 +159,6 @@ public class UserServiceTests {
         assertEquals(userDto.getEmail(), user.getEmail());
         assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getProfileImg(), user.getProfileImg());
-        assertEquals(userDto.getFbId(), user.getFbId());
         assertNotNull(user.getCreatedAt());
         assertNotNull(user.getUpdatedAt());
     }

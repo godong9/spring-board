@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-public class UserForm {
+public class SignupForm {
     @NotNull
     private String name;
 

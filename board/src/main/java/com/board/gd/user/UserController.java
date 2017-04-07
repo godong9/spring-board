@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -44,18 +43,29 @@ public class UserController {
      * @apiSuccess {String} user.name 유저 이름
      */
     @PostMapping("/users/signup")
-    public UserResult userSignup(@RequestBody @Valid UserForm userForm) {
+    public UserResult userSignup(@RequestBody @Valid SignupForm userForm) {
         User user = userService.save(modelMapper.map(userForm, UserDto.class));
-        HttpSession session = request.getSession(true);
-        session.setAttribute("user", user);
+//        HttpSession session = request.getSession(true);
+//        session.setAttribute("user", user);
 
         return UserResult.from(user, null);
     }
 
-    @GetMapping("/users/me")
-    public UserResult getUserMe() {
-        User user = (User)request.getAttribute("user");
+    @PostMapping("/users/login")
+    public void userLogin(@RequestBody @Valid LoginForm loginForm) {
+//        HttpSession session = request.getSession(true);
+//        session.setAttribute("user", user);
+        log.debug("======== LOGIN ========");
 
-        return UserResult.from(user, null);
     }
+
+//    @GetMapping("/users/me")
+//    public UserResult getUserMe() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        auth.getPrincipal();
+//
+//                User user = (User)request.getAttribute("user");
+//
+//        return UserResult.from(user, null);
+//    }
 }

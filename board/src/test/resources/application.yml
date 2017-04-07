@@ -22,4 +22,4 @@ spring:
   datasource:
     username: test
     password: test
-    url: jdbc:mysql://localhost/board-test?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost/board?useUnicode=true&characterEncoding=utf8&useSSL=false
