@@ -1,15 +1,12 @@
 package com.board.gd.user;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -37,7 +34,7 @@ public class UserServiceTests {
     public void fail_findOne_when_invalid_id() {
         // given
         UserDto testUserDto = getTestUserDto("test1");
-        User testUser = userService.save(testUserDto);
+        userService.save(testUserDto);
 
         // when
         User user = userService.findOne(-1L);
@@ -59,16 +56,40 @@ public class UserServiceTests {
         assertUserDtoAndUser(testUserDto, user);
     }
 
-    @Test
-    public void success_save_insert_with_password() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void fail_save_insert_when_invalid_email() {
         // given
         UserDto testUserDto = getTestUserDto("test1");
+        testUserDto.setEmail(null);
 
         // when
-        User testUser = userService.save(testUserDto);
+        userService.save(testUserDto);
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void fail_save_insert_when_duplicated_email() {
+        // given
+        UserDto testUserDto1 = getTestUserDto("test1");
+        UserDto testUserDto2 = getTestUserDto("test1");
+
+        // when
+        userService.save(testUserDto1);
+        userService.save(testUserDto2);
+    }
+
+    @Test
+    public void success_save_insert() {
+        // given
+        UserDto testUserDto1 = getTestUserDto("test1");
+        UserDto testUserDto2 = getTestUserDto("test2");
+
+        // when
+        User testUser1 = userService.save(testUserDto1);
+        User testUser2 = userService.save(testUserDto2);
 
         // then
-        assertUserDtoAndUser(testUserDto, testUser);
+        assertUserDtoAndUser(testUserDto1, testUser1);
+        assertUserDtoAndUser(testUserDto2, testUser2);
     }
 
     @Test
@@ -159,6 +180,7 @@ public class UserServiceTests {
         assertEquals(userDto.getEmail(), user.getEmail());
         assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getProfileImg(), user.getProfileImg());
+        assertEquals(user.getEnabled(), true);
         assertNotNull(user.getCreatedAt());
         assertNotNull(user.getUpdatedAt());
     }
