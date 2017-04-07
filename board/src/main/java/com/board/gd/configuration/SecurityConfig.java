@@ -1,11 +1,13 @@
 package com.board.gd.configuration;
 
 import com.board.gd.authentication.EmailAuthenticationProvider;
+import com.board.gd.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Created by gd.godong9 on 2017. 4. 6.
@@ -13,13 +15,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private EmailAuthenticationProvider userAuthenticationProvider;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(userAuthenticationProvider);
+        auth
+                .authenticationProvider(userAuthenticationProvider)
+                .userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
@@ -27,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/users/login", "/users/signup")
-                    .access("permitAll");
+                    .access("permitAll")
+                    .antMatchers("/users/me").hasAuthority("USER");
     }
 
 }

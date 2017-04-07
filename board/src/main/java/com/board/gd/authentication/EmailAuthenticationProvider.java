@@ -2,7 +2,6 @@ package com.board.gd.authentication;
 
 import com.board.gd.user.User;
 import com.board.gd.user.UserService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,11 +35,12 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
         if (Objects.isNull(user)) {
             throw new UsernameNotFoundException("Bad username");
         }
-        if (ObjectUtils.notEqual(user.getPassword(), password)) {
+
+        if (!userService.matchPassword(password, user.getPassword())) {
             throw new BadCredentialsException("Bad credentials");
         }
 
-        List<GrantedAuthority> roles = userService.getRoles(user.getId());
+        List<GrantedAuthority> roles = userService.getRolesByUserId(user.getId());
         UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(email, password, roles);
         result.setDetails(user);
         return result;

@@ -6,10 +6,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +26,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
+    private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
+
     public User findOne(Long id) {
         return userRepository.findOne(id);
     }
@@ -32,23 +36,40 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public List<GrantedAuthority> getRoles(Long userId) {
+    public List<GrantedAuthority> getRolesByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId).stream()
-                .map(UserRole::getRole)
+                .map(userRole -> userRole.getRole().name())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
+    public UserRole saveUserRole(User user, UserRoleType userRole) {
+        if (Objects.isNull(user)) {
+            return null;
+        }
+        return userRoleRepository.save(UserRole.builder()
+                .role(userRole)
+                .user(user)
+                .build());
+    }
+
     @Transactional
     public User save(UserDto userDto) {
-        return userRepository.save(User.builder()
-                .id(userDto.getId())
+        Long userDtoId = userDto.getId();
+        User user = userRepository.save(User.builder()
+                .id(userDtoId)
                 .name(userDto.getName())
                 .email(userDto.getEmail())
-                .password(userDto.getPassword())
+                .password(bcryptEncoder.encode(userDto.getPassword()))
                 .profileImg(userDto.getProfileImg())
                 .enabled(true)
                 .build());
+
+        if (Objects.isNull(userDtoId)) { // 유저 새로 생길 때만 권한 추가
+            saveUserRole(user, UserRoleType.USER);
+        }
+
+        return user;
     }
 
     public long count() {
@@ -67,5 +88,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findByEmail(username);
+    }
+
+    public boolean matchPassword(String rawPassword, String encodedPassword) {
+        return bcryptEncoder.matches(rawPassword, encodedPassword);
     }
 }

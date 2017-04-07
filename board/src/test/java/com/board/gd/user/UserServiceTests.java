@@ -6,13 +6,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by gd.godong9 on 2017. 4. 3.
@@ -57,6 +60,19 @@ public class UserServiceTests {
     }
 
     @Test
+    public void fail_findByEmail() {
+        // given
+        UserDto testUserDto = getTestUserDto("test1");
+        userService.save(testUserDto);
+
+        // when
+        User user = userService.findByEmail("test1@");
+
+        // then
+        assertEquals(user, null);
+    }
+
+    @Test
     public void success_findByEmail() {
         // given
         UserDto testUserDto = getTestUserDto("test1");
@@ -69,6 +85,56 @@ public class UserServiceTests {
         assertUserDtoAndUser(testUserDto, user);
     }
 
+    @Test
+    public void fail_getRolesByUserId() {
+        // given
+
+        // when
+        List<GrantedAuthority> roles = userService.getRolesByUserId(-1L);
+
+        // then
+        assertEquals(roles.size(), 0);
+    }
+
+    @Test
+    public void success_getRolesByUserId() {
+        // given
+        UserDto testUserDto = getTestUserDto("test1");
+        User testUser = userService.save(testUserDto);
+
+        // when
+        List<GrantedAuthority> roles = userService.getRolesByUserId(testUser.getId());
+
+        // then
+        assertEquals(roles.size(), 1);
+        roles
+                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
+    }
+
+    @Test
+    public void fail_saveUserRole() {
+        // given
+        User testUser = null;
+
+        // when
+        UserRole userRole = userService.saveUserRole(testUser, UserRoleType.USER);
+
+        // then
+        assertEquals(userRole, null);
+    }
+
+    @Test
+    public void success_saveUserRole() {
+        // given
+        UserDto testUserDto = getTestUserDto("test1");
+        User testUser = userService.save(testUserDto);
+
+        // when
+        UserRole userRole = userService.saveUserRole(testUser, UserRoleType.USER);
+
+        // then
+        assertEquals(userRole.getRole(), UserRoleType.USER);
+    }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void fail_save_insert_when_invalid_email() {
@@ -192,9 +258,9 @@ public class UserServiceTests {
     public void assertUserDtoAndUser(UserDto userDto, User user) {
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getEmail(), user.getEmail());
-        assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getProfileImg(), user.getProfileImg());
         assertEquals(user.getEnabled(), true);
+        assertThat(userService.matchPassword(userDto.getPassword(), user.getPassword()), is(true));
         assertNotNull(user.getCreatedAt());
         assertNotNull(user.getUpdatedAt());
     }

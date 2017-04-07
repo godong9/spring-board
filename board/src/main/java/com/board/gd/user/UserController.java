@@ -1,9 +1,10 @@
 package com.board.gd.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.PermissionDeniedDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,25 +53,21 @@ public class UserController {
     @PostMapping("/users/signup")
     public UserResult userSignup(@RequestBody @Valid SignupForm userForm) {
         User user = userService.save(modelMapper.map(userForm, UserDto.class));
-//        HttpSession session = request.getSession(true);
-//        session.setAttribute("user", user);
-
         return UserResult.from(user, null);
     }
 
     @PostMapping("/users/login")
-    public void userLogin(HttpSession session, @RequestBody @Valid LoginForm loginForm) {
-//        HttpSession session = request.getSession(true);
-//        session.setAttribute("user", user);
+    public UserResult userLogin(HttpSession session, @RequestBody @Valid LoginForm loginForm) {
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = authenticationManager.authenticate(token);
-        log.info("======== LOGIN ========");
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                 SecurityContextHolder.getContext());
+
+        return UserResult.from(HttpStatus.OK, "success");
     }
 
     @PostMapping("/users/logout")
@@ -79,16 +76,13 @@ public class UserController {
     }
 
     @GetMapping("/users/me")
-    public void getUserMe(HttpSession session) {
-
+    public UserResult getUserMe() {
         Object userDetail = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (!(userDetail instanceof User)) {
-            return;
+            log.info("Not authenticated!");
+            return null;
         }
-
         User user = (User) userDetail;
-//                User user = (User)request.getAttribute("user");
-        log.info("USER: {}", user.getEmail());
-//        return UserResult.from(user, null);
+        return UserResult.from(user, null);
     }
 }
