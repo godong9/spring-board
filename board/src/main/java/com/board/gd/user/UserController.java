@@ -34,7 +34,6 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-
     /**
      * @api {post} /users/signup Request User signup
      * @apiName UserSignup
@@ -51,8 +50,10 @@ public class UserController {
      * @apiSuccess {String} user.name 유저 이름
      */
     @PostMapping("/users/signup")
-    public UserResult userSignup(@RequestBody @Valid SignupForm userForm) {
-        User user = userService.save(modelMapper.map(userForm, UserDto.class));
+    public UserResult userSignup(@RequestBody @Valid SignupForm signupForm) {
+        User user = userService.save(modelMapper.map(signupForm, UserDto.class));
+        UserResult ur = UserResult.from(user, null);
+
         return UserResult.from(user, null);
     }
 
