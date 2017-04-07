@@ -3,12 +3,18 @@ package com.board.gd.user;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -25,7 +31,8 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private HttpServletRequest request;
+    private AuthenticationManager authenticationManager;
+
 
     /**
      * @api {post} /users/signup Request User signup
@@ -52,20 +59,36 @@ public class UserController {
     }
 
     @PostMapping("/users/login")
-    public void userLogin(@RequestBody @Valid LoginForm loginForm) {
+    public void userLogin(HttpSession session, @RequestBody @Valid LoginForm loginForm) {
 //        HttpSession session = request.getSession(true);
 //        session.setAttribute("user", user);
-        log.debug("======== LOGIN ========");
+        String email = loginForm.getEmail();
+        String password = loginForm.getPassword();
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
+        Authentication authentication = authenticationManager.authenticate(token);
+        log.info("======== LOGIN ========");
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                SecurityContextHolder.getContext());
     }
 
-//    @GetMapping("/users/me")
-//    public UserResult getUserMe() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        auth.getPrincipal();
-//
+    @PostMapping("/users/logout")
+    public void userLogout(HttpSession session) {
+        session.invalidate();
+    }
+
+    @GetMapping("/users/me")
+    public void getUserMe(HttpSession session) {
+
+        Object userDetail = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        if (!(userDetail instanceof User)) {
+            return;
+        }
+
+        User user = (User) userDetail;
 //                User user = (User)request.getAttribute("user");
-//
+        log.info("USER: {}", user.getEmail());
 //        return UserResult.from(user, null);
-//    }
+    }
 }

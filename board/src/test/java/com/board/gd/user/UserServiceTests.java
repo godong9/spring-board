@@ -56,6 +56,20 @@ public class UserServiceTests {
         assertUserDtoAndUser(testUserDto, user);
     }
 
+    @Test
+    public void success_findByEmail() {
+        // given
+        UserDto testUserDto = getTestUserDto("test1");
+        User testUser = userService.save(testUserDto);
+
+        // when
+        User user = userService.findByEmail(testUser.getEmail());
+
+        // then
+        assertUserDtoAndUser(testUserDto, user);
+    }
+
+
     @Test(expected = DataIntegrityViolationException.class)
     public void fail_save_insert_when_invalid_email() {
         // given
