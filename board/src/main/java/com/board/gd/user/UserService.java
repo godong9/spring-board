@@ -2,14 +2,15 @@ package com.board.gd.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by gd.godong9 on 2017. 4. 3.
@@ -20,6 +21,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     public User findOne(Long id) {
         return userRepository.findOne(id);
     }
@@ -28,9 +32,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-//    public ArrayList<GrantedAuthority> getRoles(String email) {
-//
-//    }
+    public List<GrantedAuthority> getRoles(Long userId) {
+        return userRoleRepository.findByUserId(userId).stream()
+                .map(UserRole::getRole)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public User save(UserDto userDto) {
