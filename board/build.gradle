@@ -38,7 +38,6 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-devtools')
-	compile('org.springframework.boot:spring-boot-devtools')
 	compile('mysql:mysql-connector-java')
 	compile('org.springframework.session:spring-session-jdbc')
 
