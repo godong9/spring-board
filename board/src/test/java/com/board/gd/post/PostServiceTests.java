@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class PostServiceTests {
     @Autowired
     private PostService postService;
@@ -30,6 +32,35 @@ public class PostServiceTests {
     @Before
     public void setUp() {
         postService.deleteAll();
+        userService.deleteAll();
+    }
+
+    @Test
+    public void fail_findOne_when_invalid_id() {
+        // given
+        User testUser = getTestUser();
+        PostDto testPostDto = getTestPostDto(testUser.getId());
+        postService.save(testPostDto);
+
+        // when
+        Post post = postService.findOne(-1L);
+
+        // then
+        assertEquals(post, null);
+    }
+
+    @Test
+    public void success_findOne() {
+        // given
+        User testUser = getTestUser();
+        PostDto testPostDto = getTestPostDto(testUser.getId());
+        Post testPost = postService.save(testPostDto);
+
+        // when
+        Post post = postService.findOne(testPost.getId());
+
+        // then
+        assertPostDtoAndPost(testPostDto, post);
     }
 
     @Test(expected = PostException.class)

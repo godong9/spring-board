@@ -20,6 +20,10 @@ public class PostService {
     @Autowired
     private UserService userService;
 
+    public Post findOne(Long id) {
+        return postRepository.findOne(id);
+    }
+
     public Post save(PostDto postDto) {
         User user = userService.findOne(postDto.getUserId());
         if (user == null) {
@@ -30,6 +34,7 @@ public class PostService {
                 .type(postDto.getType())
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
+                .viewCount(0L)
                 .user(user)
                 .build());
     }
