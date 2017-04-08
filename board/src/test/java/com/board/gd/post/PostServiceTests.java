@@ -38,7 +38,7 @@ public class PostServiceTests {
     @Test
     public void fail_findOne_when_invalid_id() {
         // given
-        User testUser = getTestUser();
+        User testUser = saveAndGetTestUser();
         PostDto testPostDto = getTestPostDto(testUser.getId());
         postService.save(testPostDto);
 
@@ -52,7 +52,7 @@ public class PostServiceTests {
     @Test
     public void success_findOne() {
         // given
-        User testUser = getTestUser();
+        User testUser = saveAndGetTestUser();
         PostDto testPostDto = getTestPostDto(testUser.getId());
         Post testPost = postService.save(testPostDto);
 
@@ -78,7 +78,7 @@ public class PostServiceTests {
     @Test
     public void success_save_insert() {
         // given
-        User testUser = getTestUser();
+        User testUser = saveAndGetTestUser();
         PostDto testPostDto = getTestPostDto(testUser.getId());
 
         // when
@@ -88,7 +88,35 @@ public class PostServiceTests {
         assertPostDtoAndPost(testPostDto, post);
     }
 
-    public User getTestUser() {
+    @Test
+    public void success_count_0() {
+        // given
+
+        // when
+        Long postCount = postService.count();
+
+        // then
+        assertEquals(Math.toIntExact(postCount), 0);
+    }
+
+    @Test
+    public void success_count_2() {
+        // given
+        User testUser = saveAndGetTestUser();
+        PostDto testPostDto1 = getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = getTestPostDto(testUser.getId());
+        postService.save(testPostDto1);
+        postService.save(testPostDto2);
+
+        // when
+        Long postCount = postService.count();
+
+        // then
+        assertEquals(Math.toIntExact(postCount), 2);
+    }
+
+
+    public User saveAndGetTestUser() {
         UserDto userDto = new UserDto();
         userDto.setName("test");
         userDto.setEmail("test@test.com");

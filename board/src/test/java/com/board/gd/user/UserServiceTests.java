@@ -244,6 +244,7 @@ public class UserServiceTests {
         assertEquals(testUserList.size(), 0);
     }
 
+
     public UserDto getTestUserDto(String name) {
         UserDto userDto = new UserDto();
         userDto.setName(name);

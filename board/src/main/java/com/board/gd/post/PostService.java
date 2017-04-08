@@ -39,6 +39,10 @@ public class PostService {
                 .build());
     }
 
+    public long count() {
+        return postRepository.count();
+    }
+
     @Transactional
     public void deleteAll() {
         postRepository.deleteAll();
