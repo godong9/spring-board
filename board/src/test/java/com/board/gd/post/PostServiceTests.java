@@ -9,8 +9,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,7 +44,7 @@ public class PostServiceTests {
     @Test
     public void fail_findOne_when_invalid_id() {
         // given
-        User testUser = saveAndGetTestUser();
+        User testUser = saveAndGetTestUser("test");
         PostDto testPostDto = getTestPostDto(testUser.getId());
         postService.save(testPostDto);
 
@@ -52,7 +58,7 @@ public class PostServiceTests {
     @Test
     public void success_findOne() {
         // given
-        User testUser = saveAndGetTestUser();
+        User testUser = saveAndGetTestUser("test");
         PostDto testPostDto = getTestPostDto(testUser.getId());
         Post testPost = postService.save(testPostDto);
 
@@ -61,6 +67,91 @@ public class PostServiceTests {
 
         // then
         assertPostDtoAndPost(testPostDto, post);
+    }
+
+    @Test(expected = PostException.class)
+    public void fail_findAll_when_invalid_pageable() {
+        // given
+        User testUser = saveAndGetTestUser("test");
+        PostDto testPostDto1 = getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = getTestPostDto(testUser.getId());
+        postService.save(testPostDto1);
+        postService.save(testPostDto2);
+
+        // when
+        Page<Post> result = postService.findAll(null);
+    }
+
+    @Test
+    public void success_findAll_sortBy_id_desc() {
+        // given
+        User testUser = saveAndGetTestUser("test");
+        PostDto testPostDto1 = getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = getTestPostDto(testUser.getId());
+        PostDto testPostDto3 = getTestPostDto(testUser.getId());
+        postService.save(testPostDto1);
+        postService.save(testPostDto2);
+        postService.save(testPostDto3);
+        Pageable pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id"));
+
+        // when
+        Page<Post> result = postService.findAll(pageRequest);
+        List<Post> posts = result.getContent();
+
+        // then
+        assertEquals(posts.size(), 3);
+        Post post3 = posts.get(0);
+        Post post2 = posts.get(1);
+        Post post1 = posts.get(2);
+        assertPostDtoAndPost(testPostDto3, post3);
+        assertPostDtoAndPost(testPostDto2, post2);
+        assertPostDtoAndPost(testPostDto1, post1);
+    }
+
+    @Test
+    public void success_findAll_sortBy_createdAt_desc() {
+        // given
+        User testUser = saveAndGetTestUser("test");
+        PostDto testPostDto1 = getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = getTestPostDto(testUser.getId());
+        PostDto testPostDto3 = getTestPostDto(testUser.getId());
+        postService.save(testPostDto1);
+        postService.save(testPostDto2);
+        postService.save(testPostDto3);
+        Pageable pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "createdAt"));
+
+        // when
+        Page<Post> result = postService.findAll(pageRequest);
+        List<Post> posts = result.getContent();
+
+        // then
+        assertEquals(posts.size(), 3);
+        Post post3 = posts.get(0);
+        Post post2 = posts.get(1);
+        Post post1 = posts.get(2);
+        assertPostDtoAndPost(testPostDto3, post3);
+        assertPostDtoAndPost(testPostDto2, post2);
+        assertPostDtoAndPost(testPostDto1, post1);
+    }
+
+    @Test
+    public void success_findAll_size_1_sortBy_createdAt_asc() {
+        // given
+        User testUser = saveAndGetTestUser("test");
+        PostDto testPostDto1 = getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = getTestPostDto(testUser.getId());
+        postService.save(testPostDto1);
+        postService.save(testPostDto2);
+        Pageable pageRequest = new PageRequest(0, 1, new Sort(Sort.Direction.ASC, "createdAt"));
+
+        // when
+        Page<Post> result = postService.findAll(pageRequest);
+        List<Post> posts = result.getContent();
+
+        // then
+        assertEquals(posts.size(), 1);
+        Post post1 = posts.get(0);
+        assertPostDtoAndPost(testPostDto1, post1);
     }
 
     @Test(expected = PostException.class)
@@ -78,7 +169,7 @@ public class PostServiceTests {
     @Test
     public void success_save_insert() {
         // given
-        User testUser = saveAndGetTestUser();
+        User testUser = saveAndGetTestUser("test");
         PostDto testPostDto = getTestPostDto(testUser.getId());
 
         // when
@@ -102,7 +193,7 @@ public class PostServiceTests {
     @Test
     public void success_count_2() {
         // given
-        User testUser = saveAndGetTestUser();
+        User testUser = saveAndGetTestUser("test");
         PostDto testPostDto1 = getTestPostDto(testUser.getId());
         PostDto testPostDto2 = getTestPostDto(testUser.getId());
         postService.save(testPostDto1);
@@ -116,14 +207,12 @@ public class PostServiceTests {
     }
 
 
-    public User saveAndGetTestUser() {
+    public User saveAndGetTestUser(String name) {
         UserDto userDto = new UserDto();
-        userDto.setName("test");
-        userDto.setEmail("test@test.com");
+        userDto.setName(name);
+        userDto.setEmail(name + "@test.com");
         userDto.setPassword("test");
-        userDto.setProfileImg("http://test.com/test.jpg");
-        User testUser = userService.save(userDto);
-        return testUser;
+        return userService.save(userDto);
     }
 
     public PostDto getTestPostDto(Long userId) {

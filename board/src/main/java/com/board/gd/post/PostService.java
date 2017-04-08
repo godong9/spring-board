@@ -5,10 +5,11 @@ package com.board.gd.post;
  */
 
 import com.board.gd.exception.PostException;
-import com.board.gd.exception.UserException;
 import com.board.gd.user.User;
 import com.board.gd.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,13 @@ public class PostService {
 
     public Post findOne(Long id) {
         return postRepository.findOne(id);
+    }
+
+    public Page<Post> findAll(Pageable pageable) {
+        if (pageable == null) {
+            throw new PostException("Invalid pageable!");
+        }
+        return postRepository.findAll(pageable);
     }
 
     public Post save(PostDto postDto) {
