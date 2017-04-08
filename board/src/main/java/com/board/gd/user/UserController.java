@@ -1,7 +1,8 @@
 package com.board.gd.user;
 
+import com.board.gd.user.form.LoginForm;
+import com.board.gd.user.form.SignupForm;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,8 +53,6 @@ public class UserController {
     @PostMapping("/users/signup")
     public UserResult userSignup(@RequestBody @Valid SignupForm signupForm) {
         User user = userService.save(modelMapper.map(signupForm, UserDto.class));
-        UserResult ur = UserResult.from(user, null);
-
         return UserResult.from(user, null);
     }
 

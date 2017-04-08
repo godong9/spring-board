@@ -1,5 +1,6 @@
 package com.board.gd.user;
 
+import com.board.gd.exception.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,7 +46,7 @@ public class UserService implements UserDetailsService {
 
     public UserRole saveUserRole(User user, UserRoleType userRole) {
         if (Objects.isNull(user)) {
-            return null;
+            throw new UserException("Fail saveUserRole!");
         }
         return userRoleRepository.save(UserRole.builder()
                 .role(userRole)

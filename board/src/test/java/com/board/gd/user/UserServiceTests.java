@@ -1,5 +1,6 @@
 package com.board.gd.user;
 
+import com.board.gd.exception.UserException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -111,16 +112,13 @@ public class UserServiceTests {
                 .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
     }
 
-    @Test
+    @Test(expected = UserException.class)
     public void fail_saveUserRole() {
         // given
         User testUser = null;
 
         // when
-        UserRole userRole = userService.saveUserRole(testUser, UserRoleType.USER);
-
-        // then
-        assertEquals(userRole, null);
+        userService.saveUserRole(testUser, UserRoleType.USER);
     }
 
     @Test

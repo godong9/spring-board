@@ -1,5 +1,6 @@
 package com.board.gd.user;
 
+import com.board.gd.user.form.SignupForm;
 import com.board.gd.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +36,22 @@ public class UserControllerTests {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
+    }
+
+    @Test
+    public void fail_signup_not_exist_email() throws Exception {
+        // given
+        String userName = "test111";
+        String userPassword = "test111";
+        SignupForm form = new SignupForm();
+        form.setName(userName);
+        form.setPassword(userPassword);
+
+        // when
+        mockMvc.perform(post("/users/signup")
+                .content(JsonUtils.toJson(form))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
