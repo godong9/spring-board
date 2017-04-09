@@ -1,4 +1,4 @@
-package com.board.gd.user;
+package com.board.gd.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

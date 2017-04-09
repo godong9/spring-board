@@ -1,4 +1,4 @@
-package com.board.gd.post;
+package com.board.gd.domain.user;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,18 +10,18 @@ import static org.junit.Assert.assertEquals;
  */
 
 @SpringBootTest
-public class PostTypeTests {
+public class UserRoleTypeTests {
     @Test
     public void success_getName() {
         // then
-        assertEquals(PostType.FREE.name(), "FREE");
-        assertEquals(PostType.PAID.name(), "PAID");
+        assertEquals(UserRoleType.USER.name(), "USER");
+        assertEquals(UserRoleType.ADMIN.name(), "ADMIN");
     }
 
     @Test
     public void success_getDescription() {
         // then
-        assertEquals(PostType.FREE.getDescription(), "무료");
-        assertEquals(PostType.PAID.getDescription(), "유료");
+        assertEquals(UserRoleType.USER.getDescription(), "기본유저");
+        assertEquals(UserRoleType.ADMIN.getDescription(), "어드민유저");
     }
 }

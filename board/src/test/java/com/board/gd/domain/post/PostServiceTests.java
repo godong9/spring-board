@@ -1,9 +1,9 @@
-package com.board.gd.post;
+package com.board.gd.domain.post;
 
 import com.board.gd.exception.PostException;
-import com.board.gd.user.User;
-import com.board.gd.user.UserDto;
-import com.board.gd.user.UserService;
+import com.board.gd.domain.user.User;
+import com.board.gd.domain.user.UserDto;
+import com.board.gd.domain.user.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

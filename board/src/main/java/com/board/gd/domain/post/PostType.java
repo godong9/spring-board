@@ -1,4 +1,4 @@
-package com.board.gd.post;
+package com.board.gd.domain.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

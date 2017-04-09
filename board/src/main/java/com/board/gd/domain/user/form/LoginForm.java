@@ -1,18 +1,15 @@
-package com.board.gd.user.form;
+package com.board.gd.domain.user.form;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by gd.godong9 on 2017. 4. 3.
+ * Created by gd.godong9 on 2017. 4. 6.
  */
 
 @Data
-public class SignupForm {
-    @NotNull
-    private String name;
-
+public class LoginForm {
     @NotNull
     private String email;
 

@@ -1,12 +1,12 @@
-package com.board.gd.post;
+package com.board.gd.domain.post;
 
 /**
  * Created by gd.godong9 on 2017. 4. 4.
  */
 
 import com.board.gd.exception.PostException;
-import com.board.gd.user.User;
-import com.board.gd.user.UserService;
+import com.board.gd.domain.user.User;
+import com.board.gd.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

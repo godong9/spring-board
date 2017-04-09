@@ -1,6 +1,6 @@
-package com.board.gd.post;
+package com.board.gd.domain.post;
 
-import com.board.gd.user.User;
+import com.board.gd.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.Nullable;
 import lombok.*;

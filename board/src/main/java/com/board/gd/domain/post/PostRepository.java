@@ -1,4 +1,4 @@
-package com.board.gd.post;
+package com.board.gd.domain.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

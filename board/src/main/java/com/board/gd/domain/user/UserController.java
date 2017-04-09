@@ -1,7 +1,7 @@
-package com.board.gd.user;
+package com.board.gd.domain.user;
 
-import com.board.gd.user.form.LoginForm;
-import com.board.gd.user.form.SignupForm;
+import com.board.gd.domain.user.form.LoginForm;
+import com.board.gd.domain.user.form.SignupForm;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

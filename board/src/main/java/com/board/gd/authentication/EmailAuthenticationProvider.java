@@ -1,7 +1,7 @@
 package com.board.gd.authentication;
 
-import com.board.gd.user.User;
-import com.board.gd.user.UserService;
+import com.board.gd.domain.user.User;
+import com.board.gd.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

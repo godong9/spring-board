@@ -1,7 +1,7 @@
 package com.board.gd.configuration;
 
 import com.board.gd.authentication.EmailAuthenticationProvider;
-import com.board.gd.user.UserService;
+import com.board.gd.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

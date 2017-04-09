@@ -1,4 +1,4 @@
-package com.board.gd.user;
+package com.board.gd.domain.user;
 
 import com.board.gd.exception.UserException;
 import org.springframework.beans.factory.annotation.Autowired;

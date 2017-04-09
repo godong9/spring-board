@@ -1,4 +1,4 @@
-package com.board.gd.user;
+package com.board.gd.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

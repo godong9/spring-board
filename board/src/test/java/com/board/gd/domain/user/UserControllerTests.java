@@ -1,7 +1,7 @@
-package com.board.gd.user;
+package com.board.gd.domain.user;
 
-import com.board.gd.user.form.LoginForm;
-import com.board.gd.user.form.SignupForm;
+import com.board.gd.domain.user.form.LoginForm;
+import com.board.gd.domain.user.form.SignupForm;
 import com.board.gd.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,6 +80,11 @@ public class UserControllerTests {
         form.setName(userName);
         form.setEmail(userEmail);
         form.setPassword(userPassword);
+        given(userService.save(any(UserDto.class))).willReturn(User.builder()
+                .id(1L)
+                .name(userName)
+                .email(userEmail)
+                .build());
 
         // when
         mockMvc.perform(post("/users/signup")
