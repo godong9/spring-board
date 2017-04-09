@@ -32,6 +32,7 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    @Transactional
     public Post save(PostDto postDto) {
         User user = userService.findOne(postDto.getUserId());
         if (user == null) {
@@ -51,7 +52,10 @@ public class PostService {
         return postRepository.count();
     }
 
-    @Transactional
+    public void delete(Long id) {
+        postRepository.delete(id);
+    }
+
     public void deleteAll() {
         postRepository.deleteAll();
     }

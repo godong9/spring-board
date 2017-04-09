@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -224,6 +225,29 @@ public class PostServiceTests {
         assertEquals(Math.toIntExact(postCount), 2);
     }
 
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void fail_delete_when_invalid_id() {
+        // given
+        Long deletedId = -1L;
+
+        // when
+        postService.delete(deletedId);
+    }
+
+    @Test
+    public void success_delete() {
+        // given
+        User testUser = saveAndGetTestUser("test");
+        PostDto testPostDto = getTestPostDto(testUser.getId());
+        Post post = postService.save(testPostDto);
+        Long deletedId = post.getId();
+
+        // when
+        postService.delete(deletedId);
+
+        // then
+        assertEquals(postService.findOne(deletedId), null);
+    }
 
     public User saveAndGetTestUser(String name) {
         UserDto userDto = new UserDto();
