@@ -180,6 +180,24 @@ public class PostServiceTests {
     }
 
     @Test
+    public void success_save_update() {
+        // given
+        User testUser = saveAndGetTestUser("test");
+        PostDto testPostDto = getTestPostDto(testUser.getId());
+        Post post = postService.save(testPostDto);
+
+        // when
+        String changedContent = "change content";
+        testPostDto.setId(post.getId());
+        testPostDto.setContent(changedContent);
+        Post changedPost = postService.save(testPostDto);
+
+        // then
+        assertEquals(post.getId(), changedPost.getId());
+        assertEquals(changedPost.getContent(), changedContent);
+    }
+
+    @Test
     public void success_count_0() {
         // given
 

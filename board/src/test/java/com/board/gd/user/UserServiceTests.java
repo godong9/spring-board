@@ -175,9 +175,9 @@ public class UserServiceTests {
         // given
         UserDto testUserDto = getTestUserDto("test1");
         String changedName = "change";
+        User testUser = userService.save(testUserDto);
 
         // when
-        User testUser = userService.save(testUserDto);
         testUserDto.setId(testUser.getId());
         testUserDto.setName(changedName);
         User changedTestUser = userService.save(testUserDto);

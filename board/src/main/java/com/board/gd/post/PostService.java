@@ -35,7 +35,7 @@ public class PostService {
     public Post save(PostDto postDto) {
         User user = userService.findOne(postDto.getUserId());
         if (user == null) {
-            throw new PostException();
+            throw new PostException("Not exist user!");
         }
         return postRepository.save(Post.builder()
                 .id(postDto.getId())
