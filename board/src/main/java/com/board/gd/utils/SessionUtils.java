@@ -23,4 +23,8 @@ public class SessionUtils {
         }
         return (User) userDetail;
     }
+
+    public static void clearAuthentication() {
+        SecurityContextHolder.clearContext();
+    }
 }
