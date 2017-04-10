@@ -46,5 +46,48 @@ dependencies {
 	compile('org.apache.commons:commons-lang3:3.5')
 	compile('org.modelmapper.extensions:modelmapper-spring:0.7.5')
 
+	compile('com.querydsl:querydsl-core')
+	compile('com.querydsl:querydsl-jpa')
+	compile('com.querydsl:querydsl-apt')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+sourceSets {
+	generated {
+		java {
+			srcDirs = ['src/main/generated']
+		}
+	}
+}
+
+configurations {
+	provided
+}
+
+
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+	source = sourceSets.main.java
+	classpath = configurations.compile + configurations.provided
+	options.compilerArgs = [
+			"-proc:only",
+			"-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
+	]
+	destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+	dependsOn generateQueryDSL
+	source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+	dependsOn generateQueryDSL
+	options.warnings = false
+	classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+	delete sourceSets.generated.java.srcDirs
 }

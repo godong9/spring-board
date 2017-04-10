@@ -16,11 +16,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import com.querydsl.core.types.Predicate;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by gd.godong9 on 2017. 4. 3.
@@ -80,7 +82,7 @@ public class PostServiceTests {
         postService.save(testPostDto2);
 
         // when
-        Page<Post> result = postService.findAll(null);
+        Page<Post> result = postService.findAll(null, null);
     }
 
     @Test
@@ -94,9 +96,10 @@ public class PostServiceTests {
         postService.save(testPostDto2);
         postService.save(testPostDto3);
         Pageable pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id"));
+        Predicate predicateMock = mock(Predicate.class);
 
         // when
-        Page<Post> result = postService.findAll(pageRequest);
+        Page<Post> result = postService.findAll(predicateMock, pageRequest);
         List<Post> posts = result.getContent();
 
         // then
@@ -120,9 +123,10 @@ public class PostServiceTests {
         postService.save(testPostDto2);
         postService.save(testPostDto3);
         Pageable pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "createdAt"));
+        Predicate predicateMock = mock(Predicate.class);
 
         // when
-        Page<Post> result = postService.findAll(pageRequest);
+        Page<Post> result = postService.findAll(predicateMock, pageRequest);
         List<Post> posts = result.getContent();
 
         // then
@@ -144,9 +148,10 @@ public class PostServiceTests {
         postService.save(testPostDto1);
         postService.save(testPostDto2);
         Pageable pageRequest = new PageRequest(0, 1, new Sort(Sort.Direction.ASC, "createdAt"));
+        Predicate predicateMock = mock(Predicate.class);
 
         // when
-        Page<Post> result = postService.findAll(pageRequest);
+        Page<Post> result = postService.findAll(predicateMock, pageRequest);
         List<Post> posts = result.getContent();
 
         // then

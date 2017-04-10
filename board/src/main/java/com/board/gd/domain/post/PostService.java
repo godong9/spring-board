@@ -7,11 +7,14 @@ package com.board.gd.domain.post;
 import com.board.gd.exception.PostException;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 public class PostService {
@@ -25,11 +28,11 @@ public class PostService {
         return postRepository.findOne(id);
     }
 
-    public Page<Post> findAll(Pageable pageable) {
-        if (pageable == null) {
+    public Page<Post> findAll(Predicate predicate, Pageable pageable) {
+        if (Objects.isNull(pageable) || Objects.isNull(predicate)) {
             throw new PostException("Invalid pageable!");
         }
-        return postRepository.findAll(pageable);
+        return postRepository.findAll(predicate, pageable);
     }
 
     @Transactional

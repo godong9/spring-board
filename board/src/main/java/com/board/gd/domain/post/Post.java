@@ -1,7 +1,6 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.domain.user.User;
-import com.sun.istack.internal.Nullable;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -39,7 +38,6 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @Nullable
     @Column(name = "view_count")
     private Long viewCount;
 
