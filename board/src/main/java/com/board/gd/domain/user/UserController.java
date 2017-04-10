@@ -56,6 +56,17 @@ public class UserController {
         return UserResult.from(user, null);
     }
 
+    /**
+     * @api {post} /users/login Request User login
+     * @apiName UserLogin
+     * @apiGroup User
+     *
+     * @apiParam {String} email 이메일
+     * @apiParam {String} password 패스워드
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     */
     @PostMapping("/users/login")
     public UserResult userLogin(HttpSession session, @RequestBody @Valid LoginForm loginForm) {
         String email = loginForm.getEmail();
@@ -70,9 +81,18 @@ public class UserController {
         return UserResult.from(HttpStatus.OK, "success");
     }
 
+    /**
+     * @api {post} /users/logout Request User logout
+     * @apiName UserLogout
+     * @apiGroup User
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     */
     @PostMapping("/users/logout")
-    public void userLogout(HttpSession session) {
+    public UserResult userLogout(HttpSession session) {
         session.invalidate();
+        return UserResult.from(HttpStatus.OK, "success");
     }
 
     @GetMapping("/users/me")
