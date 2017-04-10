@@ -1,7 +1,6 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.domain.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.Nullable;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -48,16 +47,13 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @JsonIgnore
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable = false)
     private Date createdAt;
-
 }

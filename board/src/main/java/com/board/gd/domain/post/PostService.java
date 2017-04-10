@@ -40,7 +40,7 @@ public class PostService {
         }
         return postRepository.save(Post.builder()
                 .id(postDto.getId())
-                .type(postDto.getType())
+                .type(PostType.FREE) // 디폴트로 FREE로 세팅
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .viewCount(0L)
