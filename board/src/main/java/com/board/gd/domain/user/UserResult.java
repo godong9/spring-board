@@ -19,7 +19,7 @@ public class UserResult {
     private String message;
     private JsonUser user;
 
-    public static UserResult from(User user, String msg) {
+    public static UserResult from(User user, String message) {
         JsonUser jsonUser = new JsonUser();
         jsonUser.setId(user.getId());
         jsonUser.setName(user.getName());
@@ -27,14 +27,14 @@ public class UserResult {
         return UserResult.builder()
                 .status(HttpStatus.OK.toString())
                 .user(jsonUser)
-                .message(msg)
+                .message(message)
                 .build();
     }
 
-    public static UserResult from(HttpStatus status, String msg) {
+    public static UserResult from(HttpStatus status, String message) {
         return UserResult.builder()
                 .status(status.toString())
-                .message(msg)
+                .message(message)
                 .build();
     }
 }

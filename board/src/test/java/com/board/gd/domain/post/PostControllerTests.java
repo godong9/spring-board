@@ -8,7 +8,6 @@ import com.board.gd.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * Created by gd.godong9 on 2017. 4. 10.
@@ -81,7 +81,6 @@ public class PostControllerTests {
                 .param("user.id", testUser1Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-//                .andDo(print())
                 .andExpect(jsonPath("$.posts", hasSize(1)))
                 .andExpect(jsonPath("$.posts[0].id").isNotEmpty())
                 .andExpect(jsonPath("$.posts[0].title").value(testPostDto1.getTitle()))
@@ -92,7 +91,6 @@ public class PostControllerTests {
                 .param("user.id", testUser2Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-//                .andDo(print())
                 .andExpect(jsonPath("$.posts", hasSize(1)))
                 .andExpect(jsonPath("$.posts[0].id").isNotEmpty())
                 .andExpect(jsonPath("$.posts[0].title").value(testPostDto2.getTitle()))
@@ -115,7 +113,9 @@ public class PostControllerTests {
         mockMvc.perform(post("/posts")
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().is4xxClientError());
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message").value("Not authenticated!"));
     }
 
     @Test

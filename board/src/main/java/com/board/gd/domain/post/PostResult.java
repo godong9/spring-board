@@ -27,15 +27,15 @@ public class PostResult {
     private JsonPost post;
     private List<JsonPost> posts;
 
-    public static PostResult from(Post post, String msg) {
+    public static PostResult from(Post post, String message) {
         return PostResult.builder()
                 .status(HttpStatus.OK.toString())
                 .post(getJsonPost(post))
-                .message(msg)
+                .message(message)
                 .build();
     }
 
-    public static PostResult from(Page<Post> posts, String msg) {
+    public static PostResult from(Page<Post> posts, String message) {
         List<Post> postList = posts.getContent();
         List<JsonPost> postLists = postList.stream()
                 .map(post -> getJsonPost(post))
@@ -44,7 +44,7 @@ public class PostResult {
         return PostResult.builder()
                 .status(HttpStatus.OK.toString())
                 .posts(postLists)
-                .message(msg)
+                .message(message)
                 .build();
     }
 
