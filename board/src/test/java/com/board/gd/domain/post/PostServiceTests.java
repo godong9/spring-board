@@ -206,6 +206,7 @@ public class PostServiceTests {
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
         PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
         Post post = postService.create(testPostDto);
+
         String changedTitle = "changed title";
         PostDto changedPostDto = new PostDto();
         changedPostDto.setId(post.getId());

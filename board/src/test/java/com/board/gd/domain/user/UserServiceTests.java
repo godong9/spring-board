@@ -15,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Created by gd.godong9 on 2017. 4. 3.
@@ -169,6 +167,29 @@ public class UserServiceTests {
         // then
         assertUserDtoAndUser(testUserDto1, testUser1);
         assertUserDtoAndUser(testUserDto2, testUser2);
+    }
+
+    @Test
+    public void success_update() {
+        // given
+        UserDto testUserDto = TestHelper.getTestUserDto("test");
+        User testUser = userService.create(testUserDto);
+
+        String changedName = "changedName";
+        String changedPassword = "changedPassword";
+        UserDto changedUserDto = new UserDto();
+        changedUserDto.setId(testUser.getId());
+        changedUserDto.setName(changedName);
+        changedUserDto.setPassword(changedPassword);
+
+        // when
+        User changedUser = userService.update(changedUserDto);
+
+        // then
+        assertEquals(testUser.getId(), changedUser.getId());
+        assertEquals(changedName, changedUser.getName());
+        assertEquals(testUserDto.getEmail(), changedUser.getEmail());
+        assertNotEquals(testUserDto.getPassword(), changedUser.getPassword());
     }
 
     @Test

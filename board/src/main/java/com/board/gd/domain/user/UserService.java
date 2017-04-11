@@ -73,6 +73,21 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    @Transactional(readOnly = false)
+    public User update(UserDto userDto) {
+        User user = userRepository.findOne(userDto.getId());
+
+        if (!Objects.isNull(userDto.getName())) {
+            user.setName(userDto.getName());
+        }
+
+        if (!Objects.isNull(userDto.getPassword())) {
+            user.setPassword(bcryptEncoder.encode(userDto.getPassword()));
+        }
+
+        return userRepository.save(user);
+    }
+
     public long count() {
         return userRepository.count();
     }
