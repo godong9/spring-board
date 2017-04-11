@@ -9,9 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-public class PostForm {
-    private Long id;
-
+public class CreateForm {
     private Long userId;
 
     @NotNull

@@ -184,6 +184,43 @@ public class PostServiceTests {
         TestHelper.assertPostDtoAndPost(testPostDto, post);
     }
 
+    @Test(expected = PostException.class)
+    public void fail_update_when_invalid_userId() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post post = postService.create(testPostDto);
+        String changedTitle = "changed title";
+        PostDto changedPostDto = new PostDto();
+        changedPostDto.setId(post.getId());
+        changedPostDto.setUserId(-1L);
+        changedPostDto.setTitle(changedTitle);
+
+        // when
+        postService.update(changedPostDto);
+    }
+
+    @Test
+    public void success_update() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post post = postService.create(testPostDto);
+        String changedTitle = "changed title";
+        PostDto changedPostDto = new PostDto();
+        changedPostDto.setId(post.getId());
+        changedPostDto.setUserId(testUser.getId());
+        changedPostDto.setTitle(changedTitle);
+
+        // when
+        Post changedPost = postService.update(changedPostDto);
+
+        // then
+        assertEquals(post.getId(), changedPost.getId());
+        assertEquals(changedTitle, changedPost.getTitle());
+        assertEquals(testPostDto.getContent(), changedPost.getContent());
+    }
+
     @Test
     public void success_count_0() {
         // given

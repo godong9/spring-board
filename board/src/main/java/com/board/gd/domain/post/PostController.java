@@ -1,6 +1,6 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.post.form.PostForm;
+import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.user.UserService;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
@@ -52,16 +52,16 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public PostResult postPost(@RequestBody @Valid PostForm postForm) {
-        postForm.setUserId(userService.getCurrentUser().getId());
-        Post post = postService.create(modelMapper.map(postForm, PostDto.class));
+    public PostResult postPost(@RequestBody @Valid CreateForm createForm) {
+        createForm.setUserId(userService.getCurrentUser().getId());
+        Post post = postService.create(modelMapper.map(createForm, PostDto.class));
         return PostResult.from(post, null);
     }
 
     @PutMapping("/posts")
-    public PostResult putPost(@RequestBody @Valid PostForm postForm) {
-        postForm.setUserId(userService.getCurrentUser().getId());
-        Post post = postService.create(modelMapper.map(postForm, PostDto.class));
+    public PostResult putPost(@RequestBody @Valid CreateForm createForm) {
+        createForm.setUserId(userService.getCurrentUser().getId());
+        Post post = postService.create(modelMapper.map(createForm, PostDto.class));
         return PostResult.from(post, null);
     }
 }

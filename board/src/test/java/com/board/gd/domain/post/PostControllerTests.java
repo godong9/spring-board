@@ -1,7 +1,7 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.TestHelper;
-import com.board.gd.domain.post.form.PostForm;
+import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.UserException;
@@ -106,7 +106,7 @@ public class PostControllerTests {
 
         String title = "test title";
         String content = "test content";
-        PostForm form = new PostForm();
+        CreateForm form = new CreateForm();
         form.setTitle(title);
         form.setContent(content);
 
@@ -136,7 +136,7 @@ public class PostControllerTests {
 
         String title = "test title";
         String content = "test content";
-        PostForm form = new PostForm();
+        CreateForm form = new CreateForm();
         form.setTitle(title);
         form.setContent(content);
 

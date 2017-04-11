@@ -8,6 +8,7 @@ import com.board.gd.exception.PostException;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.querydsl.core.types.Predicate;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,7 +55,18 @@ public class PostService {
     @Transactional(readOnly = false)
     public Post update(PostDto postDto) {
         Post post = postRepository.findOne(postDto.getId());
-//        post.setTitle();
+        if (ObjectUtils.notEqual(postDto.getUserId(), post.getUser().getId())) {
+            throw new PostException("Not allowed!");
+        }
+
+        if (!Objects.isNull(postDto.getTitle())) {
+            post.setTitle(postDto.getTitle());
+        }
+
+        if (!Objects.isNull(postDto.getContent())) {
+            post.setContent(postDto.getContent());
+        }
+
         return postRepository.save(post);
     }
 
@@ -62,10 +74,12 @@ public class PostService {
         return postRepository.count();
     }
 
+    @Transactional(readOnly = false)
     public void delete(Long id) {
         postRepository.delete(id);
     }
 
+    @Transactional(readOnly = false)
     public void deleteAll() {
         postRepository.deleteAll();
     }

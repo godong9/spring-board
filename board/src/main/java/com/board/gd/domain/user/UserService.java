@@ -81,6 +81,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    @Transactional(readOnly = false)
     public void deleteAll() {
         userRepository.deleteAll();
     }
