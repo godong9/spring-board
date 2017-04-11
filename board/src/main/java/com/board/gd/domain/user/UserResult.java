@@ -19,12 +19,6 @@ public class UserResult {
     private String message;
     private JsonUser user;
 
-    @Data
-    private static class JsonUser {
-        private Long id;
-        private String name;
-    }
-
     public static UserResult from(User user, String msg) {
         JsonUser jsonUser = new JsonUser();
         jsonUser.setId(user.getId());

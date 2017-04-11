@@ -29,7 +29,7 @@ public class PostService {
     }
 
     public Page<Post> findAll(Predicate predicate, Pageable pageable) {
-        if (Objects.isNull(pageable) || Objects.isNull(predicate)) {
+        if (Objects.isNull(pageable)) {
             throw new PostException("Invalid pageable!");
         }
         return postRepository.findAll(predicate, pageable);
@@ -38,7 +38,7 @@ public class PostService {
     @Transactional
     public Post save(PostDto postDto) {
         User user = userService.findOne(postDto.getUserId());
-        if (user == null) {
+        if (Objects.isNull(user)) {
             throw new PostException("Not exist user!");
         }
         return postRepository.save(Post.builder()

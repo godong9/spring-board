@@ -32,17 +32,16 @@ public class PostController {
      * @apiParam {Number} [size=20] 가져올 개수
      * @apiParam {Number} [page=0] 가져올 페이지
      * @apiParam {String="createdAt,desc", "updatedAt,desc"} [sort=createdAt,desc] 정렬 조건
-     * @apiParam {Number} [userId] 가져올 유저 id
-     * @apiParam {String} [type=FREE,PAID] 가져올 타입
+     * @apiParam {Number} [user.id] 가져올 유저 id
      *
      * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
      */
     @GetMapping("/posts")
-    public void getPosts(
+    public PostResult getPosts(
             @QuerydslPredicate(root = Post.class) Predicate predicate,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         log.debug("[getPosts] pageable: {}", pageable.toString());
         log.debug("[getPosts] predicate: {}", predicate);
-        postService.findAll(predicate, pageable);
+        return PostResult.from(postService.findAll(predicate, pageable), null);
     }
 }

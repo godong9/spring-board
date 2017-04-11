@@ -1,7 +1,10 @@
 package com.board.gd.domain.post;
 
+import com.board.gd.domain.user.QUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,5 +12,12 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long>, QueryDslPredicateExecutor<Post> {
+//public interface PostRepository extends JpaRepository<Post, Long>, QueryDslPredicateExecutor<Post> {
+public interface PostRepository extends JpaRepository<Post, Long>, QueryDslPredicateExecutor<Post>, QuerydslBinderCustomizer<QPost> {
+
+    @Override
+    default public void customize(QuerydslBindings bindings, QPost root) {
+        bindings.including(root.id);
+        bindings.including(root.user.id);
+    }
 }
