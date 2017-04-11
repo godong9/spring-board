@@ -80,7 +80,7 @@ public class UserControllerTests {
         form.setName(userName);
         form.setEmail(userEmail);
         form.setPassword(userPassword);
-        given(userService.save(any(UserDto.class))).willReturn(User.builder()
+        given(userService.create(any(UserDto.class))).willReturn(User.builder()
                 .id(1L)
                 .name(userName)
                 .email(userEmail)

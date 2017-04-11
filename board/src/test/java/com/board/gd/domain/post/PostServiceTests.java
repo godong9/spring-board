@@ -1,5 +1,6 @@
 package com.board.gd.domain.post;
 
+import com.board.gd.TestHelper;
 import com.board.gd.exception.PostException;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
@@ -36,9 +37,6 @@ public class PostServiceTests {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PostTestHelper postTestHelper;
-
     @Before
     public void setUp() {
         postService.deleteAll();
@@ -48,9 +46,9 @@ public class PostServiceTests {
     @Test
     public void fail_findOne_when_invalid_id() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto = postTestHelper.getTestPostDto(testUser.getId());
-        postService.save(testPostDto);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        postService.create(testPostDto);
 
         // when
         Post post = postService.findOne(-1L);
@@ -62,25 +60,25 @@ public class PostServiceTests {
     @Test
     public void success_findOne() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto = postTestHelper.getTestPostDto(testUser.getId());
-        Post testPost = postService.save(testPostDto);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
 
         // when
         Post post = postService.findOne(testPost.getId());
 
         // then
-        postTestHelper.assertPostDtoAndPost(testPostDto, post);
+        TestHelper.assertPostDtoAndPost(testPostDto, post);
     }
 
     @Test(expected = PostException.class)
     public void fail_findAll_when_invalid_pageable() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto1 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto2 = postTestHelper.getTestPostDto(testUser.getId());
-        postService.save(testPostDto1);
-        postService.save(testPostDto2);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser.getId());
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
 
         // when
         Page<Post> result = postService.findAll(null, null);
@@ -89,13 +87,13 @@ public class PostServiceTests {
     @Test
     public void success_findAll_sortBy_id_desc() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto1 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto2 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto3 = postTestHelper.getTestPostDto(testUser.getId());
-        postService.save(testPostDto1);
-        postService.save(testPostDto2);
-        postService.save(testPostDto3);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto3 = TestHelper.getTestPostDto(testUser.getId());
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
+        postService.create(testPostDto3);
         Pageable pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id"));
         Predicate predicateMock = mock(Predicate.class);
 
@@ -108,21 +106,21 @@ public class PostServiceTests {
         Post post3 = posts.get(0);
         Post post2 = posts.get(1);
         Post post1 = posts.get(2);
-        postTestHelper.assertPostDtoAndPost(testPostDto3, post3);
-        postTestHelper.assertPostDtoAndPost(testPostDto2, post2);
-        postTestHelper.assertPostDtoAndPost(testPostDto1, post1);
+        TestHelper.assertPostDtoAndPost(testPostDto3, post3);
+        TestHelper.assertPostDtoAndPost(testPostDto2, post2);
+        TestHelper.assertPostDtoAndPost(testPostDto1, post1);
     }
 
     @Test
     public void success_findAll_sortBy_createdAt_desc() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto1 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto2 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto3 = postTestHelper.getTestPostDto(testUser.getId());
-        postService.save(testPostDto1);
-        postService.save(testPostDto2);
-        postService.save(testPostDto3);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto3 = TestHelper.getTestPostDto(testUser.getId());
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
+        postService.create(testPostDto3);
         Pageable pageRequest = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "createdAt"));
         Predicate predicateMock = mock(Predicate.class);
 
@@ -135,19 +133,19 @@ public class PostServiceTests {
         Post post3 = posts.get(0);
         Post post2 = posts.get(1);
         Post post1 = posts.get(2);
-        postTestHelper.assertPostDtoAndPost(testPostDto3, post3);
-        postTestHelper.assertPostDtoAndPost(testPostDto2, post2);
-        postTestHelper.assertPostDtoAndPost(testPostDto1, post1);
+        TestHelper.assertPostDtoAndPost(testPostDto3, post3);
+        TestHelper.assertPostDtoAndPost(testPostDto2, post2);
+        TestHelper.assertPostDtoAndPost(testPostDto1, post1);
     }
 
     @Test
     public void success_findAll_size_1_sortBy_createdAt_asc() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto1 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto2 = postTestHelper.getTestPostDto(testUser.getId());
-        postService.save(testPostDto1);
-        postService.save(testPostDto2);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser.getId());
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
         Pageable pageRequest = new PageRequest(0, 1, new Sort(Sort.Direction.ASC, "createdAt"));
         Predicate predicateMock = mock(Predicate.class);
 
@@ -158,50 +156,32 @@ public class PostServiceTests {
         // then
         assertEquals(posts.size(), 1);
         Post post1 = posts.get(0);
-        postTestHelper.assertPostDtoAndPost(testPostDto1, post1);
+        TestHelper.assertPostDtoAndPost(testPostDto1, post1);
     }
 
     @Test(expected = PostException.class)
     public void fail_save_insert() {
         // given
-        PostDto testPostDto = postTestHelper.getTestPostDto(-1L);
+        PostDto testPostDto = TestHelper.getTestPostDto(-1L);
 
         // when
-        Post post = postService.save(testPostDto);
+        Post post = postService.create(testPostDto);
 
         // then
-        postTestHelper.assertPostDtoAndPost(testPostDto, post);
+        TestHelper.assertPostDtoAndPost(testPostDto, post);
     }
 
     @Test
     public void success_save_insert() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto = postTestHelper.getTestPostDto(testUser.getId());
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
 
         // when
-        Post post = postService.save(testPostDto);
+        Post post = postService.create(testPostDto);
 
         // then
-        postTestHelper.assertPostDtoAndPost(testPostDto, post);
-    }
-
-    @Test
-    public void success_save_update() {
-        // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto = postTestHelper.getTestPostDto(testUser.getId());
-        Post post = postService.save(testPostDto);
-
-        // when
-        String changedContent = "change content";
-        testPostDto.setId(post.getId());
-        testPostDto.setContent(changedContent);
-        Post changedPost = postService.save(testPostDto);
-
-        // then
-        assertEquals(post.getId(), changedPost.getId());
-        assertEquals(changedPost.getContent(), changedContent);
+        TestHelper.assertPostDtoAndPost(testPostDto, post);
     }
 
     @Test
@@ -218,11 +198,11 @@ public class PostServiceTests {
     @Test
     public void success_count_2() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto1 = postTestHelper.getTestPostDto(testUser.getId());
-        PostDto testPostDto2 = postTestHelper.getTestPostDto(testUser.getId());
-        postService.save(testPostDto1);
-        postService.save(testPostDto2);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser.getId());
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser.getId());
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
 
         // when
         Long postCount = postService.count();
@@ -243,9 +223,9 @@ public class PostServiceTests {
     @Test
     public void success_delete() {
         // given
-        User testUser = postTestHelper.saveAndGetTestUser("test");
-        PostDto testPostDto = postTestHelper.getTestPostDto(testUser.getId());
-        Post post = postService.save(testPostDto);
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post post = postService.create(testPostDto);
         Long deletedId = post.getId();
 
         // when

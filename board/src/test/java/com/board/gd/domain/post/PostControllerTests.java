@@ -1,5 +1,6 @@
 package com.board.gd.domain.post;
 
+import com.board.gd.TestHelper;
 import com.board.gd.domain.post.form.PostForm;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
@@ -46,9 +47,6 @@ public class PostControllerTests {
     private Filter springSecurityFilterChain;
 
     @Autowired
-    private PostTestHelper postTestHelper;
-
-    @Autowired
     private PostService postService;
 
     @MockBean
@@ -67,14 +65,17 @@ public class PostControllerTests {
     @Test
     public void success_getPosts_when_params_userId() throws Exception {
         // given
-        User testUser1 = postTestHelper.saveAndGetTestUser("test1");
-        User testUser2 = postTestHelper.saveAndGetTestUser("test2");
-        PostDto testPostDto1 = postTestHelper.getTestPostDto(testUser1.getId());
-        PostDto testPostDto2 = postTestHelper.getTestPostDto(testUser2.getId());
-        postService.save(testPostDto1);
-        postService.save(testPostDto2);
-        String testUser1Id =  testUser1.getId().toString();
-        String testUser2Id =  testUser2.getId().toString();
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+        given(userService.findOne(2L)).willReturn(TestHelper.getTestUser(2L));
+
+        User testUser1 = TestHelper.getTestUser(1L);
+        User testUser2 = TestHelper.getTestUser(2L);
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId());
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser2.getId());
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
+        String testUser1Id = testUser1.getId().toString();
+        String testUser2Id = testUser2.getId().toString();
 
         // when
         mockMvc.perform(get("/posts")

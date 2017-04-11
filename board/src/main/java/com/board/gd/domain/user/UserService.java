@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * Created by gd.godong9 on 2017. 4. 3.
  */
 
+@Transactional(readOnly = true)
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -46,6 +47,7 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = false)
     public UserRole saveUserRole(User user, UserRoleType userRole) {
         if (Objects.isNull(user)) {
             throw new UserException("Fail saveUserRole!");
@@ -56,11 +58,9 @@ public class UserService implements UserDetailsService {
                 .build());
     }
 
-    @Transactional
-    public User save(UserDto userDto) {
-        Long userDtoId = userDto.getId();
+    @Transactional(readOnly = false)
+    public User create(UserDto userDto) {
         User user = userRepository.save(User.builder()
-                .id(userDtoId)
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .password(bcryptEncoder.encode(userDto.getPassword()))
@@ -68,9 +68,7 @@ public class UserService implements UserDetailsService {
                 .enabled(true)
                 .build());
 
-        if (Objects.isNull(userDtoId)) { // 유저 새로 생길 때만 권한 추가
-            saveUserRole(user, UserRoleType.USER);
-        }
+        saveUserRole(user, UserRoleType.USER);
 
         return user;
     }

@@ -1,5 +1,6 @@
 package com.board.gd.domain.user;
 
+import com.board.gd.TestHelper;
 import com.board.gd.exception.UserException;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,8 +38,8 @@ public class UserServiceTests {
     @Test
     public void fail_findOne_when_invalid_id() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
-        userService.save(testUserDto);
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        userService.create(testUserDto);
 
         // when
         User user = userService.findOne(-1L);
@@ -50,8 +51,8 @@ public class UserServiceTests {
     @Test
     public void success_findOne() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
-        User testUser = userService.save(testUserDto);
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        User testUser = userService.create(testUserDto);
 
         // when
         User user = userService.findOne(testUser.getId());
@@ -63,8 +64,8 @@ public class UserServiceTests {
     @Test
     public void fail_findByEmail() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
-        userService.save(testUserDto);
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        userService.create(testUserDto);
 
         // when
         User user = userService.findByEmail("test1@");
@@ -76,8 +77,8 @@ public class UserServiceTests {
     @Test
     public void success_findByEmail() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
-        User testUser = userService.save(testUserDto);
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        User testUser = userService.create(testUserDto);
 
         // when
         User user = userService.findByEmail(testUser.getEmail());
@@ -100,8 +101,8 @@ public class UserServiceTests {
     @Test
     public void success_getRolesByUserId() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
-        User testUser = userService.save(testUserDto);
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        User testUser = userService.create(testUserDto);
 
         // when
         List<GrantedAuthority> roles = userService.getRolesByUserId(testUser.getId());
@@ -124,8 +125,8 @@ public class UserServiceTests {
     @Test
     public void success_saveUserRole() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
-        User testUser = userService.save(testUserDto);
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        User testUser = userService.create(testUserDto);
 
         // when
         UserRole userRole = userService.saveUserRole(testUser, UserRoleType.USER);
@@ -137,54 +138,37 @@ public class UserServiceTests {
     @Test(expected = DataIntegrityViolationException.class)
     public void fail_save_insert_when_invalid_email() {
         // given
-        UserDto testUserDto = getTestUserDto("test1");
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
         testUserDto.setEmail(null);
 
         // when
-        userService.save(testUserDto);
+        userService.create(testUserDto);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void fail_save_insert_when_duplicated_email() {
         // given
-        UserDto testUserDto1 = getTestUserDto("test1");
-        UserDto testUserDto2 = getTestUserDto("test1");
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        UserDto testUserDto2 = TestHelper.getTestUserDto("test1");
 
         // when
-        userService.save(testUserDto1);
-        userService.save(testUserDto2);
+        userService.create(testUserDto1);
+        userService.create(testUserDto2);
     }
 
     @Test
     public void success_save_insert() {
         // given
-        UserDto testUserDto1 = getTestUserDto("test1");
-        UserDto testUserDto2 = getTestUserDto("test2");
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        UserDto testUserDto2 = TestHelper.getTestUserDto("test2");
 
         // when
-        User testUser1 = userService.save(testUserDto1);
-        User testUser2 = userService.save(testUserDto2);
+        User testUser1 = userService.create(testUserDto1);
+        User testUser2 = userService.create(testUserDto2);
 
         // then
         assertUserDtoAndUser(testUserDto1, testUser1);
         assertUserDtoAndUser(testUserDto2, testUser2);
-    }
-
-    @Test
-    public void success_save_update() {
-        // given
-        UserDto testUserDto = getTestUserDto("test1");
-        String changedName = "change";
-        User testUser = userService.save(testUserDto);
-
-        // when
-        testUserDto.setId(testUser.getId());
-        testUserDto.setName(changedName);
-        User changedTestUser = userService.save(testUserDto);
-
-        // then
-        assertEquals(testUser.getId(), changedTestUser.getId());
-        assertEquals(changedTestUser.getName(), changedName);
     }
 
     @Test
@@ -201,10 +185,10 @@ public class UserServiceTests {
     @Test
     public void success_count_2() {
         // given
-        UserDto testUserDto1 = getTestUserDto("test1");
-        UserDto testUserDto2 = getTestUserDto("test2");
-        userService.save(testUserDto1);
-        userService.save(testUserDto2);
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        UserDto testUserDto2 = TestHelper.getTestUserDto("test2");
+        userService.create(testUserDto1);
+        userService.create(testUserDto2);
 
         // when
         Long userCount = userService.count();
@@ -216,10 +200,10 @@ public class UserServiceTests {
     @Test
     public void success_findAll() {
         // given
-        UserDto testUserDto1 = getTestUserDto("test1");
-        UserDto testUserDto2 = getTestUserDto("test2");
-        userService.save(testUserDto1);
-        userService.save(testUserDto2);
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        UserDto testUserDto2 = TestHelper.getTestUserDto("test2");
+        userService.create(testUserDto1);
+        userService.create(testUserDto2);
 
         // when
         List<User> testUserList = userService.findAll();
@@ -231,10 +215,10 @@ public class UserServiceTests {
     @Test
     public void success_deleteAll() {
         // given
-        UserDto testUserDto1 = getTestUserDto("test1");
-        UserDto testUserDto2 = getTestUserDto("test2");
-        userService.save(testUserDto1);
-        userService.save(testUserDto2);
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        UserDto testUserDto2 = TestHelper.getTestUserDto("test2");
+        userService.create(testUserDto1);
+        userService.create(testUserDto2);
 
         // when
         userService.deleteAll();
@@ -242,16 +226,6 @@ public class UserServiceTests {
         // then
         List<User> testUserList = userService.findAll();
         assertEquals(testUserList.size(), 0);
-    }
-
-
-    public UserDto getTestUserDto(String name) {
-        UserDto userDto = new UserDto();
-        userDto.setName(name);
-        userDto.setEmail(name + "@test.com");
-        userDto.setPassword("test");
-        userDto.setProfileImg("http://test.com/test.jpg");
-        return userDto;
     }
 
     public void assertUserDtoAndUser(UserDto userDto, User user) {

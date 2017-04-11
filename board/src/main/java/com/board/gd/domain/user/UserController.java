@@ -53,7 +53,7 @@ public class UserController {
      */
     @PostMapping("/users/signup")
     public UserResult userSignup(@RequestBody @Valid SignupForm signupForm) {
-        User user = userService.save(modelMapper.map(signupForm, UserDto.class));
+        User user = userService.create(modelMapper.map(signupForm, UserDto.class));
         return UserResult.from(user, null);
     }
 

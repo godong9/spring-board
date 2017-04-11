@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+@Transactional(readOnly = true)
 @Service
 public class PostService {
     @Autowired
@@ -35,20 +36,26 @@ public class PostService {
         return postRepository.findAll(predicate, pageable);
     }
 
-    @Transactional
-    public Post save(PostDto postDto) {
+    @Transactional(readOnly = false)
+    public Post create(PostDto postDto) {
         User user = userService.findOne(postDto.getUserId());
         if (Objects.isNull(user)) {
             throw new PostException("Not exist user!");
         }
         return postRepository.save(Post.builder()
-                .id(postDto.getId())
                 .type(PostType.FREE) // 디폴트로 FREE로 세팅
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .viewCount(0L)
                 .user(user)
                 .build());
+    }
+
+    @Transactional(readOnly = false)
+    public Post update(PostDto postDto) {
+        Post post = postRepository.findOne(postDto.getId());
+//        post.setTitle();
+        return postRepository.save(post);
     }
 
     public long count() {

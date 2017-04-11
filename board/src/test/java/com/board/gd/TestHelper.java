@@ -1,11 +1,10 @@
-package com.board.gd.domain.post;
+package com.board.gd;
 
+import com.board.gd.domain.post.Post;
+import com.board.gd.domain.post.PostDto;
+import com.board.gd.domain.post.PostType;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserDto;
-import com.board.gd.domain.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Component;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,21 +13,25 @@ import static org.junit.Assert.assertNotNull;
  * Created by gd.godong9 on 2017. 4. 10.
  */
 
-@SpringBootTest
-@Component
-public class PostTestHelper {
-    @Autowired
-    private UserService userService;
+public class TestHelper {
+    public static User getTestUser(Long id) {
+        return User.builder()
+                .id(id)
+                .name("test" + id.toString())
+                .password("test")
+                .email("test" + id.toString() + "@test.com")
+                .build();
+    }
 
-    public User saveAndGetTestUser(String name) {
+    public static UserDto getTestUserDto(String name) {
         UserDto userDto = new UserDto();
         userDto.setName(name);
         userDto.setEmail(name + "@test.com");
         userDto.setPassword("test");
-        return userService.save(userDto);
+        return userDto;
     }
 
-    public PostDto getTestPostDto(Long userId) {
+    public static PostDto getTestPostDto(Long userId) {
         PostDto postDto = new PostDto();
         postDto.setType(PostType.FREE);
         postDto.setTitle("test title");
@@ -37,7 +40,7 @@ public class PostTestHelper {
         return postDto;
     }
 
-    public void assertPostDtoAndPost(PostDto postDto, Post post) {
+    public static void assertPostDtoAndPost(PostDto postDto, Post post) {
         assertEquals(postDto.getType(), post.getType());
         assertEquals(postDto.getTitle(), post.getTitle());
         assertEquals(postDto.getContent(), post.getContent());
