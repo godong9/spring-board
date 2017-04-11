@@ -1,11 +1,17 @@
 package com.board.gd.domain.post;
 
+import com.board.gd.domain.post.form.PostForm;
 import com.board.gd.domain.user.User;
+import com.board.gd.domain.user.UserService;
+import com.board.gd.exception.UserException;
+import com.board.gd.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,7 +22,10 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.Filter;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -42,8 +51,13 @@ public class PostControllerTests {
     @Autowired
     private PostService postService;
 
+    @MockBean
+    private UserService userService;
+
     @Before
     public void setup() {
+        postService.deleteAll();
+
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .addFilters(springSecurityFilterChain)
@@ -64,7 +78,7 @@ public class PostControllerTests {
 
         // when
         mockMvc.perform(get("/posts")
-                .param("userId", testUser1Id)
+                .param("user.id", testUser1Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
 //                .andDo(print())
@@ -75,7 +89,7 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.posts[0].user.id").value(testUser1Id));
 
         mockMvc.perform(get("/posts")
-                .param("userId", testUser2Id)
+                .param("user.id", testUser2Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
 //                .andDo(print())
@@ -84,6 +98,56 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.posts[0].title").value(testPostDto2.getTitle()))
                 .andExpect(jsonPath("$.posts[0].content").value(testPostDto2.getContent()))
                 .andExpect(jsonPath("$.posts[0].user.id").value(testUser2Id));
+    }
+
+    @Test
+    public void fail_postPost_insert_when_not_login() throws Exception {
+        // given
+        String title = "test title";
+        String content = "test content";
+        PostForm form = new PostForm();
+        form.setTitle(title);
+        form.setContent(content);
+
+        given(userService.getCurrentUser()).willThrow(new UserException("Not authenticated!"));
+
+        // when
+        mockMvc.perform(post("/posts")
+                .content(JsonUtils.toJson(form))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void success_postPost_insert() throws Exception {
+        // given
+        String title = "test title";
+        String content = "test content";
+        PostForm form = new PostForm();
+        form.setTitle(title);
+        form.setContent(content);
+
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+
+        given(userService.findOne(any(Long.class))).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+
+        // when
+        mockMvc.perform(post("/posts")
+                .content(JsonUtils.toJson(form))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.post.id").isNotEmpty())
+                .andExpect(jsonPath("$.post.title").value(title))
+                .andExpect(jsonPath("$.post.content").value(content))
+                .andExpect(jsonPath("$.post.user.id").value(1L));
     }
 
 }

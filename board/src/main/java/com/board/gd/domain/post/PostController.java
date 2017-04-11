@@ -1,5 +1,7 @@
 package com.board.gd.domain.post;
 
+import com.board.gd.domain.post.form.PostForm;
+import com.board.gd.domain.user.UserService;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -9,7 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * Created by gd.godong9 on 2017. 4. 10.
@@ -23,6 +29,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * @api {get} /posts Request Post list
@@ -43,5 +52,12 @@ public class PostController {
         log.debug("[getPosts] pageable: {}", pageable.toString());
         log.debug("[getPosts] predicate: {}", predicate);
         return PostResult.from(postService.findAll(predicate, pageable), null);
+    }
+
+    @PostMapping("/posts")
+    public PostResult postPost(@RequestBody @Valid PostForm postForm) {
+        postForm.setUserId(userService.getCurrentUser().getId());
+        Post post = postService.save(modelMapper.map(postForm, PostDto.class));
+        return PostResult.from(post, null);
     }
 }

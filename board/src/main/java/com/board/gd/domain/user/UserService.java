@@ -2,8 +2,10 @@ package com.board.gd.domain.user;
 
 import com.board.gd.exception.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -83,6 +85,22 @@ public class UserService implements UserDetailsService {
 
     public void deleteAll() {
         userRepository.deleteAll();
+    }
+
+    public void setAuthentication(Authentication authentication) {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    public User getCurrentUser() {
+        Object userDetail = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        if (!(userDetail instanceof User)) {
+            throw new UserException("Not authenticated!");
+        }
+        return (User) userDetail;
+    }
+
+    public void clearAuthentication() {
+        SecurityContextHolder.clearContext();
     }
 
     @Override

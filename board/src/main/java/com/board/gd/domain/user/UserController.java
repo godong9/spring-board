@@ -2,7 +2,6 @@ package com.board.gd.domain.user;
 
 import com.board.gd.domain.user.form.LoginForm;
 import com.board.gd.domain.user.form.SignupForm;
-import com.board.gd.utils.SessionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +75,7 @@ public class UserController {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = authenticationManager.authenticate(token);
 
-        SessionUtils.setAuthentication(authentication);
+        userService.setAuthentication(authentication);
 
         return UserResult.from(HttpStatus.OK, "success");
     }
@@ -91,7 +90,7 @@ public class UserController {
      */
     @PostMapping("/users/logout")
     public UserResult userLogout() {
-        SessionUtils.clearAuthentication();
+        userService.clearAuthentication();
         return UserResult.from(HttpStatus.OK, "success");
     }
 
@@ -108,6 +107,6 @@ public class UserController {
      */
     @GetMapping("/users/me")
     public UserResult getUserMe() {
-        return UserResult.from(SessionUtils.getUser(), null);
+        return UserResult.from(userService.getCurrentUser(), null);
     }
 }
