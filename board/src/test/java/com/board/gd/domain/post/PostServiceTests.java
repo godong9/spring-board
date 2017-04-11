@@ -160,7 +160,7 @@ public class PostServiceTests {
     }
 
     @Test(expected = PostException.class)
-    public void fail_save_insert() {
+    public void fail_create() {
         // given
         PostDto testPostDto = TestHelper.getTestPostDto(-1L);
 
@@ -172,7 +172,7 @@ public class PostServiceTests {
     }
 
     @Test
-    public void success_save_insert() {
+    public void success_create() {
         // given
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
         PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());

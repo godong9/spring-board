@@ -102,13 +102,13 @@ public class PostControllerTests {
     @Test
     public void fail_postPost_insert_when_not_login() throws Exception {
         // given
+        given(userService.getCurrentUser()).willThrow(new UserException("Not authenticated!"));
+
         String title = "test title";
         String content = "test content";
         PostForm form = new PostForm();
         form.setTitle(title);
         form.setContent(content);
-
-        given(userService.getCurrentUser()).willThrow(new UserException("Not authenticated!"));
 
         // when
         mockMvc.perform(post("/posts")
@@ -122,12 +122,6 @@ public class PostControllerTests {
     @Test
     public void success_postPost_insert() throws Exception {
         // given
-        String title = "test title";
-        String content = "test content";
-        PostForm form = new PostForm();
-        form.setTitle(title);
-        form.setContent(content);
-
         given(userService.getCurrentUser()).willReturn(User.builder()
                 .id(1L)
                 .name("test")
@@ -139,6 +133,12 @@ public class PostControllerTests {
                 .name("test")
                 .email("test@test.com")
                 .build());
+
+        String title = "test title";
+        String content = "test content";
+        PostForm form = new PostForm();
+        form.setTitle(title);
+        form.setContent(content);
 
         // when
         mockMvc.perform(post("/posts")

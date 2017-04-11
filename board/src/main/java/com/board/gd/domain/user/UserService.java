@@ -48,9 +48,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = false)
-    public UserRole saveUserRole(User user, UserRoleType userRole) {
+    public UserRole createUserRole(User user, UserRoleType userRole) {
         if (Objects.isNull(user)) {
-            throw new UserException("Fail saveUserRole!");
+            throw new UserException("Fail createUserRole!");
         }
         return userRoleRepository.save(UserRole.builder()
                 .role(userRole)
@@ -68,7 +68,7 @@ public class UserService implements UserDetailsService {
                 .enabled(true)
                 .build());
 
-        saveUserRole(user, UserRoleType.USER);
+        createUserRole(user, UserRoleType.USER);
 
         return user;
     }
