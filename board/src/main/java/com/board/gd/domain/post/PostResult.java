@@ -67,6 +67,8 @@ public class PostResult {
         jsonPost.setTitle(post.getTitle());
         jsonPost.setContent(post.getContent());
         jsonPost.setViewCount(post.getViewCount());
+        jsonPost.setCreatedAt(post.getCreatedAt());
+        jsonPost.setUpdatedAt(post.getUpdatedAt());
 
         return jsonPost;
     }

@@ -100,7 +100,7 @@ public class PostControllerTests {
     }
 
     @Test
-    public void fail_postPost_insert_when_not_login() throws Exception {
+    public void fail_postPost_when_not_login() throws Exception {
         // given
         given(userService.getCurrentUser()).willThrow(new UserException("Not authenticated!"));
 
@@ -114,13 +114,12 @@ public class PostControllerTests {
         mockMvc.perform(post("/posts")
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.message").value("Not authenticated!"));
     }
 
     @Test
-    public void success_postPost_insert() throws Exception {
+    public void success_postPost() throws Exception {
         // given
         given(userService.getCurrentUser()).willReturn(User.builder()
                 .id(1L)
@@ -144,10 +143,13 @@ public class PostControllerTests {
         mockMvc.perform(post("/posts")
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.post.id").isNotEmpty())
                 .andExpect(jsonPath("$.post.title").value(title))
                 .andExpect(jsonPath("$.post.content").value(content))
+                .andExpect(jsonPath("$.post.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.post.updatedAt").isNotEmpty())
                 .andExpect(jsonPath("$.post.user.id").value(1L));
     }
 

@@ -35,7 +35,7 @@ public class PostController {
 
     /**
      * @api {get} /posts Request Post list
-     * @apiName PostList
+     * @apiName GetPosts
      * @apiGroup Post
      *
      * @apiParam {Number} [size=20] 가져올 개수
@@ -54,6 +54,25 @@ public class PostController {
         return PostResult.from(postService.findAll(predicate, pageable), null);
     }
 
+    /**
+     * @api {post} /posts Request Post create
+     * @apiName CreatePost
+     * @apiGroup Post
+     *
+     * @apiParam {String} title 제목
+     * @apiParam {String} content 내용
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {Object} post 포스트 객체
+     * @apiSuccess {String} post.id 포스트 id
+     * @apiSuccess {String} post.title 포스트 제목
+     * @apiSuccess {String} post.content 포스트 내용
+     * @apiSuccess {Date} post.createdAt 포스트 생성일
+     * @apiSuccess {Date} post.updatedAt 포스트 수정일
+     * @apiSuccess {Object} post.user 포스트 유저
+     * @apiSuccess {String} post.user.id 포스트 유저 id
+     */
     @PostMapping("/posts")
     public PostResult postPost(@RequestBody @Valid CreateForm createForm) {
         createForm.setUserId(userService.getCurrentUser().getId());
