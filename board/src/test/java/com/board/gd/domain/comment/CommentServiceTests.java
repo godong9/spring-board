@@ -8,6 +8,7 @@ import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,13 @@ public class CommentServiceTests {
 
     @Autowired
     private CommentService commentService;
+
+    @Before
+    public void setUp() {
+        commentService.deleteAll();
+        postService.deleteAll();
+        userService.deleteAll();
+    }
 
     @Test
     public void success_findByPostId() {

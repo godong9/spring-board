@@ -61,4 +61,17 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public long count() {
+        return commentRepository.count();
+    }
+
+    @Transactional(readOnly = false)
+    public void delete(Long id) {
+        commentRepository.delete(id);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteAll() {
+        commentRepository.deleteAll();
+    }
 }
