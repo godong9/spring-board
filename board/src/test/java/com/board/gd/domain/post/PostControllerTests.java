@@ -2,6 +2,7 @@ package com.board.gd.domain.post;
 
 import com.board.gd.TestHelper;
 import com.board.gd.domain.post.form.CreateForm;
+import com.board.gd.domain.post.form.UpdateForm;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.UserException;
@@ -26,6 +27,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -148,9 +151,73 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.post.id").isNotEmpty())
                 .andExpect(jsonPath("$.post.title").value(title))
                 .andExpect(jsonPath("$.post.content").value(content))
-                .andExpect(jsonPath("$.post.createdAt").isNotEmpty())
-                .andExpect(jsonPath("$.post.updatedAt").isNotEmpty())
+                .andExpect(jsonPath("$.post.created_at").isNotEmpty())
+                .andExpect(jsonPath("$.post.updated_at").isNotEmpty())
                 .andExpect(jsonPath("$.post.user.id").value(1L));
     }
 
+    @Test
+    public void success_putPost() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+
+        User testUser = TestHelper.getTestUser(1L);
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+
+        String changedTitle = "changed title";
+        String changedContent = "changed content";
+
+        UpdateForm form = new UpdateForm();
+        form.setTitle(changedTitle);
+        form.setContent(changedContent);
+
+        // when
+        mockMvc.perform(put("/posts/" + testPost.getId())
+                .content(JsonUtils.toJson(form))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.post.id").isNotEmpty())
+                .andExpect(jsonPath("$.post.title").value(changedTitle))
+                .andExpect(jsonPath("$.post.content").value(changedContent))
+                .andExpect(jsonPath("$.post.created_at").isNotEmpty())
+                .andExpect(jsonPath("$.post.updated_at").isNotEmpty())
+                .andExpect(jsonPath("$.post.user.id").value(1L));
+    }
+
+    @Test
+    public void fail_deletePost_when_empty_id() throws Exception {
+        // when
+        mockMvc.perform(delete("/posts/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void success_deletePost() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+
+        User testUser = TestHelper.getTestUser(1L);
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+
+        // when
+        mockMvc.perform(delete("/posts/" + testPost.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }

@@ -80,14 +80,41 @@ public class PostController {
         return PostResult.from(post, null);
     }
 
+    /**
+     * @api {put} /posts/:id Request Post update
+     * @apiName UpdatePost
+     * @apiGroup Post
+     *
+     * @apiParam {String} [title] 제목
+     * @apiParam {String} [content] 내용
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {Object} post 포스트 객체
+     * @apiSuccess {String} post.id 포스트 id
+     * @apiSuccess {String} post.title 포스트 제목
+     * @apiSuccess {String} post.content 포스트 내용
+     * @apiSuccess {Date} post.createdAt 포스트 생성일
+     * @apiSuccess {Date} post.updatedAt 포스트 수정일
+     * @apiSuccess {Object} post.user 포스트 유저
+     * @apiSuccess {String} post.user.id 포스트 유저 id
+     */
     @PutMapping("/posts/{id}")
     public PostResult putPost(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(id);
         updateForm.setUserId(userService.getCurrentUser().getId());
-        Post post = postService.create(modelMapper.map(updateForm, PostDto.class));
+        Post post = postService.update(modelMapper.map(updateForm, PostDto.class));
         return PostResult.from(post, null);
     }
 
+    /**
+     * @api {delete} /posts/:id Request Post delete
+     * @apiName DeletePost
+     * @apiGroup Post
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     */
     @DeleteMapping("/posts/{id}")
     public PostResult deletePost(@PathVariable @Valid Long id) {
         DeleteForm deleteForm = new DeleteForm();
