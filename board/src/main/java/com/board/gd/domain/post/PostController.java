@@ -1,6 +1,8 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.domain.post.form.CreateForm;
+import com.board.gd.domain.post.form.DeleteForm;
+import com.board.gd.domain.post.form.UpdateForm;
 import com.board.gd.domain.user.UserService;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -58,10 +61,20 @@ public class PostController {
         return PostResult.from(post, null);
     }
 
-    @PutMapping("/posts")
-    public PostResult putPost(@RequestBody @Valid CreateForm createForm) {
-        createForm.setUserId(userService.getCurrentUser().getId());
-        Post post = postService.create(modelMapper.map(createForm, PostDto.class));
+    @PutMapping("/posts/{id}")
+    public PostResult putPost(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
+        updateForm.setId(id);
+        updateForm.setUserId(userService.getCurrentUser().getId());
+        Post post = postService.create(modelMapper.map(updateForm, PostDto.class));
         return PostResult.from(post, null);
+    }
+
+    @DeleteMapping("/posts/{id}")
+    public PostResult deletePost(@PathVariable @Valid Long id) {
+        DeleteForm deleteForm = new DeleteForm();
+        deleteForm.setId(id);
+        deleteForm.setUserId(userService.getCurrentUser().getId());
+        postService.delete(modelMapper.map(deleteForm, PostDto.class));
+        return PostResult.from(HttpStatus.OK, "success");
     }
 }

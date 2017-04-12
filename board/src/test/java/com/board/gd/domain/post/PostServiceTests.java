@@ -249,13 +249,14 @@ public class PostServiceTests {
         assertEquals(Math.toIntExact(postCount), 2);
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
+    @Test(expected = PostException.class)
     public void fail_delete_when_invalid_id() {
         // given
-        Long deletedId = -1L;
+        PostDto deleteDto = new PostDto();
+        deleteDto.setId(-1L);
 
         // when
-        postService.delete(deletedId);
+        postService.delete(deleteDto);
     }
 
     @Test
@@ -266,8 +267,12 @@ public class PostServiceTests {
         Post post = postService.create(testPostDto);
         Long deletedId = post.getId();
 
+        PostDto deleteDto = new PostDto();
+        deleteDto.setId(deletedId);
+        deleteDto.setUserId(testUser.getId());
+
         // when
-        postService.delete(deletedId);
+        postService.delete(deleteDto);
 
         // then
         assertEquals(postService.findOne(deletedId), null);

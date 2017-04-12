@@ -48,6 +48,13 @@ public class PostResult {
                 .build();
     }
 
+    public static PostResult from(HttpStatus status, String message) {
+        return PostResult.builder()
+                .status(status.toString())
+                .message(message)
+                .build();
+    }
+
     public static JsonPost getJsonPost(Post post) {
         JsonUser jsonUser = new JsonUser();
         User user = post.getUser();

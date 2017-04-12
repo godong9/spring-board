@@ -5,16 +5,12 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by gd.godong9 on 2017. 4. 11.
+ * Created by gd.godong9 on 2017. 4. 12.
  */
 
 @Data
-public class UpdateForm {
+public class DeleteForm {
     private Long id;
 
     private Long userId;
-
-    private String title;
-
-    private String content;
 }

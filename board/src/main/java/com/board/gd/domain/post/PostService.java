@@ -55,6 +55,9 @@ public class PostService {
     @Transactional(readOnly = false)
     public Post update(PostDto postDto) {
         Post post = postRepository.findOne(postDto.getId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
         if (ObjectUtils.notEqual(postDto.getUserId(), post.getUser().getId())) {
             throw new PostException("Not allowed!");
         }
@@ -75,8 +78,15 @@ public class PostService {
     }
 
     @Transactional(readOnly = false)
-    public void delete(Long id) {
-        postRepository.delete(id);
+    public void delete(PostDto postDto) {
+        Post post = postRepository.findOne(postDto.getId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+        if (ObjectUtils.notEqual(postDto.getUserId(), post.getUser().getId())) {
+            throw new PostException("Not allowed!");
+        }
+        postRepository.delete(post.getId());
     }
 
     @Transactional(readOnly = false)
