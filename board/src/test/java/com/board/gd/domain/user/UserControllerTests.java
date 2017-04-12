@@ -128,7 +128,7 @@ public class UserControllerTests {
                 .email(userEmail)
                 .build());
 
-        given(userService.getRolesByUserId(any(Long.class))).willReturn(null);
+        given(userService.findRolesByUserId(any(Long.class))).willReturn(null);
         given(userService.matchPassword(any(String.class), any(String.class))).willReturn(true);
 
         // when

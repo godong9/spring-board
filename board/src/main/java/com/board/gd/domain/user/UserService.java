@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public List<GrantedAuthority> getRolesByUserId(Long userId) {
+    public List<GrantedAuthority> findRolesByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId).stream()
                 .map(userRole -> userRole.getRole().name())
                 .map(SimpleGrantedAuthority::new)

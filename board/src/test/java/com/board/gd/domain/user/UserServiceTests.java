@@ -90,7 +90,7 @@ public class UserServiceTests {
         // given
 
         // when
-        List<GrantedAuthority> roles = userService.getRolesByUserId(-1L);
+        List<GrantedAuthority> roles = userService.findRolesByUserId(-1L);
 
         // then
         assertEquals(roles.size(), 0);
@@ -103,7 +103,7 @@ public class UserServiceTests {
         User testUser = userService.create(testUserDto);
 
         // when
-        List<GrantedAuthority> roles = userService.getRolesByUserId(testUser.getId());
+        List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
         assertEquals(roles.size(), 1);

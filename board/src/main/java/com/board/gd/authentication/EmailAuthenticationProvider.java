@@ -40,7 +40,7 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Bad credentials");
         }
 
-        List<GrantedAuthority> roles = userService.getRolesByUserId(user.getId());
+        List<GrantedAuthority> roles = userService.findRolesByUserId(user.getId());
         UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(email, password, roles);
         result.setDetails(user);
         return result;

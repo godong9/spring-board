@@ -1,5 +1,7 @@
 package com.board.gd;
 
+import com.board.gd.domain.comment.Comment;
+import com.board.gd.domain.comment.CommentDto;
 import com.board.gd.domain.post.Post;
 import com.board.gd.domain.post.PostDto;
 import com.board.gd.domain.post.PostType;
@@ -40,12 +42,30 @@ public class TestHelper {
         return postDto;
     }
 
+    public static CommentDto getTestCommentDto(Long userId, Long postId) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setContent("test content");
+        commentDto.setUserId(userId);
+        commentDto.setPostId(postId);
+        return commentDto;
+    }
+
     public static void assertPostDtoAndPost(PostDto postDto, Post post) {
         assertEquals(postDto.getType(), post.getType());
         assertEquals(postDto.getTitle(), post.getTitle());
         assertEquals(postDto.getContent(), post.getContent());
         assertEquals(postDto.getUserId(), post.getUser().getId());
+        assertNotNull(post.getId());
         assertNotNull(post.getCreatedAt());
         assertNotNull(post.getUpdatedAt());
+    }
+
+    public static void assertCommentDtoAndComment(CommentDto commentDto, Comment comment) {
+        assertEquals(commentDto.getContent(), comment.getContent());
+        assertEquals(commentDto.getUserId(), comment.getUser().getId());
+        assertEquals(commentDto.getPostId(), comment.getPost().getId());
+        assertNotNull(comment.getId());
+        assertNotNull(comment.getCreatedAt());
+        assertNotNull(comment.getUpdatedAt());
     }
 }
