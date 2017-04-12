@@ -7,6 +7,7 @@ import com.board.gd.domain.post.PostService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +77,49 @@ public class CommentServiceTests {
 
         // then
         TestHelper.assertCommentDtoAndComment(commentDto, testComment);
+    }
+
+    @Test(expected = CommentException.class)
+    public void fail_update_when_invalid_userId() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+        CommentDto commentDto = TestHelper.getTestCommentDto(testUser.getId(), testPost.getId());
+        Comment testComment = commentService.create(commentDto);
+
+        String changedContent = "changed content";
+        CommentDto changedCommentDto = new CommentDto();
+        changedCommentDto.setId(testComment.getId());
+        changedCommentDto.setPostId(testPost.getId());
+        changedCommentDto.setUserId(-1L);
+        changedCommentDto.setContent(changedContent);
+
+        // when
+        commentService.update(changedCommentDto);
+    }
+
+    @Test
+    public void success_update() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+        CommentDto commentDto = TestHelper.getTestCommentDto(testUser.getId(), testPost.getId());
+        Comment testComment = commentService.create(commentDto);
+
+        String changedContent = "changed content";
+        CommentDto changedCommentDto = new CommentDto();
+        changedCommentDto.setId(testComment.getId());
+        changedCommentDto.setPostId(testPost.getId());
+        changedCommentDto.setUserId(testUser.getId());
+        changedCommentDto.setContent(changedContent);
+
+        // when
+        Comment changedComment = commentService.update(changedCommentDto);
+
+        // then
+        Assert.assertEquals(testComment.getId(), changedComment.getId());
+        Assert.assertEquals(changedContent, changedComment.getContent());
     }
 }

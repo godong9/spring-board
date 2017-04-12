@@ -5,6 +5,7 @@ import com.board.gd.domain.post.PostService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,4 +46,19 @@ public class CommentService {
                 .user(user)
                 .build());
     }
+
+    @Transactional(readOnly = false)
+    public Comment update(CommentDto commentDto) {
+        Comment comment = commentRepository.findOne(commentDto.getId());
+        if (ObjectUtils.notEqual(commentDto.getUserId(), comment.getUser().getId())) {
+            throw new CommentException("Not allowed!");
+        }
+
+        if (!Objects.isNull(commentDto.getContent())) {
+            comment.setContent(commentDto.getContent());
+        }
+
+        return commentRepository.save(comment);
+    }
+
 }
