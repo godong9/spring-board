@@ -56,7 +56,8 @@ public class UserServiceTests {
         User user = userService.findOne(testUser.getId());
 
         // then
-        assertUserDtoAndUser(testUserDto, user);
+        TestHelper.assertUserDtoAndUser(testUserDto, user);
+        assertThat(userService.matchPassword(testUserDto.getPassword(), user.getPassword()), is(true));
     }
 
     @Test
@@ -82,11 +83,12 @@ public class UserServiceTests {
         User user = userService.findByEmail(testUser.getEmail());
 
         // then
-        assertUserDtoAndUser(testUserDto, user);
+        TestHelper.assertUserDtoAndUser(testUserDto, user);
+        assertThat(userService.matchPassword(testUserDto.getPassword(), user.getPassword()), is(true));
     }
 
     @Test
-    public void fail_getRolesByUserId() {
+    public void fail_findRolesByUserId() {
         // given
 
         // when
@@ -97,7 +99,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void success_getRolesByUserId() {
+    public void success_findRolesByUserId() {
         // given
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
@@ -165,8 +167,10 @@ public class UserServiceTests {
         User testUser2 = userService.create(testUserDto2);
 
         // then
-        assertUserDtoAndUser(testUserDto1, testUser1);
-        assertUserDtoAndUser(testUserDto2, testUser2);
+        TestHelper.assertUserDtoAndUser(testUserDto1, testUser1);
+        assertThat(userService.matchPassword(testUserDto1.getPassword(), testUser1.getPassword()), is(true));
+        TestHelper.assertUserDtoAndUser(testUserDto2, testUser2);
+        assertThat(userService.matchPassword(testUserDto2.getPassword(), testUser2.getPassword()), is(true));
     }
 
     @Test
@@ -249,13 +253,4 @@ public class UserServiceTests {
         assertEquals(testUserList.size(), 0);
     }
 
-    public void assertUserDtoAndUser(UserDto userDto, User user) {
-        assertEquals(userDto.getName(), user.getName());
-        assertEquals(userDto.getEmail(), user.getEmail());
-        assertEquals(userDto.getProfileImg(), user.getProfileImg());
-        assertEquals(user.getEnabled(), true);
-        assertThat(userService.matchPassword(userDto.getPassword(), user.getPassword()), is(true));
-        assertNotNull(user.getCreatedAt());
-        assertNotNull(user.getUpdatedAt());
-    }
 }

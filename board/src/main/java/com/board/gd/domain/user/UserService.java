@@ -40,6 +40,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return findByEmail(username);
+    }
+
     public List<GrantedAuthority> findRolesByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId).stream()
                 .map(userRole -> userRole.getRole().name())
@@ -101,6 +106,7 @@ public class UserService implements UserDetailsService {
         userRepository.deleteAll();
     }
 
+
     public void setAuthentication(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
@@ -115,11 +121,6 @@ public class UserService implements UserDetailsService {
 
     public void clearAuthentication() {
         SecurityContextHolder.clearContext();
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return findByEmail(username);
     }
 
     public boolean matchPassword(String rawPassword, String encodedPassword) {

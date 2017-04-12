@@ -50,6 +50,15 @@ public class TestHelper {
         return commentDto;
     }
 
+    public static void assertUserDtoAndUser(UserDto userDto, User user) {
+        assertEquals(userDto.getName(), user.getName());
+        assertEquals(userDto.getEmail(), user.getEmail());
+        assertEquals(userDto.getProfileImg(), user.getProfileImg());
+        assertEquals(user.getEnabled(), true);
+        assertNotNull(user.getCreatedAt());
+        assertNotNull(user.getUpdatedAt());
+    }
+
     public static void assertPostDtoAndPost(PostDto postDto, Post post) {
         assertEquals(postDto.getType(), post.getType());
         assertEquals(postDto.getTitle(), post.getTitle());
