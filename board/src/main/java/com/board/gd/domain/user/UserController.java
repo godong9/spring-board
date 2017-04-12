@@ -2,6 +2,7 @@ package com.board.gd.domain.user;
 
 import com.board.gd.domain.user.form.LoginForm;
 import com.board.gd.domain.user.form.SignupForm;
+import com.board.gd.domain.user.form.UpdateForm;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -38,7 +36,7 @@ public class UserController {
 
     /**
      * @api {post} /users/signup Request User signup
-     * @apiName UserSignup
+     * @apiName SignupUser
      * @apiGroup User
      *
      * @apiParam {String} name 이름
@@ -59,7 +57,7 @@ public class UserController {
 
     /**
      * @api {post} /users/login Request User login
-     * @apiName UserLogin
+     * @apiName LoginUser
      * @apiGroup User
      *
      * @apiParam {String} email 이메일
@@ -82,7 +80,7 @@ public class UserController {
 
     /**
      * @api {post} /users/logout Request User logout
-     * @apiName UserLogout
+     * @apiName LogoutUser
      * @apiGroup User
      *
      * @apiSuccess {Number} status 상태코드
@@ -96,7 +94,7 @@ public class UserController {
 
     /**
      * @api {get} /users/me Request User me data
-     * @apiName UserMe
+     * @apiName GetMeUser
      * @apiGroup User
      *
      * @apiSuccess {Number} status 상태코드
@@ -109,4 +107,26 @@ public class UserController {
     public UserResult getUserMe() {
         return UserResult.from(userService.getCurrentUser(), null);
     }
+
+    /**
+     * @api {put} /users Request User update
+     * @apiName UpdateUser
+     * @apiGroup User
+     *
+     * @apiParam {String} [name] 유저 이름
+     * @apiParam {String} [password] 패스워드
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {Object} user 유저 객체
+     * @apiSuccess {String} user.id 유저 id
+     * @apiSuccess {String} user.name 유저 이름
+     */
+    @PutMapping("/users")
+    public UserResult PutUser(@RequestBody @Valid UpdateForm updateForm) {
+        updateForm.setId(userService.getCurrentUser().getId());
+        User user = userService.update(modelMapper.map(updateForm, UserDto.class));
+        return UserResult.from(user, null);
+    }
+
 }
