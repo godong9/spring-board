@@ -70,6 +70,22 @@ public class PostServiceTests {
         TestHelper.assertPostDtoAndPost(testPostDto, post);
     }
 
+    @Test
+    public void success_increaseViewCountAndFindOne() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+
+        // when
+        postService.increaseViewCountAndFindOne(testPost.getId());
+        Post post = postService.increaseViewCountAndFindOne(testPost.getId());
+
+        // then
+        TestHelper.assertPostDtoAndPost(testPostDto, post);
+        assertEquals(Math.toIntExact(post.getViewCount()), 2);
+    }
+
     @Test(expected = PostException.class)
     public void fail_findAll_when_invalid_pageable() {
         // given
