@@ -103,6 +103,23 @@ public class PostControllerTests {
     }
 
     @Test
+    public void success_getPost() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+
+        User testUser = TestHelper.getTestUser(1L);
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+
+        //TODO
+    }
+
+    @Test
     public void fail_postPost_when_not_login() throws Exception {
         // given
         given(userService.getCurrentUser()).willThrow(new UserException("Not authenticated!"));

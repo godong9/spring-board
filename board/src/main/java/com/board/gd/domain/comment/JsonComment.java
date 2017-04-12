@@ -1,4 +1,4 @@
-package com.board.gd.domain.post;
+package com.board.gd.domain.comment;
 
 import com.board.gd.domain.user.JsonUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,17 +7,14 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * Created by gd.godong9 on 2017. 4. 10.
+ * Created by gd.godong9 on 2017. 4. 12.
  */
 
 @Data
-public class JsonPost {
+public class JsonComment {
     private Long id;
-    private String title;
     private String content;
-    private Long viewCount;
     private JsonUser user;
-    private Long commentCount;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private Date createdAt;
