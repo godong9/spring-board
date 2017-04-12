@@ -41,6 +41,9 @@ public class Post {
     @Column(name = "view_count")
     private Long viewCount;
 
+    @Column(name = "comment_count")
+    private Long commentCount;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

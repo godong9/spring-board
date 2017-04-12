@@ -30,6 +30,16 @@ public class PostService {
         return postRepository.findOne(id);
     }
 
+    @Transactional(readOnly = false)
+    public Post increaseViewCountAndFindOne(Long id) {
+        Post post = postRepository.findOne(id);
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+        post.setViewCount(post.getViewCount() + 1);
+        return postRepository.save(post);
+    }
+
     public Page<Post> findAll(Predicate predicate, Pageable pageable) {
         if (Objects.isNull(pageable)) {
             throw new PostException("Invalid pageable!");
@@ -48,6 +58,7 @@ public class PostService {
                 .title(postDto.getTitle())
                 .content(postDto.getContent())
                 .viewCount(0L)
+                .commentCount(0L)
                 .user(user)
                 .build());
     }

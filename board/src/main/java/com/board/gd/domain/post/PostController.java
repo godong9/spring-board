@@ -65,6 +65,8 @@ public class PostController {
      * @apiSuccess {String} post.id 포스트 id
      * @apiSuccess {String} post.title 포스트 제목
      * @apiSuccess {String} post.content 포스트 내용
+     * @apiSuccess {String} post.viewCount 포스트 조회수
+     * @apiSuccess {String} post.commentCount 포스트 댓글수
      * @apiSuccess {Date} post.createdAt 포스트 생성일
      * @apiSuccess {Date} post.updatedAt 포스트 수정일
      * @apiSuccess {Object} post.user 포스트 유저
@@ -74,7 +76,7 @@ public class PostController {
      */
     @GetMapping("/posts/{id}")
     public PostResult getPost(@PathVariable @Valid Long id) {
-        return PostResult.from(postService.findOne(id), null);
+        return PostResult.from(postService.increaseViewCountAndFindOne(id), null);
     }
 
     /**
@@ -87,14 +89,16 @@ public class PostController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} post 포스트 객체
-     * @apiSuccess {String} post.id 포스트 id
-     * @apiSuccess {String} post.title 포스트 제목
-     * @apiSuccess {String} post.content 포스트 내용
-     * @apiSuccess {Date} post.createdAt 포스트 생성일
-     * @apiSuccess {Date} post.updatedAt 포스트 수정일
-     * @apiSuccess {Object} post.user 포스트 유저
-     * @apiSuccess {String} post.user.id 포스트 유저 id
+     * @apiSuccess {Object[]} posts 포스트 객체
+     * @apiSuccess {String} posts.id 포스트 id
+     * @apiSuccess {String} posts.title 포스트 제목
+     * @apiSuccess {String} posts.content 포스트 내용
+     * @apiSuccess {String} post.viewCount 포스트 조회수
+     * @apiSuccess {String} post.commentCount 포스트 댓글수
+     * @apiSuccess {Date} posts.createdAt 포스트 생성일
+     * @apiSuccess {Date} posts.updatedAt 포스트 수정일
+     * @apiSuccess {Object} posts.user 포스트 유저
+     * @apiSuccess {String} posts.user.id 포스트 유저 id
      */
     @PostMapping("/posts")
     public PostResult postPost(@RequestBody @Valid CreateForm createForm) {

@@ -65,6 +65,8 @@ public class TestHelper {
         assertEquals(postDto.getContent(), post.getContent());
         assertEquals(postDto.getUserId(), post.getUser().getId());
         assertNotNull(post.getId());
+        assertNotNull(post.getViewCount());
+        assertNotNull(post.getCommentCount());
         assertNotNull(post.getCreatedAt());
         assertNotNull(post.getUpdatedAt());
     }
