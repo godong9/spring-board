@@ -50,6 +50,7 @@ dependencies {
 	compile('com.querydsl:querydsl-jpa')
 	compile('com.querydsl:querydsl-apt')
 
+	testCompile('org.mockito:mockito-core')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

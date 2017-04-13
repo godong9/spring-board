@@ -1,9 +1,10 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.TestHelper;
-import com.board.gd.exception.PostException;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
+import com.board.gd.exception.PostException;
+import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import com.querydsl.core.types.Predicate;
 
 import java.util.List;
 

@@ -40,6 +40,7 @@ public class CommentService {
         if (Objects.isNull(user) || Objects.isNull(post)) {
             throw new CommentException("Not exist user or post!");
         }
+        postService.increaseCommentCount(post);
         return commentRepository.save(Comment.builder()
                 .content(commentDto.getContent())
                 .post(post)

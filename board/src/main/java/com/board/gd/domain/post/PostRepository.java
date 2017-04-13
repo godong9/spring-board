@@ -1,6 +1,5 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.user.QUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;

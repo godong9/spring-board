@@ -7,7 +7,6 @@ import com.board.gd.domain.post.PostService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,6 +84,7 @@ public class CommentServiceTests {
 
         // then
         TestHelper.assertCommentDtoAndComment(commentDto, testComment);
+        assertEquals(Math.toIntExact(testComment.getPost().getCommentCount()), 1);
     }
 
     @Test(expected = CommentException.class)
@@ -127,7 +127,7 @@ public class CommentServiceTests {
         Comment changedComment = commentService.update(changedCommentDto);
 
         // then
-        Assert.assertEquals(testComment.getId(), changedComment.getId());
-        Assert.assertEquals(changedContent, changedComment.getContent());
+        assertEquals(testComment.getId(), changedComment.getId());
+        assertEquals(changedContent, changedComment.getContent());
     }
 }

@@ -4,9 +4,9 @@ package com.board.gd.domain.post;
  * Created by gd.godong9 on 2017. 4. 4.
  */
 
-import com.board.gd.exception.PostException;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
+import com.board.gd.exception.PostException;
 import com.querydsl.core.types.Predicate;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,12 @@ public class PostService {
         }
         post.setViewCount(post.getViewCount() + 1);
         return postRepository.save(post);
+    }
+
+    @Transactional(readOnly = false)
+    public void increaseCommentCount(Post post) {
+        post.setCommentCount(post.getCommentCount() + 1);
+        postRepository.save(post);
     }
 
     public Page<Post> findAll(Predicate predicate, Pageable pageable) {
