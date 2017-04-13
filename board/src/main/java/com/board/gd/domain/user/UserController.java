@@ -1,5 +1,6 @@
 package com.board.gd.domain.user;
 
+import com.board.gd.result.ServerResult;
 import com.board.gd.domain.user.form.LoginForm;
 import com.board.gd.domain.user.form.SignupForm;
 import com.board.gd.domain.user.form.UpdateForm;
@@ -50,9 +51,9 @@ public class UserController {
      * @apiSuccess {String} user.name 유저 이름
      */
     @PostMapping("/users/signup")
-    public UserResult userSignup(@RequestBody @Valid SignupForm signupForm) {
+    public ServerResult userSignup(@RequestBody @Valid SignupForm signupForm) {
         User user = userService.create(modelMapper.map(signupForm, UserDto.class));
-        return UserResult.from(user, null);
+        return ServerResult.success(user);
     }
 
     /**

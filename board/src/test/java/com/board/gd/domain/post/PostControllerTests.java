@@ -142,7 +142,7 @@ public class PostControllerTests {
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message").value("Not authenticated!"));
+                .andExpect(jsonPath("$.error.message").value("Not authenticated!"));
     }
 
     @Test

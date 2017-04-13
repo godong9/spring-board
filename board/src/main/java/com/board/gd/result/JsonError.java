@@ -1,4 +1,4 @@
-package com.board.gd.error;
+package com.board.gd.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ErrorResult {
+public class JsonError {
     private String message;
 }

@@ -22,6 +22,7 @@ import javax.servlet.Filter;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,6 +68,7 @@ public class UserControllerTests {
         mockMvc.perform(post("/users/signup")
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
 
@@ -92,8 +94,8 @@ public class UserControllerTests {
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.id").isNotEmpty())
-                .andExpect(jsonPath("$.user.name").value(userName));
+                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.name").value(userName));
     }
 
     @Test
