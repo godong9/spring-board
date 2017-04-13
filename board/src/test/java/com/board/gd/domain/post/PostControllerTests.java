@@ -116,7 +116,17 @@ public class PostControllerTests {
         PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
         Post testPost = postService.create(testPostDto);
 
-        //TODO
+        // when
+        mockMvc.perform(get("/posts/" + testPost.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.post.id").isNotEmpty())
+                .andExpect(jsonPath("$.post.title").value(testPostDto.getTitle()))
+                .andExpect(jsonPath("$.post.content").value(testPostDto.getContent()))
+                .andExpect(jsonPath("$.post.user.id").value(testUser.getId()))
+                .andExpect(jsonPath("$.post.comment_count").value(0))
+                .andExpect(jsonPath("$.post.view_count").value(1));
     }
 
     @Test
