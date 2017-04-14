@@ -1,4 +1,4 @@
-package com.board.gd.domain.post.form;
+package com.board.gd.domain.comment.form;
 
 import lombok.Data;
 

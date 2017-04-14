@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public class UpdateForm {
     private Long id;
-
     private String name;
-
     private String password;
 }

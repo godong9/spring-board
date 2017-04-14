@@ -1,6 +1,8 @@
 package com.board.gd.domain.comment;
 
 import com.board.gd.domain.comment.form.CreateForm;
+import com.board.gd.domain.comment.form.DeleteForm;
+import com.board.gd.domain.comment.form.UpdateForm;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.response.ServerResponse;
 import com.querydsl.core.types.Predicate;
@@ -12,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -91,5 +90,48 @@ public class CommentController {
         createForm.setUserId(userService.getCurrentUser().getId());
         Comment comment = commentService.create(modelMapper.map(createForm, CommentDto.class));
         return ServerResponse.success(CommentResult.getCommentResult(comment));
+    }
+
+    /**
+     * @api {put} /comments/:id Request Comment update
+     * @apiName UpdateComment
+     * @apiGroup Comment
+     *
+     * @apiParam {String} [content] 내용
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [message] 메시지
+     * @apiSuccess {Object} data 댓글 객체
+     * @apiSuccess {Number} data.id 댓글 id
+     * @apiSuccess {String} data.content 댓글 내용
+     * @apiSuccess {Date} data.createdAt 댓글 생성일
+     * @apiSuccess {Date} data.updatedAt 댓글 수정일
+     * @apiSuccess {Object} data.user 댓글 유저
+     * @apiSuccess {Number} data.user.id 댓글 유저 id
+     * @apiSuccess {String} data.user.name 댓글 유저 이름
+     */
+    @PutMapping("/comments/{id}")
+    public ServerResponse putComment(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
+        updateForm.setId(id);
+        updateForm.setUserId(userService.getCurrentUser().getId());
+        Comment comment = commentService.update(modelMapper.map(updateForm, CommentDto.class));
+        return ServerResponse.success(CommentResult.getCommentResult(comment));
+    }
+
+    /**
+     * @api {delete} /comments/:id Request Comment delete
+     * @apiName DeleteComment
+     * @apiGroup Comment
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [message] 메시지
+     */
+    @DeleteMapping("/comments/{id}")
+    public ServerResponse deleteComment(@PathVariable @Valid Long id) {
+        DeleteForm deleteForm = new DeleteForm();
+        deleteForm.setId(id);
+        deleteForm.setUserId(userService.getCurrentUser().getId());
+        commentService.delete(modelMapper.map(deleteForm, CommentDto.class));
+        return ServerResponse.success();
     }
 }

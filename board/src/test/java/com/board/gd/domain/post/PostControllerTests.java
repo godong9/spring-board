@@ -212,7 +212,7 @@ public class PostControllerTests {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.id").value(testPost.getId()))
                 .andExpect(jsonPath("$.data.title").value(changedTitle))
                 .andExpect(jsonPath("$.data.content").value(changedContent))
                 .andExpect(jsonPath("$.data.created_at").isNotEmpty())

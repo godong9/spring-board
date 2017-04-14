@@ -130,4 +130,36 @@ public class CommentServiceTests {
         assertEquals(testComment.getId(), changedComment.getId());
         assertEquals(changedContent, changedComment.getContent());
     }
+
+    @Test(expected = CommentException.class)
+    public void fail_delete_when_invalid_id() {
+        // given
+        CommentDto deleteDto = new CommentDto();
+        deleteDto.setId(-1L);
+
+        // when
+        commentService.delete(deleteDto);
+    }
+
+    @Test
+    public void success_delete() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+        CommentDto commentDto = TestHelper.getTestCommentDto(testUser.getId(), testPost.getId());
+        Comment testComment = commentService.create(commentDto);
+
+        Long deletedId = testComment.getId();
+
+        CommentDto deleteDto = new CommentDto();
+        deleteDto.setId(deletedId);
+        deleteDto.setUserId(testUser.getId());
+
+        // when
+        commentService.delete(deleteDto);
+
+        // then
+        assertEquals(commentService.findOne(deletedId), null);
+    }
 }

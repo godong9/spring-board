@@ -1,6 +1,7 @@
 package com.board.gd.domain.comment;
 
 import com.board.gd.TestHelper;
+import com.board.gd.domain.comment.form.UpdateForm;
 import com.board.gd.domain.post.Post;
 import com.board.gd.domain.post.PostDto;
 import com.board.gd.domain.post.PostService;
@@ -26,8 +27,7 @@ import javax.servlet.Filter;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -152,6 +152,63 @@ public class CommentControllerTests {
                 .andExpect(jsonPath("$.data.created_at").isNotEmpty())
                 .andExpect(jsonPath("$.data.updated_at").isNotEmpty())
                 .andExpect(jsonPath("$.data.user.id").value(1L));
+    }
+
+    @Test
+    public void success_putComment() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+
+        PostDto testPostDto = TestHelper.getTestPostDto(1L);
+        Post testPost = postService.create(testPostDto);
+
+        CommentDto testCommentDto = TestHelper.getTestCommentDto(1L, testPost.getId());
+        Comment testComment = commentService.create(testCommentDto);
+
+        String changedContent = "changed content";
+
+        UpdateForm form = new UpdateForm();
+        form.setContent(changedContent);
+
+        // when
+        mockMvc.perform(put("/comments/" + testComment.getId())
+                .content(JsonUtils.toJson(form))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(testComment.getId()))
+                .andExpect(jsonPath("$.data.content").value(changedContent))
+                .andExpect(jsonPath("$.data.created_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.updated_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.user.id").value(1L));
+    }
+
+    @Test
+    public void success_deleteComment() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+
+        PostDto testPostDto = TestHelper.getTestPostDto(1L);
+        Post testPost = postService.create(testPostDto);
+
+        CommentDto testCommentDto = TestHelper.getTestCommentDto(1L, testPost.getId());
+        Comment testComment = commentService.create(testCommentDto);
+
+        // when
+        mockMvc.perform(delete("/comments/" + testComment.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }

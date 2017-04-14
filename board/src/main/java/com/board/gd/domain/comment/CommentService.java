@@ -32,6 +32,10 @@ public class CommentService {
     @Autowired
     private PostService postService;
 
+    public Comment findOne(Long id) {
+        return commentRepository.findOne(id);
+    }
+
     public List<Comment> findByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
     }
@@ -77,8 +81,15 @@ public class CommentService {
     }
 
     @Transactional(readOnly = false)
-    public void delete(Long id) {
-        commentRepository.delete(id);
+    public void delete(CommentDto commentDto) {
+        Comment comment = commentRepository.findOne(commentDto.getId());
+        if (Objects.isNull(comment)) {
+            throw new CommentException("Not exist post!");
+        }
+        if (ObjectUtils.notEqual(commentDto.getUserId(), comment.getUser().getId())) {
+            throw new CommentException("Not allowed!");
+        }
+        commentRepository.delete(comment.getId());
     }
 
     @Transactional(readOnly = false)
