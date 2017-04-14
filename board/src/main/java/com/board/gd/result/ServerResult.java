@@ -15,13 +15,17 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServerResult<T> {
-    private static final int SUCCESS_STATUS = HttpStatus.OK.value();
-    private static final int ERROR_STATUS = HttpStatus.BAD_REQUEST.value();
+    protected static final int SUCCESS_STATUS = HttpStatus.OK.value();
+    protected static final int ERROR_STATUS = HttpStatus.BAD_REQUEST.value();
 
-    private int status;
-    private T data;
-    private String message;
-    private JsonError error;
+    protected int status;
+    protected T data;
+    protected String message;
+    protected JsonError error;
+
+    public static ServerResult success() {
+        return success(null);
+    }
 
     public static <T> ServerResult success(T data) {
         return ServerResult.builder()

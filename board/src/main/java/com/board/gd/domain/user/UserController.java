@@ -46,9 +46,9 @@ public class UserController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} user 유저 객체
-     * @apiSuccess {String} user.id 유저 id
-     * @apiSuccess {String} user.name 유저 이름
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {String} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
      */
     @PostMapping("/users/signup")
     public ServerResult userSignup(@RequestBody @Valid SignupForm signupForm) {
@@ -68,7 +68,7 @@ public class UserController {
      * @apiSuccess {String} [msg] 메시지
      */
     @PostMapping("/users/login")
-    public UserResult userLogin(@RequestBody @Valid LoginForm loginForm) {
+    public ServerResult userLogin(@RequestBody @Valid LoginForm loginForm) {
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
@@ -76,7 +76,7 @@ public class UserController {
 
         userService.setAuthentication(authentication);
 
-        return UserResult.from(HttpStatus.OK, "success");
+        return ServerResult.success();
     }
 
     /**
@@ -88,9 +88,9 @@ public class UserController {
      * @apiSuccess {String} [msg] 메시지
      */
     @PostMapping("/users/logout")
-    public UserResult userLogout() {
+    public ServerResult userLogout() {
         userService.clearAuthentication();
-        return UserResult.from(HttpStatus.OK, "success");
+        return ServerResult.success();
     }
 
     /**
@@ -100,13 +100,13 @@ public class UserController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} user 유저 객체
-     * @apiSuccess {String} user.id 유저 id
-     * @apiSuccess {String} user.name 유저 이름
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {String} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
      */
     @GetMapping("/users/me")
-    public UserResult getUserMe() {
-        return UserResult.from(userService.getCurrentUser(), null);
+    public ServerResult getUserMe() {
+        return ServerResult.success(userService.getCurrentUser());
     }
 
     /**
@@ -119,15 +119,15 @@ public class UserController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} user 유저 객체
-     * @apiSuccess {String} user.id 유저 id
-     * @apiSuccess {String} user.name 유저 이름
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {String} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
      */
     @PutMapping("/users")
-    public UserResult PutUser(@RequestBody @Valid UpdateForm updateForm) {
+    public ServerResult PutUser(@RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(userService.getCurrentUser().getId());
         User user = userService.update(modelMapper.map(updateForm, UserDto.class));
-        return UserResult.from(user, null);
+        return ServerResult.success(user);
     }
 
 }

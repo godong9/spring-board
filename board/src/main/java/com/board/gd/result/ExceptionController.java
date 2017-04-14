@@ -1,5 +1,6 @@
 package com.board.gd.result;
 
+import com.board.gd.exception.CommentException;
 import com.board.gd.exception.PostException;
 import com.board.gd.exception.UserException;
 import com.google.common.base.Throwables;
@@ -33,6 +34,13 @@ public class ExceptionController {
     public ResponseEntity<ServerResult> handlePostException(PostException exception) throws Exception {
         String message = exception.getMessage();
         log.warn("[PostException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResult.error(message));
+    }
+
+    @ExceptionHandler(CommentException.class)
+    public ResponseEntity<ServerResult> handleCommentException(CommentException exception) throws Exception {
+        String message = exception.getMessage();
+        log.warn("[CommentException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
         return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResult.error(message));
     }
 }

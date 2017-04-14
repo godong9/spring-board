@@ -82,21 +82,21 @@ public class PostControllerTests {
                 .param("user.id", testUser1Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.posts", hasSize(1)))
-                .andExpect(jsonPath("$.posts[0].id").isNotEmpty())
-                .andExpect(jsonPath("$.posts[0].title").value(testPostDto1.getTitle()))
-                .andExpect(jsonPath("$.posts[0].content").value(testPostDto1.getContent()))
-                .andExpect(jsonPath("$.posts[0].user.id").value(testUser1Id));
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id").isNotEmpty())
+                .andExpect(jsonPath("$.data[0].title").value(testPostDto1.getTitle()))
+                .andExpect(jsonPath("$.data[0].content").value(testPostDto1.getContent()))
+                .andExpect(jsonPath("$.data[0].user.id").value(testUser1Id));
 
         mockMvc.perform(get("/posts")
                 .param("user.id", testUser2Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.posts", hasSize(1)))
-                .andExpect(jsonPath("$.posts[0].id").isNotEmpty())
-                .andExpect(jsonPath("$.posts[0].title").value(testPostDto2.getTitle()))
-                .andExpect(jsonPath("$.posts[0].content").value(testPostDto2.getContent()))
-                .andExpect(jsonPath("$.posts[0].user.id").value(testUser2Id));
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id").isNotEmpty())
+                .andExpect(jsonPath("$.data[0].title").value(testPostDto2.getTitle()))
+                .andExpect(jsonPath("$.data[0].content").value(testPostDto2.getContent()))
+                .andExpect(jsonPath("$.data[0].user.id").value(testUser2Id));
     }
 
     @Test
