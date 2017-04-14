@@ -5,7 +5,6 @@ import com.board.gd.domain.post.PostService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
-import com.board.gd.exception.PostException;
 import com.querydsl.core.types.Predicate;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;

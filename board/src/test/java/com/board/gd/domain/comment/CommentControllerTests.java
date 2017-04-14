@@ -4,8 +4,10 @@ import com.board.gd.TestHelper;
 import com.board.gd.domain.post.Post;
 import com.board.gd.domain.post.PostDto;
 import com.board.gd.domain.post.PostService;
+import com.board.gd.domain.comment.form.CreateForm;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
+import com.board.gd.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +25,9 @@ import javax.servlet.Filter;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,8 +116,42 @@ public class CommentControllerTests {
                 .andExpect(jsonPath("$.data[0].id").isNotEmpty())
                 .andExpect(jsonPath("$.data[0].content").value(testCommentDto2.getContent()))
                 .andExpect(jsonPath("$.data[0].user.id").value(testUser2Id));
+    }
 
+    @Test
+    public void success_postComment() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
 
+        given(userService.findOne(any(Long.class))).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+
+        PostDto testPostDto = TestHelper.getTestPostDto(1L);
+        Post testPost = postService.create(testPostDto);
+
+        String content = "test content";
+        CreateForm form = new CreateForm();
+        form.setContent(content);
+        form.setPostId(testPost.getId());
+
+        // when
+        mockMvc.perform(post("/comments")
+                .content(JsonUtils.toJson(form))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.content").value(content))
+                .andExpect(jsonPath("$.data.created_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.updated_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.user.id").value(1L));
     }
 
 }

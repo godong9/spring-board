@@ -47,15 +47,16 @@ public class PostController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object[]} data 포스트 리스트
-     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
      * @apiSuccess {String} data.content 포스트 내용
-     * @apiSuccess {String} data.viewCount 포스트 조회수
-     * @apiSuccess {String} data.commentCount 포스트 댓글수
+     * @apiSuccess {Number} data.viewCount 포스트 조회수
+     * @apiSuccess {Number} data.commentCount 포스트 댓글수
      * @apiSuccess {Date} data.createdAt 포스트 생성일
      * @apiSuccess {Date} data.updatedAt 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
-     * @apiSuccess {String} data.user.id 포스트 유저 id
+     * @apiSuccess {Number} data.user.id 포스트 유저 id
+     * @apiSuccess {String} data.user.name 포스트 유저 이름
      *
      * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
      */
@@ -77,15 +78,16 @@ public class PostController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 포스트 객체
-     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
      * @apiSuccess {String} data.content 포스트 내용
-     * @apiSuccess {String} data.viewCount 포스트 조회수
-     * @apiSuccess {String} data.commentCount 포스트 댓글수
+     * @apiSuccess {Number} data.viewCount 포스트 조회수
+     * @apiSuccess {Number} data.commentCount 포스트 댓글수
      * @apiSuccess {Date} data.createdAt 포스트 생성일
      * @apiSuccess {Date} data.updatedAt 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
-     * @apiSuccess {String} data.user.id 포스트 유저 id
+     * @apiSuccess {Number} data.user.id 포스트 유저 id
+     * @apiSuccess {String} data.user.name 포스트 유저 이름
      *
      * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
      */
@@ -106,13 +108,16 @@ public class PostController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 포스트 객체
-     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
      * @apiSuccess {String} data.content 포스트 내용
+     * @apiSuccess {Number} data.viewCount 포스트 조회수
+     * @apiSuccess {Number} data.commentCount 포스트 댓글수
      * @apiSuccess {Date} data.createdAt 포스트 생성일
      * @apiSuccess {Date} data.updatedAt 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
-     * @apiSuccess {String} data.user.id 포스트 유저 id
+     * @apiSuccess {Number} data.user.id 포스트 유저 id
+     * @apiSuccess {String} data.user.name 포스트 유저 이름
      */
     @PostMapping("/posts")
     public ServerResponse postPost(@RequestBody @Valid CreateForm createForm) {
@@ -132,13 +137,16 @@ public class PostController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 포스트 객체
-     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
      * @apiSuccess {String} data.content 포스트 내용
+     * @apiSuccess {Number} data.viewCount 포스트 조회수
+     * @apiSuccess {Number} data.commentCount 포스트 댓글수
      * @apiSuccess {Date} data.createdAt 포스트 생성일
      * @apiSuccess {Date} data.updatedAt 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
-     * @apiSuccess {String} data.user.id 포스트 유저 id
+     * @apiSuccess {Number} data.user.id 포스트 유저 id
+     * @apiSuccess {String} data.user.name 포스트 유저 이름
      */
     @PutMapping("/posts/{id}")
     public ServerResponse putPost(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {

@@ -46,7 +46,7 @@ public class UserController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
-     * @apiSuccess {String} data.id 유저 id
+     * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      */
     @PostMapping("/users/signup")
@@ -100,7 +100,7 @@ public class UserController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
-     * @apiSuccess {String} data.id 유저 id
+     * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      */
     @GetMapping("/users/me")
@@ -119,7 +119,7 @@ public class UserController {
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
-     * @apiSuccess {String} data.id 유저 id
+     * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      */
     @PutMapping("/users")
