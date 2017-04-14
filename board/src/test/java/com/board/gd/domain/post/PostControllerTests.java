@@ -63,7 +63,7 @@ public class PostControllerTests {
     }
 
     @Test
-    public void success_getPosts_when_params_userId() throws Exception {
+    public void success_getPosts() throws Exception {
         // given
         given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
         given(userService.findOne(2L)).willReturn(TestHelper.getTestUser(2L));
@@ -78,6 +78,11 @@ public class PostControllerTests {
         String testUser2Id = testUser2.getId().toString();
 
         // when
+        mockMvc.perform(get("/posts")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(2)));
+
         mockMvc.perform(get("/posts")
                 .param("user.id", testUser1Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))

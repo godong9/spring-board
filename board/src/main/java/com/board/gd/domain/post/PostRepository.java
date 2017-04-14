@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-//public interface PostRepository extends JpaRepository<Post, Long>, QueryDslPredicateExecutor<Post> {
 public interface PostRepository extends JpaRepository<Post, Long>, QueryDslPredicateExecutor<Post>, QuerydslBinderCustomizer<QPost> {
 
     @Override

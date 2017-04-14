@@ -48,8 +48,8 @@ public class PostResult {
         return postResult;
     }
 
-    public static List<PostResult> getPostResultList(Page<Post> posts) {
-        List<Post> postList = posts.getContent();
+    public static List<PostResult> getPostResultList(Page<Post> postPage) {
+        List<Post> postList = postPage.getContent();
         return postList.stream()
                 .map(post -> getPostResult(post))
                 .collect(Collectors.toList());

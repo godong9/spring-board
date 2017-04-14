@@ -5,8 +5,12 @@ import com.board.gd.domain.post.PostService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
+import com.board.gd.exception.PostException;
+import com.querydsl.core.types.Predicate;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,13 @@ public class CommentService {
 
     public List<Comment> findByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
+    }
+
+    public Page<Comment> findAll(Predicate predicate, Pageable pageable) {
+        if (Objects.isNull(pageable)) {
+            throw new CommentException("Invalid pageable!");
+        }
+        return commentRepository.findAll(predicate, pageable);
     }
 
     @Transactional(readOnly = false)
