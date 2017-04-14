@@ -48,6 +48,8 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @PostMapping("/users/signup")
     public ServerResponse userSignup(@RequestBody @Valid SignupForm signupForm) {
@@ -65,6 +67,8 @@ public class UserController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
+     *
+     * @apiUse BadRequestError
      */
     @PostMapping("/users/login")
     public ServerResponse userLogin(@RequestBody @Valid LoginForm loginForm) {
@@ -102,6 +106,8 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
@@ -121,6 +127,8 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @PutMapping("/users")
     public ServerResponse PutUser(@RequestBody @Valid UpdateForm updateForm) {

@@ -59,6 +59,8 @@ public class PostController {
      * @apiSuccess {String} data.user.name 포스트 유저 이름
      *
      * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
+     *
+     * @apiUse BadRequestError
      */
     @GetMapping("/posts")
     public ServerResponse getPosts(
@@ -89,7 +91,7 @@ public class PostController {
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
      *
-     * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
+     * @apiUse BadRequestError
      */
     @GetMapping("/posts/{id}")
     public ServerResponse getPost(@PathVariable @Valid Long id) {
@@ -118,6 +120,8 @@ public class PostController {
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @PostMapping("/posts")
     public ServerResponse postPost(@RequestBody @Valid CreateForm createForm) {
@@ -147,6 +151,8 @@ public class PostController {
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @PutMapping("/posts/{id}")
     public ServerResponse putPost(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
@@ -163,6 +169,8 @@ public class PostController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
+     *
+     * @apiUse BadRequestError
      */
     @DeleteMapping("/posts/{id}")
     public ServerResponse deletePost(@PathVariable @Valid Long id) {

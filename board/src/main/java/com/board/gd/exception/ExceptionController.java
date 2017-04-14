@@ -1,14 +1,26 @@
-package com.board.gd.response;
+package com.board.gd.exception;
 
-import com.board.gd.exception.CommentException;
-import com.board.gd.exception.PostException;
-import com.board.gd.exception.UserException;
+import com.board.gd.response.ServerResponse;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+/**
+ * @apiDefine BadRequestError
+ *
+ * @apiError BadRequestError Bad request error
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": {
+ *          "message": "Error Message"
+ *       }
+ *     }
+ */
 
 /**
  * Created by gd.godong9 on 2017. 4. 6.

@@ -55,6 +55,8 @@ public class CommentController {
      * @apiSuccess {String} data.user.name 댓글 유저 이름
      *
      * @apiSampleRequest http://localhost:8080/comments?page=1&size=10&sort=updatedAt,desc
+     *
+     * @apiUse BadRequestError
      */
     @GetMapping("/comments")
     public ServerResponse getComments(
@@ -84,6 +86,8 @@ public class CommentController {
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @PostMapping("/comments")
     public ServerResponse postComment(@RequestBody @Valid CreateForm createForm) {
@@ -97,7 +101,7 @@ public class CommentController {
      * @apiName UpdateComment
      * @apiGroup Comment
      *
-     * @apiParam {String} [content] 내용
+     * @apiParam {String} content 내용
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
@@ -109,6 +113,8 @@ public class CommentController {
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름
+     *
+     * @apiUse BadRequestError
      */
     @PutMapping("/comments/{id}")
     public ServerResponse putComment(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
@@ -125,6 +131,8 @@ public class CommentController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
+     *
+     * @apiUse BadRequestError
      */
     @DeleteMapping("/comments/{id}")
     public ServerResponse deleteComment(@PathVariable @Valid Long id) {
