@@ -1,11 +1,11 @@
 package com.board.gd.domain.comment;
 
 import com.board.gd.TestHelper;
+import com.board.gd.domain.comment.form.CreateForm;
 import com.board.gd.domain.comment.form.UpdateForm;
 import com.board.gd.domain.post.Post;
 import com.board.gd.domain.post.PostDto;
 import com.board.gd.domain.post.PostService;
-import com.board.gd.domain.comment.form.CreateForm;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.utils.JsonUtils;
