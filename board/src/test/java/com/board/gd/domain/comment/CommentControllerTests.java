@@ -46,9 +46,6 @@ public class CommentControllerTests {
     private WebApplicationContext context;
 
     @Autowired
-    private Filter springSecurityFilterChain;
-
-    @Autowired
     private CommentService commentService;
 
     @Autowired
@@ -63,7 +60,6 @@ public class CommentControllerTests {
 
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
                 .build();
     }
 

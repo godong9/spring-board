@@ -44,9 +44,6 @@ public class PostControllerTests {
     private WebApplicationContext context;
 
     @Autowired
-    private Filter springSecurityFilterChain;
-
-    @Autowired
     private PostService postService;
 
     @MockBean
@@ -58,7 +55,6 @@ public class PostControllerTests {
 
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
                 .build();
     }
 

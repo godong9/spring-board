@@ -39,9 +39,6 @@ public class UserControllerTests {
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private Filter springSecurityFilterChain;
-
     @MockBean
     private UserService userService;
 
@@ -49,7 +46,6 @@ public class UserControllerTests {
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .addFilters(springSecurityFilterChain)
                 .build();
     }
 
