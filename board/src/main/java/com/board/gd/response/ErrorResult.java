@@ -1,5 +1,6 @@
 package com.board.gd.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Data;
  */
 
 @Data
+@AllArgsConstructor
 public class ErrorResult {
     private String message;
 }
