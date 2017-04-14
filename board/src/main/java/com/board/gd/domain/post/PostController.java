@@ -4,15 +4,16 @@ import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.post.form.DeleteForm;
 import com.board.gd.domain.post.form.UpdateForm;
 import com.board.gd.domain.user.UserService;
+import com.board.gd.response.ServerResponse;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,7 +45,7 @@ public class PostController {
      * @apiParam {Number} [user.id] 가져올 유저 id
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object[]} data 포스트 리스트
      * @apiSuccess {String} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
@@ -59,12 +60,13 @@ public class PostController {
      * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
      */
     @GetMapping("/posts")
-    public PostResult getPosts(
+    public ServerResponse getPosts(
             @QuerydslPredicate(root = Post.class) Predicate predicate,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         log.debug("[getPosts] pageable: {}", pageable.toString());
         log.debug("[getPosts] predicate: {}", predicate);
-        return PostResult.from(postService.findAll(predicate, pageable), null);
+        Page<Post> postPage = postService.findAll(predicate, pageable);
+        return ServerResponse.success(PostResult.getPostResultList(postPage));
     }
 
     /**
@@ -73,23 +75,24 @@ public class PostController {
      * @apiGroup Post
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} post 포스트 객체
-     * @apiSuccess {String} post.id 포스트 id
-     * @apiSuccess {String} post.title 포스트 제목
-     * @apiSuccess {String} post.content 포스트 내용
-     * @apiSuccess {String} post.viewCount 포스트 조회수
-     * @apiSuccess {String} post.commentCount 포스트 댓글수
-     * @apiSuccess {Date} post.createdAt 포스트 생성일
-     * @apiSuccess {Date} post.updatedAt 포스트 수정일
-     * @apiSuccess {Object} post.user 포스트 유저
-     * @apiSuccess {String} post.user.id 포스트 유저 id
+     * @apiSuccess {String} [message] 메시지
+     * @apiSuccess {Object} data 포스트 객체
+     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {String} data.title 포스트 제목
+     * @apiSuccess {String} data.content 포스트 내용
+     * @apiSuccess {String} data.viewCount 포스트 조회수
+     * @apiSuccess {String} data.commentCount 포스트 댓글수
+     * @apiSuccess {Date} data.createdAt 포스트 생성일
+     * @apiSuccess {Date} data.updatedAt 포스트 수정일
+     * @apiSuccess {Object} data.user 포스트 유저
+     * @apiSuccess {String} data.user.id 포스트 유저 id
      *
      * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
      */
     @GetMapping("/posts/{id}")
-    public PostResult getPost(@PathVariable @Valid Long id) {
-        return PostResult.from(postService.increaseViewCountAndFindOne(id), null);
+    public ServerResponse getPost(@PathVariable @Valid Long id) {
+        Post post = postService.increaseViewCountAndFindOne(id);
+        return ServerResponse.success(PostResult.getPostResult(post));
     }
 
     /**
@@ -101,21 +104,21 @@ public class PostController {
      * @apiParam {String} content 내용
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} post 포스트 객체
-     * @apiSuccess {String} post.id 포스트 id
-     * @apiSuccess {String} post.title 포스트 제목
-     * @apiSuccess {String} post.content 포스트 내용
-     * @apiSuccess {Date} post.createdAt 포스트 생성일
-     * @apiSuccess {Date} post.updatedAt 포스트 수정일
-     * @apiSuccess {Object} post.user 포스트 유저
-     * @apiSuccess {String} post.user.id 포스트 유저 id
+     * @apiSuccess {String} [message] 메시지
+     * @apiSuccess {Object} data 포스트 객체
+     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {String} data.title 포스트 제목
+     * @apiSuccess {String} data.content 포스트 내용
+     * @apiSuccess {Date} data.createdAt 포스트 생성일
+     * @apiSuccess {Date} data.updatedAt 포스트 수정일
+     * @apiSuccess {Object} data.user 포스트 유저
+     * @apiSuccess {String} data.user.id 포스트 유저 id
      */
     @PostMapping("/posts")
-    public PostResult postPost(@RequestBody @Valid CreateForm createForm) {
+    public ServerResponse postPost(@RequestBody @Valid CreateForm createForm) {
         createForm.setUserId(userService.getCurrentUser().getId());
         Post post = postService.create(modelMapper.map(createForm, PostDto.class));
-        return PostResult.from(post, null);
+        return ServerResponse.success(PostResult.getPostResult(post));
     }
 
     /**
@@ -127,22 +130,22 @@ public class PostController {
      * @apiParam {String} [content] 내용
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
-     * @apiSuccess {Object} post 포스트 객체
-     * @apiSuccess {String} post.id 포스트 id
-     * @apiSuccess {String} post.title 포스트 제목
-     * @apiSuccess {String} post.content 포스트 내용
-     * @apiSuccess {Date} post.createdAt 포스트 생성일
-     * @apiSuccess {Date} post.updatedAt 포스트 수정일
-     * @apiSuccess {Object} post.user 포스트 유저
-     * @apiSuccess {String} post.user.id 포스트 유저 id
+     * @apiSuccess {String} [message] 메시지
+     * @apiSuccess {Object} data 포스트 객체
+     * @apiSuccess {String} data.id 포스트 id
+     * @apiSuccess {String} data.title 포스트 제목
+     * @apiSuccess {String} data.content 포스트 내용
+     * @apiSuccess {Date} data.createdAt 포스트 생성일
+     * @apiSuccess {Date} data.updatedAt 포스트 수정일
+     * @apiSuccess {Object} data.user 포스트 유저
+     * @apiSuccess {String} data.user.id 포스트 유저 id
      */
     @PutMapping("/posts/{id}")
-    public PostResult putPost(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
+    public ServerResponse putPost(@PathVariable @Valid Long id, @RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(id);
         updateForm.setUserId(userService.getCurrentUser().getId());
         Post post = postService.update(modelMapper.map(updateForm, PostDto.class));
-        return PostResult.from(post, null);
+        return ServerResponse.success(PostResult.getPostResult(post));
     }
 
     /**
@@ -151,14 +154,14 @@ public class PostController {
      * @apiGroup Post
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      */
     @DeleteMapping("/posts/{id}")
-    public PostResult deletePost(@PathVariable @Valid Long id) {
+    public ServerResponse deletePost(@PathVariable @Valid Long id) {
         DeleteForm deleteForm = new DeleteForm();
         deleteForm.setId(id);
         deleteForm.setUserId(userService.getCurrentUser().getId());
         postService.delete(modelMapper.map(deleteForm, PostDto.class));
-        return PostResult.from(HttpStatus.OK, "success");
+        return ServerResponse.success();
     }
 }

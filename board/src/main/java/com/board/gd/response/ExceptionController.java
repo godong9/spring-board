@@ -1,4 +1,4 @@
-package com.board.gd.result;
+package com.board.gd.response;
 
 import com.board.gd.exception.CommentException;
 import com.board.gd.exception.PostException;
@@ -18,29 +18,29 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionController {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ServerResult> handleException(Exception exception) throws Exception {
+    public ResponseEntity<ServerResponse> handleException(Exception exception) throws Exception {
         log.error("[Exception] {}\n{}", exception.getMessage(), Throwables.getStackTraceAsString(exception));
-        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResult.error(null));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error());
     }
 
     @ExceptionHandler(UserException.class)
-    public ResponseEntity<ServerResult> handleUserException(UserException exception) throws Exception {
+    public ResponseEntity<ServerResponse> handleUserException(UserException exception) throws Exception {
         String message = exception.getMessage();
         log.warn("[UserException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
-        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResult.error(message));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
     }
 
     @ExceptionHandler(PostException.class)
-    public ResponseEntity<ServerResult> handlePostException(PostException exception) throws Exception {
+    public ResponseEntity<ServerResponse> handlePostException(PostException exception) throws Exception {
         String message = exception.getMessage();
         log.warn("[PostException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
-        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResult.error(message));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
     }
 
     @ExceptionHandler(CommentException.class)
-    public ResponseEntity<ServerResult> handleCommentException(CommentException exception) throws Exception {
+    public ResponseEntity<ServerResponse> handleCommentException(CommentException exception) throws Exception {
         String message = exception.getMessage();
         log.warn("[CommentException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
-        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResult.error(message));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
     }
 }

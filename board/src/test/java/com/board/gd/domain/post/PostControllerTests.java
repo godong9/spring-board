@@ -118,12 +118,12 @@ public class PostControllerTests {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.post.id").isNotEmpty())
-                .andExpect(jsonPath("$.post.title").value(testPostDto.getTitle()))
-                .andExpect(jsonPath("$.post.content").value(testPostDto.getContent()))
-                .andExpect(jsonPath("$.post.user.id").value(testUser.getId()))
-                .andExpect(jsonPath("$.post.comment_count").value(0))
-                .andExpect(jsonPath("$.post.view_count").value(1));
+                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.title").value(testPostDto.getTitle()))
+                .andExpect(jsonPath("$.data.content").value(testPostDto.getContent()))
+                .andExpect(jsonPath("$.data.user.id").value(testUser.getId()))
+                .andExpect(jsonPath("$.data.comment_count").value(0))
+                .andExpect(jsonPath("$.data.view_count").value(1));
     }
 
     @Test
@@ -172,12 +172,12 @@ public class PostControllerTests {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.post.id").isNotEmpty())
-                .andExpect(jsonPath("$.post.title").value(title))
-                .andExpect(jsonPath("$.post.content").value(content))
-                .andExpect(jsonPath("$.post.created_at").isNotEmpty())
-                .andExpect(jsonPath("$.post.updated_at").isNotEmpty())
-                .andExpect(jsonPath("$.post.user.id").value(1L));
+                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.title").value(title))
+                .andExpect(jsonPath("$.data.content").value(content))
+                .andExpect(jsonPath("$.data.created_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.updated_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.user.id").value(1L));
     }
 
     @Test
@@ -207,12 +207,12 @@ public class PostControllerTests {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.post.id").isNotEmpty())
-                .andExpect(jsonPath("$.post.title").value(changedTitle))
-                .andExpect(jsonPath("$.post.content").value(changedContent))
-                .andExpect(jsonPath("$.post.created_at").isNotEmpty())
-                .andExpect(jsonPath("$.post.updated_at").isNotEmpty())
-                .andExpect(jsonPath("$.post.user.id").value(1L));
+                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.title").value(changedTitle))
+                .andExpect(jsonPath("$.data.content").value(changedContent))
+                .andExpect(jsonPath("$.data.created_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.updated_at").isNotEmpty())
+                .andExpect(jsonPath("$.data.user.id").value(1L));
     }
 
     @Test

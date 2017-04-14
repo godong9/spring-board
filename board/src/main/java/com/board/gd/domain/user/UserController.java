@@ -1,6 +1,6 @@
 package com.board.gd.domain.user;
 
-import com.board.gd.result.ServerResult;
+import com.board.gd.response.ServerResponse;
 import com.board.gd.domain.user.form.LoginForm;
 import com.board.gd.domain.user.form.SignupForm;
 import com.board.gd.domain.user.form.UpdateForm;
@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,15 +44,15 @@ public class UserController {
      * @apiParam {String} password 패스워드
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {String} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      */
     @PostMapping("/users/signup")
-    public ServerResult userSignup(@RequestBody @Valid SignupForm signupForm) {
+    public ServerResponse userSignup(@RequestBody @Valid SignupForm signupForm) {
         User user = userService.create(modelMapper.map(signupForm, UserDto.class));
-        return ServerResult.success(user);
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 
     /**
@@ -65,10 +64,10 @@ public class UserController {
      * @apiParam {String} password 패스워드
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      */
     @PostMapping("/users/login")
-    public ServerResult userLogin(@RequestBody @Valid LoginForm loginForm) {
+    public ServerResponse userLogin(@RequestBody @Valid LoginForm loginForm) {
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
@@ -76,7 +75,7 @@ public class UserController {
 
         userService.setAuthentication(authentication);
 
-        return ServerResult.success();
+        return ServerResponse.success();
     }
 
     /**
@@ -85,12 +84,12 @@ public class UserController {
      * @apiGroup User
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      */
     @PostMapping("/users/logout")
-    public ServerResult userLogout() {
+    public ServerResponse userLogout() {
         userService.clearAuthentication();
-        return ServerResult.success();
+        return ServerResponse.success();
     }
 
     /**
@@ -99,14 +98,14 @@ public class UserController {
      * @apiGroup User
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {String} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      */
     @GetMapping("/users/me")
-    public ServerResult getUserMe() {
-        return ServerResult.success(userService.getCurrentUser());
+    public ServerResponse getUserMe() {
+        return ServerResponse.success(userService.getCurrentUser());
     }
 
     /**
@@ -118,16 +117,16 @@ public class UserController {
      * @apiParam {String} [password] 패스워드
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [msg] 메시지
+     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {String} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      */
     @PutMapping("/users")
-    public ServerResult PutUser(@RequestBody @Valid UpdateForm updateForm) {
+    public ServerResponse PutUser(@RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(userService.getCurrentUser().getId());
         User user = userService.update(modelMapper.map(updateForm, UserDto.class));
-        return ServerResult.success(user);
+        return ServerResponse.success(user);
     }
 
 }

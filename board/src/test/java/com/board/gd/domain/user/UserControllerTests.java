@@ -93,6 +93,7 @@ public class UserControllerTests {
         mockMvc.perform(post("/users/signup")
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").isNotEmpty())
                 .andExpect(jsonPath("$.data.name").value(userName));

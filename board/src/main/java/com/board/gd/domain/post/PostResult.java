@@ -1,75 +1,57 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.user.JsonUser;
 import com.board.gd.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.board.gd.domain.user.UserResult;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by godong9 on 2017. 4. 8..
+ * Created by gd.godong9 on 2017. 4. 10.
  */
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class PostResult {
-    private String status;
-    private String message;
-    private JsonPost post;
-    private List<JsonPost> posts;
+    private Long id;
+    private String title;
+    private String content;
+    private Long viewCount;
+    private UserResult user;
+    private Long commentCount;
 
-    public static PostResult from(Post post, String message) {
-        return PostResult.builder()
-                .status(HttpStatus.OK.toString())
-                .post(getJsonPost(post))
-                .message(message)
-                .build();
-    }
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private Date createdAt;
 
-    public static PostResult from(Page<Post> posts, String message) {
-        List<Post> postList = posts.getContent();
-        List<JsonPost> postLists = postList.stream()
-                .map(post -> getJsonPost(post))
-                .collect(Collectors.toList());
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private Date updatedAt;
 
-        return PostResult.builder()
-                .status(HttpStatus.OK.toString())
-                .posts(postLists)
-                .message(message)
-                .build();
-    }
-
-    public static PostResult from(HttpStatus status, String message) {
-        return PostResult.builder()
-                .status(status.toString())
-                .message(message)
-                .build();
-    }
-
-    public static JsonPost getJsonPost(Post post) {
-        JsonUser jsonUser = new JsonUser();
+    public static PostResult getPostResult(Post post) {
+        UserResult userResult = new UserResult();
         User user = post.getUser();
-        jsonUser.setId(user.getId());
-        jsonUser.setName(user.getName());
+        userResult.setId(user.getId());
+        userResult.setName(user.getName());
 
-        JsonPost jsonPost = new JsonPost();
-        jsonPost.setId(post.getId());
-        jsonPost.setUser(jsonUser);
-        jsonPost.setTitle(post.getTitle());
-        jsonPost.setContent(post.getContent());
-        jsonPost.setCommentCount(post.getCommentCount());
-        jsonPost.setViewCount(post.getViewCount());
-        jsonPost.setCreatedAt(post.getCreatedAt());
-        jsonPost.setUpdatedAt(post.getUpdatedAt());
+        PostResult postResult = new PostResult();
+        postResult.setId(post.getId());
+        postResult.setUser(userResult);
+        postResult.setTitle(post.getTitle());
+        postResult.setContent(post.getContent());
+        postResult.setCommentCount(post.getCommentCount());
+        postResult.setViewCount(post.getViewCount());
+        postResult.setCreatedAt(post.getCreatedAt());
+        postResult.setUpdatedAt(post.getUpdatedAt());
 
-        return jsonPost;
+        return postResult;
+    }
+
+    public static List<PostResult> getPostResultList(Page<Post> posts) {
+        List<Post> postList = posts.getContent();
+        return postList.stream()
+                .map(post -> getPostResult(post))
+                .collect(Collectors.toList());
     }
 }
