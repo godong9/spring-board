@@ -77,7 +77,11 @@ public class CommentService {
     }
 
     public long count() {
-        return commentRepository.count();
+        return count(null);
+    }
+
+    public long count(Predicate predicate) {
+        return commentRepository.count(predicate);
     }
 
     @Transactional(readOnly = false)

@@ -81,12 +81,14 @@ public class PostControllerTests {
         mockMvc.perform(get("/posts")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(2))
                 .andExpect(jsonPath("$.data", hasSize(2)));
 
         mockMvc.perform(get("/posts")
                 .param("user.id", testUser1Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(1))
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].id").isNotEmpty())
                 .andExpect(jsonPath("$.data[0].title").value(testPostDto1.getTitle()))
@@ -97,6 +99,7 @@ public class PostControllerTests {
                 .param("user.id", testUser2Id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(1))
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].id").isNotEmpty())
                 .andExpect(jsonPath("$.data[0].title").value(testPostDto2.getTitle()))

@@ -91,7 +91,11 @@ public class PostService {
     }
 
     public long count() {
-        return postRepository.count();
+        return count(null);
+    }
+
+    public long count(Predicate predicate) {
+        return postRepository.count(predicate);
     }
 
     @Transactional(readOnly = false)

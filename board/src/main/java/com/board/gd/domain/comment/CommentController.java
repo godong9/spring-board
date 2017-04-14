@@ -45,6 +45,9 @@ public class CommentController {
      * @apiParam {Number} [post.id] 가져올 포스트 id
      * @apiParam {Number} [user.id] 가져올 유저 id
      *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {String} [message] 메시지
+     * @apiSuccess {Number} count 댓글 개수
      * @apiSuccess {Object[]} data 댓글 리스트
      * @apiSuccess {Number} data.id 댓글 id
      * @apiSuccess {String} data.content 댓글 내용
@@ -65,7 +68,8 @@ public class CommentController {
         log.debug("[getPosts] pageable: {}", pageable.toString());
         log.debug("[getPosts] predicate: {}", predicate);
         Page<Comment> commentPage = commentService.findAll(predicate, pageable);
-        return ServerResponse.success(CommentResult.getCommentResultList(commentPage));
+        Long count = commentService.count(predicate);
+        return ServerResponse.success(CommentResult.getCommentResultList(commentPage), count);
     }
 
     /**

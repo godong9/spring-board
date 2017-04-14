@@ -46,6 +46,7 @@ public class PostController {
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
+     * @apiSuccess {Number} count 포스트 개수
      * @apiSuccess {Object[]} data 포스트 리스트
      * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
@@ -69,7 +70,8 @@ public class PostController {
         log.debug("[getPosts] pageable: {}", pageable.toString());
         log.debug("[getPosts] predicate: {}", predicate);
         Page<Post> postPage = postService.findAll(predicate, pageable);
-        return ServerResponse.success(PostResult.getPostResultList(postPage));
+        Long count = postService.count(predicate);
+        return ServerResponse.success(PostResult.getPostResultList(postPage), count);
     }
 
     /**

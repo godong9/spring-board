@@ -21,6 +21,7 @@ public class ServerResponse<T> {
     private int status;
     private T data;
     private String message;
+    private Long count;
     private ErrorResult error;
 
     public static ServerResponse success() {
@@ -28,8 +29,13 @@ public class ServerResponse<T> {
     }
 
     public static <T> ServerResponse success(T data) {
+        return success(data, null);
+    }
+
+    public static <T> ServerResponse success(T data, Long count) {
         return ServerResponse.builder()
                 .status(SUCCESS_STATUS)
+                .count(count)
                 .data(data)
                 .build();
     }
