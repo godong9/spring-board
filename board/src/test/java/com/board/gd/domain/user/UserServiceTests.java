@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -25,6 +26,8 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @Transactional
 public class UserServiceTests {
+    private static final Date DEFAULT_ROLE_EXPIRED_DATE = new Date(4150537200000L);
+
     @Autowired
     private UserService userService;
 
@@ -113,13 +116,43 @@ public class UserServiceTests {
                 .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
     }
 
+    @Test
+    public void success_findRolesByUserId_when_expired_role_exist() {
+        // given
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        User testUser = userService.create(testUserDto);
+        Date expiredDate = new Date(new Date().getTime() - (1000 * 60 * 60));
+        userService.createUserRole(testUser, UserRoleType.ADMIN, expiredDate);
+        // when
+        List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
+
+        // then
+        assertEquals(roles.size(), 1);
+        roles
+                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
+    }
+
+    @Test
+    public void success_findRolesByUserId_when_two_role_exist() {
+        // given
+        UserDto testUserDto = TestHelper.getTestUserDto("test1");
+        User testUser = userService.create(testUserDto);
+        Date notExpiredDate = new Date(new Date().getTime() + (1000 * 60 * 60));
+        userService.createUserRole(testUser, UserRoleType.ADMIN, notExpiredDate);
+        // when
+        List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
+
+        // then
+        assertEquals(roles.size(), 2);
+    }
+
     @Test(expected = UserException.class)
     public void fail_createUserRole() {
         // given
         User testUser = null;
 
         // when
-        userService.createUserRole(testUser, UserRoleType.USER);
+        userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
     }
 
     @Test
@@ -127,9 +160,8 @@ public class UserServiceTests {
         // given
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
-
         // when
-        UserRole userRole = userService.createUserRole(testUser, UserRoleType.USER);
+        UserRole userRole = userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         // then
         assertEquals(userRole.getRole(), UserRoleType.USER);

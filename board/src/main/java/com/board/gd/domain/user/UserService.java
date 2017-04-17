@@ -1,6 +1,7 @@
 package com.board.gd.domain.user;
 
 import com.board.gd.exception.UserException;
+import com.board.gd.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,6 +26,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Service
 public class UserService implements UserDetailsService {
+    private static final Date DEFAULT_ROLE_EXPIRED_DATE = new Date(4150537200000L); // 2099년 12월 31일
+
     @Autowired
     private UserRepository userRepository;
 
@@ -47,19 +51,21 @@ public class UserService implements UserDetailsService {
 
     public List<GrantedAuthority> findRolesByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId).stream()
+                .filter(userRole -> !DateUtils.isExpired(userRole.getExpiredAt())) // 만료되지 않은 role만 가져옴
                 .map(userRole -> userRole.getRole().name())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = false)
-    public UserRole createUserRole(User user, UserRoleType userRole) {
+    public UserRole createUserRole(User user, UserRoleType userRole, Date expiredAt) {
         if (Objects.isNull(user)) {
             throw new UserException("Fail createUserRole!");
         }
         return userRoleRepository.save(UserRole.builder()
                 .role(userRole)
                 .user(user)
+                .expiredAt(expiredAt)
                 .build());
     }
 
@@ -73,7 +79,7 @@ public class UserService implements UserDetailsService {
                 .enabled(true)
                 .build());
 
-        createUserRole(user, UserRoleType.USER);
+        createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         return user;
     }
