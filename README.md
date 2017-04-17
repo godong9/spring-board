@@ -1,6 +1,12 @@
 # spring-board
 Spring board project
 
+# Server build
+```
+$ cd /board 
+$ ./gradlew build -x test 
+```
+
 # Start spring server
 ```
 $ cd /board/build/libs
