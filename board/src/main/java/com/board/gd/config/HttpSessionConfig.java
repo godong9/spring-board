@@ -1,4 +1,4 @@
-package com.board.gd.configuration;
+package com.board.gd.config;
 
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 

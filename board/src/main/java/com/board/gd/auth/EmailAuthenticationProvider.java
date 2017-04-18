@@ -1,4 +1,4 @@
-package com.board.gd.authentication;
+package com.board.gd.auth;
 
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;

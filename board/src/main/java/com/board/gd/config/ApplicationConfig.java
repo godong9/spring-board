@@ -1,4 +1,4 @@
-package com.board.gd.configuration;
+package com.board.gd.config;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @Configuration
-public class ApplicationConfiguration {
+public class ApplicationConfig {
 
     @Bean
     public ModelMapper modelMapper() {
