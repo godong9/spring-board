@@ -20,8 +20,8 @@ mail:
   host: smtp.gmail.com
   port: 587
   encoding: UTF-8
-  username: dev.godong9@gmail.com
-  password: testmail
+  username: id@gmail.com
+  password: password
   debug: true
   smtp:
     start-tls-enable: true
