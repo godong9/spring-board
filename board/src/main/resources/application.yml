@@ -15,6 +15,18 @@ spring:
   session:
     key: BOARD_SESSION_KEY
 
+mail:
+  protocol: smtp
+  host: smtp.gmail.com
+  port: 587
+  encoding: UTF-8
+  username: dev.godong9@gmail.com
+  password: testmail
+  debug: true
+  smtp:
+    start-tls-enable: true
+    auth: true
+
 ---
 
 spring:
