@@ -108,6 +108,7 @@ public class PostController {
      *
      * @apiParam {String} title 제목
      * @apiParam {String} content 내용
+     * @apiParam {Number} [boardId] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
@@ -139,6 +140,7 @@ public class PostController {
      *
      * @apiParam {String} [title] 제목
      * @apiParam {String} [content] 내용
+     * @apiParam {Number} [boardId] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {String} [message] 메시지
