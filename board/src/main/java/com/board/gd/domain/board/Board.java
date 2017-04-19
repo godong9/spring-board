@@ -30,7 +30,7 @@ public class Board {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "code")
+    @Column(name = "code", nullable = true)
     private String code;
 
     @LastModifiedDate

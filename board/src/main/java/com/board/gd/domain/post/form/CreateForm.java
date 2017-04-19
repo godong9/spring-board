@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class CreateForm {
     private Long userId;
+    private Long boardId;
 
     @NotNull
     private String title;

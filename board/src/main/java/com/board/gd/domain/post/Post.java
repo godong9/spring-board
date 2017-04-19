@@ -50,7 +50,7 @@ public class Post {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "board_id", nullable = true)
     private Board board;
 
     @LastModifiedDate

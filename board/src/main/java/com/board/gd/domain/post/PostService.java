@@ -4,6 +4,7 @@ package com.board.gd.domain.post;
  * Created by gd.godong9 on 2017. 4. 4.
  */
 
+import com.board.gd.domain.board.Board;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PostException;
@@ -59,6 +60,14 @@ public class PostService {
         if (Objects.isNull(user)) {
             throw new PostException("Not exist user!");
         }
+
+        Board board = null;
+        if (!Objects.isNull(postDto.getBoardId())) {
+            board = Board.builder()
+                    .id(postDto.getBoardId()) // 게시판 ID는 validation 체크 제외
+                    .build();
+        }
+
         return postRepository.save(Post.builder()
                 .type(PostType.FREE) // 디폴트로 FREE로 세팅
                 .title(postDto.getTitle())
@@ -66,6 +75,7 @@ public class PostService {
                 .viewCount(0L)
                 .commentCount(0L)
                 .user(user)
+                .board(board)
                 .build());
     }
 
@@ -85,6 +95,12 @@ public class PostService {
 
         if (!Objects.isNull(postDto.getContent())) {
             post.setContent(postDto.getContent());
+        }
+
+        if (!Objects.isNull(postDto.getBoardId())) {
+            post.setBoard(Board.builder()
+                    .id(postDto.getBoardId()) // 게시판 ID는 validation 체크 제외
+                    .build());
         }
 
         return postRepository.save(post);

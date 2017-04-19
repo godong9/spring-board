@@ -199,6 +199,21 @@ public class PostServiceTests {
         TestHelper.assertPostDtoAndPost(testPostDto, post);
     }
 
+    @Test
+    public void success_create_when_boardId_exist() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        testPostDto.setBoardId(1L);
+
+        // when
+        Post post = postService.create(testPostDto);
+
+        // then
+        TestHelper.assertPostDtoAndPost(testPostDto, post);
+        assertEquals(testPostDto.getBoardId(), post.getBoard().getId());
+    }
+
     @Test(expected = PostException.class)
     public void fail_update_when_invalid_userId() {
         // given
@@ -227,6 +242,7 @@ public class PostServiceTests {
         changedPostDto.setId(post.getId());
         changedPostDto.setUserId(testUser.getId());
         changedPostDto.setTitle(changedTitle);
+        changedPostDto.setBoardId(1L);
 
         // when
         Post changedPost = postService.update(changedPostDto);
@@ -234,6 +250,7 @@ public class PostServiceTests {
         // then
         assertEquals(post.getId(), changedPost.getId());
         assertEquals(changedTitle, changedPost.getTitle());
+        assertEquals(changedPostDto.getBoardId(), changedPost.getBoard().getId());
         assertEquals(testPostDto.getContent(), changedPost.getContent());
     }
 
