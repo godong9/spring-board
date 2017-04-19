@@ -45,7 +45,6 @@ public class PostController {
      * @apiParam {Number} [user.id] 가져올 유저 id
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Number} count 포스트 개수
      * @apiSuccess {Object[]} data 포스트 리스트
      * @apiSuccess {Number} data.id 포스트 id
@@ -80,7 +79,6 @@ public class PostController {
      * @apiGroup Post
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 포스트 객체
      * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
@@ -111,7 +109,6 @@ public class PostController {
      * @apiParam {Number} [boardId] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 포스트 객체
      * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
@@ -143,7 +140,6 @@ public class PostController {
      * @apiParam {Number} [boardId] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 포스트 객체
      * @apiSuccess {Number} data.id 포스트 id
      * @apiSuccess {String} data.title 포스트 제목
@@ -172,7 +168,6 @@ public class PostController {
      * @apiGroup Post
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      *
      * @apiUse BadRequestError
      */

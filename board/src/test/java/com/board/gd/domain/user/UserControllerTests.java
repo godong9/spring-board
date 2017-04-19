@@ -133,6 +133,7 @@ public class UserControllerTests {
         mockMvc.perform(post("/users/login")
                 .content(JsonUtils.toJson(form))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 

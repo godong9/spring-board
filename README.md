@@ -1,6 +1,11 @@
 # spring-board
 Spring board project
 
+# Generate doc
+```
+$ ./apidoc.sh
+```
+
 # Server build
 ```
 $ cd /board 

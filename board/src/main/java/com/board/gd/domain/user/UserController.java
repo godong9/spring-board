@@ -44,7 +44,6 @@ public class UserController {
      * @apiParam {String} password 패스워드
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
@@ -66,7 +65,15 @@ public class UserController {
      * @apiParam {String} password 패스워드
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
+     *
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "status":200,
+     *       "data":null,
+     *       "count":null,
+     *       "error":null
+     *     }
      *
      * @apiUse BadRequestError
      */
@@ -88,7 +95,6 @@ public class UserController {
      * @apiGroup User
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      */
     @PostMapping("/users/logout")
     public ServerResponse userLogout() {
@@ -102,7 +108,6 @@ public class UserController {
      * @apiGroup User
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
@@ -123,7 +128,6 @@ public class UserController {
      * @apiParam {String} [password] 패스워드
      *
      * @apiSuccess {Number} status 상태코드
-     * @apiSuccess {String} [message] 메시지
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
