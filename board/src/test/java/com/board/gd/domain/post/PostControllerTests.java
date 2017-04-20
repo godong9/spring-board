@@ -102,6 +102,36 @@ public class PostControllerTests {
     }
 
     @Test
+    public void success_getPosts_by_boardId() throws Exception {
+        // given
+        Long boardId = 1L;
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+        given(userService.findOne(2L)).willReturn(TestHelper.getTestUser(2L));
+
+        User testUser1 = TestHelper.getTestUser(1L);
+        User testUser2 = TestHelper.getTestUser(2L);
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId(), boardId);
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser2.getId(), boardId);
+        postService.create(testPostDto1);
+        postService.create(testPostDto2);
+
+        // when
+        mockMvc.perform(get("/posts")
+                .param("board.id", "2")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(0))
+                .andExpect(jsonPath("$.data", hasSize(0)));
+
+        mockMvc.perform(get("/posts")
+                .param("board.id", boardId.toString())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(2))
+                .andExpect(jsonPath("$.data", hasSize(2)));
+    }
+
+    @Test
     public void success_getPost() throws Exception {
         // given
         given(userService.getCurrentUser()).willReturn(User.builder()

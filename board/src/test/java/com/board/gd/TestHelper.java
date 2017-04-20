@@ -34,11 +34,16 @@ public class TestHelper {
     }
 
     public static PostDto getTestPostDto(Long userId) {
+        return getTestPostDto(userId, null);
+    }
+
+    public static PostDto getTestPostDto(Long userId, Long boardId) {
         PostDto postDto = new PostDto();
         postDto.setType(PostType.FREE);
         postDto.setTitle("test title");
         postDto.setContent("test content");
         postDto.setUserId(userId);
+        postDto.setBoardId(boardId);
         return postDto;
     }
 

@@ -43,6 +43,7 @@ public class PostController {
      * @apiParam {Number} [page=0] 가져올 페이지
      * @apiParam {String="createdAt,desc", "updatedAt,desc"} [sort=createdAt,desc] 정렬 조건
      * @apiParam {Number} [user.id] 가져올 유저 id
+     * @apiParam {Number} [board.id] 가져올 게시판 id
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Number} count 포스트 개수

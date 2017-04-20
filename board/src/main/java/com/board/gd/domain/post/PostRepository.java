@@ -17,5 +17,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, QueryDslPredi
     default public void customize(QuerydslBindings bindings, QPost root) {
         bindings.including(root.id);
         bindings.including(root.user.id);
+        bindings.including(root.board.id);
     }
 }
