@@ -1,10 +1,8 @@
 package com.board.gd.domain.board;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
