@@ -31,6 +31,14 @@ public class BoardService {
         return boardRepository.findAll(predicate, pageable);
     }
 
+    @Transactional(readOnly = false)
+    public Board create(BoardDto boardDto) {
+        return boardRepository.save(Board.builder()
+                .title(boardDto.getTitle())
+                .code(boardDto.getCode())
+                .build());
+    }
+
     public long count() {
         return count(null);
     }

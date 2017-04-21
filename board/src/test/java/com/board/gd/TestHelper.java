@@ -1,5 +1,7 @@
 package com.board.gd;
 
+import com.board.gd.domain.board.Board;
+import com.board.gd.domain.board.BoardDto;
 import com.board.gd.domain.comment.Comment;
 import com.board.gd.domain.comment.CommentDto;
 import com.board.gd.domain.post.Post;
@@ -55,6 +57,13 @@ public class TestHelper {
         return commentDto;
     }
 
+    public static BoardDto getTestBoardDto(String code) {
+        BoardDto boardDto = new BoardDto();
+        boardDto.setTitle("test" + code);
+        boardDto.setCode(code);
+        return boardDto;
+    }
+
     public static void assertUserDtoAndUser(UserDto userDto, User user) {
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getEmail(), user.getEmail());
@@ -83,5 +92,13 @@ public class TestHelper {
         assertNotNull(comment.getId());
         assertNotNull(comment.getCreatedAt());
         assertNotNull(comment.getUpdatedAt());
+    }
+
+    public static void assertBoardDtoAndBoard(BoardDto boardDto, Board board) {
+        assertEquals(boardDto.getTitle(), board.getTitle());
+        assertEquals(boardDto.getCode(), board.getCode());
+        assertNotNull(board.getId());
+        assertNotNull(board.getCreatedAt());
+        assertNotNull(board.getUpdatedAt());
     }
 }
