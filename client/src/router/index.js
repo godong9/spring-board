@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/Main';
+import Signup from '@/components/Signup';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'Main',
       component: Main,
+    },
+    {
+      path: '/signup',
+      name: 'Signup',
+      component: Signup,
     },
     {
       path: '/login',
