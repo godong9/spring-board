@@ -90,6 +90,9 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.data[0].id").value(post1.getId()))
                 .andExpect(jsonPath("$.data[0].title").value(testPostDto1.getTitle()))
                 .andExpect(jsonPath("$.data[0].content").value(testPostDto1.getContent()))
+                .andExpect(jsonPath("$.data[0].view_count").value(0))
+                .andExpect(jsonPath("$.data[0].comment_count").value(0))
+                .andExpect(jsonPath("$.data[0].post_like_count").value(0))
                 .andExpect(jsonPath("$.data[0].user.id").value(testUser1Id));
 
         mockMvc.perform(get("/posts")
@@ -182,6 +185,7 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.data.content").value(testPostDto.getContent()))
                 .andExpect(jsonPath("$.data.user.id").value(testUser.getId()))
                 .andExpect(jsonPath("$.data.comment_count").value(0))
+                .andExpect(jsonPath("$.data.post_like_count").value(0))
                 .andExpect(jsonPath("$.data.view_count").value(1));
     }
 
