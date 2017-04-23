@@ -45,6 +45,9 @@ public class Post {
     @Column(name = "comment_count")
     private Long commentCount;
 
+    @Column(name = "post_like_count")
+    private Long postLikeCount;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

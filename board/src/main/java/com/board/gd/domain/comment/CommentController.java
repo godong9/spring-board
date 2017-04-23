@@ -41,7 +41,7 @@ public class CommentController {
      *
      * @apiParam {Number} [size=20] 가져올 개수
      * @apiParam {Number} [page=0] 가져올 페이지
-     * @apiParam {String="createdAt,desc", "updatedAt,desc"} [sort=createdAt,desc] 정렬 조건
+     * @apiParam {String="created_at,desc", "updated_at,desc"} [sort=created_at,desc] 정렬 조건
      * @apiParam {Number} [post.id] 가져올 포스트 id
      * @apiParam {Number} [user.id] 가져올 유저 id
      *
@@ -50,8 +50,8 @@ public class CommentController {
      * @apiSuccess {Object[]} data 댓글 리스트
      * @apiSuccess {Number} data.id 댓글 id
      * @apiSuccess {String} data.content 댓글 내용
-     * @apiSuccess {Date} data.createdAt 댓글 생성일
-     * @apiSuccess {Date} data.updatedAt 댓글 수정일
+     * @apiSuccess {Date} data.created_at 댓글 생성일
+     * @apiSuccess {Date} data.updated_at 댓글 수정일
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름
@@ -83,8 +83,8 @@ public class CommentController {
      * @apiSuccess {Object} data 댓글 객체
      * @apiSuccess {Number} data.id 댓글 id
      * @apiSuccess {String} data.content 댓글 내용
-     * @apiSuccess {Date} data.createdAt 댓글 생성일
-     * @apiSuccess {Date} data.updatedAt 댓글 수정일
+     * @apiSuccess {Date} data.created_at 댓글 생성일
+     * @apiSuccess {Date} data.updated_at 댓글 수정일
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름
@@ -109,8 +109,8 @@ public class CommentController {
      * @apiSuccess {Object} data 댓글 객체
      * @apiSuccess {Number} data.id 댓글 id
      * @apiSuccess {String} data.content 댓글 내용
-     * @apiSuccess {Date} data.createdAt 댓글 생성일
-     * @apiSuccess {Date} data.updatedAt 댓글 수정일
+     * @apiSuccess {Date} data.created_at 댓글 생성일
+     * @apiSuccess {Date} data.updated_at 댓글 수정일
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름

@@ -74,6 +74,7 @@ public class PostService {
                 .content(postDto.getContent())
                 .viewCount(0L)
                 .commentCount(0L)
+                .postLikeCount(0L)
                 .user(user)
                 .board(board)
                 .build());
