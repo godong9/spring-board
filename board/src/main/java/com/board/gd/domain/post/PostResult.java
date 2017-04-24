@@ -23,6 +23,7 @@ public class PostResult {
     private UserResult user;
     private Long commentCount;
     private Long postLikeCount;
+    private Boolean isLiked;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private Date createdAt;
@@ -44,6 +45,7 @@ public class PostResult {
         postResult.setCommentCount(post.getCommentCount());
         postResult.setPostLikeCount(post.getPostLikeCount());
         postResult.setViewCount(post.getViewCount());
+        postResult.setIsLiked(post.getIsLiked());
         postResult.setCreatedAt(post.getCreatedAt());
         postResult.setUpdatedAt(post.getUpdatedAt());
 

@@ -71,6 +71,17 @@ public class PostServiceTests {
     }
 
     @Test
+    public void success_findOne_when_user_isLiked() {
+        // TODO
+        // given
+
+        // when
+
+        // then
+
+    }
+
+    @Test
     public void success_increaseViewCountAndFindOne() {
         // given
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
