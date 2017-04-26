@@ -160,6 +160,6 @@ public class CommentServiceTests {
         commentService.delete(deleteDto);
 
         // then
-        assertEquals(commentService.findOne(deletedId), null);
+        assertEquals(null, commentService.findOne(deletedId));
     }
 }

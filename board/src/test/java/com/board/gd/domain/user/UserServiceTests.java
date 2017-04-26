@@ -46,7 +46,7 @@ public class UserServiceTests {
         User user = userService.findOne(-1L);
 
         // then
-        assertEquals(user, null);
+        assertEquals(null, user);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class UserServiceTests {
         User user = userService.findByEmail("test1@");
 
         // then
-        assertEquals(user, null);
+        assertEquals(null, user);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(-1L);
 
         // then
-        assertEquals(roles.size(), 0);
+        assertEquals(0, roles.size());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
-        assertEquals(roles.size(), 1);
+        assertEquals(1, roles.size());
         roles
                 .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
     }
@@ -127,7 +127,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
-        assertEquals(roles.size(), 1);
+        assertEquals(1, roles.size());
         roles
                 .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
     }
@@ -143,7 +143,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
-        assertEquals(roles.size(), 2);
+        assertEquals(2, roles.size());
     }
 
     @Test(expected = UserException.class)
@@ -164,7 +164,7 @@ public class UserServiceTests {
         UserRole userRole = userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         // then
-        assertEquals(userRole.getRole(), UserRoleType.USER);
+        assertEquals(UserRoleType.USER, userRole.getRole());
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -236,7 +236,7 @@ public class UserServiceTests {
         Long userCount = userService.count();
 
         // then
-        assertEquals(Math.toIntExact(userCount), 0);
+        assertEquals(0, Math.toIntExact(userCount));
     }
 
     @Test
@@ -251,7 +251,7 @@ public class UserServiceTests {
         Long userCount = userService.count();
 
         // then
-        assertEquals(Math.toIntExact(userCount), 2);
+        assertEquals(2, Math.toIntExact(userCount));
     }
 
     @Test
@@ -266,7 +266,7 @@ public class UserServiceTests {
         List<User> testUserList = userService.findAll();
 
         // then
-        assertEquals(testUserList.size(), 2);
+        assertEquals(2, testUserList.size());
     }
 
     @Test
@@ -282,7 +282,7 @@ public class UserServiceTests {
 
         // then
         List<User> testUserList = userService.findAll();
-        assertEquals(testUserList.size(), 0);
+        assertEquals(0, testUserList.size());
     }
 
 }
