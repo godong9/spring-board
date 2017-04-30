@@ -3,12 +3,11 @@ package com.board.gd.domain.post;
 import com.board.gd.domain.board.Board;
 import com.board.gd.domain.user.User;
 import lombok.*;
-import org.springframework.data.annotation.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.util.Date;
 
 /**
