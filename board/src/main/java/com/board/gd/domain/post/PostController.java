@@ -60,7 +60,7 @@ public class PostController {
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
      *
-     * @apiSampleRequest http://localhost:8080/posts?page=1&size=10&sort=updatedAt,desc
+     * @apiSampleRequest http://localhost:9000/posts?page=1&size=10&sort=updatedAt,desc
      *
      * @apiUse BadRequestError
      */

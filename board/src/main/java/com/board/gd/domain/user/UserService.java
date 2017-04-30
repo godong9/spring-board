@@ -4,6 +4,7 @@ import com.board.gd.exception.UserException;
 import com.board.gd.mail.MailMessage;
 import com.board.gd.mail.MailService;
 import com.board.gd.utils.DateUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -121,6 +122,18 @@ public class UserService implements UserDetailsService {
         userRepository.deleteAll();
     }
 
+    @Transactional(readOnly = false)
+    public void authUser(Long id, String uuid) {
+        User user = findOne(id);
+        if (Objects.isNull(user)) {
+            throw new UserException("User not exist!");
+        }
+        if (ObjectUtils.notEqual(user.getAuthUUID(), uuid)) {
+            throw new UserException("Invalid UUID!");
+        }
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
 
     public void setAuthentication(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -145,7 +158,9 @@ public class UserService implements UserDetailsService {
     public void sendSignupEmail(User user) {
         StringBuilder sb = new StringBuilder();
         sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
-        sb.append("http://www.stockblind.kr/users/signup/auth?uuid=");
+        sb.append("http://www.stockblind.kr/users/");
+        sb.append(user.getId());
+        sb.append("/auth?uuid=");
         sb.append(user.getAuthUUID());
 
         MailMessage mailMessage = new MailMessage();

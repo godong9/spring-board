@@ -291,10 +291,45 @@ public class UserServiceTests {
         assertEquals(0, testUserList.size());
     }
 
+    @Test(expected = UserException.class)
+    public void fail_authUser_not_exist_user() {
+        // given
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        User testUser1 = userService.create(testUserDto1);
+
+        // when
+        userService.authUser(-1L, testUser1.getAuthUUID());
+    }
+
+    @Test(expected = UserException.class)
+    public void fail_authUser_invalid_uuid() {
+        // given
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        User testUser1 = userService.create(testUserDto1);
+
+        // when
+        userService.authUser(testUser1.getId(), "failuuid");
+    }
+
+    @Test
+    public void success_authUser() {
+        // given
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        User testUser1 = userService.create(testUserDto1);
+
+        // when
+        userService.authUser(testUser1.getId(), testUser1.getAuthUUID());
+
+        // then
+        User afterTestUser1 = userService.findOne(testUser1.getId());
+        assertThat(afterTestUser1.getEnabled(), is(true));
+    }
+
     @Test
     public void sendSignupEmail() {
         // given
         User testUser = User.builder()
+                .id(1L)
                 .email("test@test.com")
                 .authUUID(UUID.randomUUID().toString())
                 .enabled(false)

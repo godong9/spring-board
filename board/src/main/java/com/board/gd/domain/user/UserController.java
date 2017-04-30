@@ -120,6 +120,28 @@ public class UserController {
     }
 
     /**
+     * @api {get} /users/:id/auth Request User auth
+     * @apiName GetAuthUser
+     * @apiGroup User
+     *
+     * @apiParam {String} uuid 인증을 위한 UUID
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiSampleRequest http://localhost:9000/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
+     *
+     * @apiUse BadRequestError
+     */
+    @GetMapping("/users/{id}/auth")
+    public ServerResponse getUserAuth(@PathVariable @Valid Long id, @RequestParam("uuid") String uuid) {
+        userService.authUser(id, uuid);
+        return ServerResponse.success();
+    }
+
+    /**
      * @api {put} /users Request User update
      * @apiName UpdateUser
      * @apiGroup User
