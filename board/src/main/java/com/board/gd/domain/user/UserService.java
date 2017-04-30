@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -76,7 +77,8 @@ public class UserService implements UserDetailsService {
                 .email(userDto.getEmail())
                 .password(bcryptEncoder.encode(userDto.getPassword()))
                 .profileImg(userDto.getProfileImg())
-                .enabled(true)
+                .authUUID(UUID.randomUUID().toString())
+                .enabled(false)
                 .build());
 
         createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
