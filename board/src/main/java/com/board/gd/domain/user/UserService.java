@@ -1,6 +1,8 @@
 package com.board.gd.domain.user;
 
 import com.board.gd.exception.UserException;
+import com.board.gd.mail.MailMessage;
+import com.board.gd.mail.MailService;
 import com.board.gd.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private MailService mailService;
 
     private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
@@ -80,6 +85,8 @@ public class UserService implements UserDetailsService {
                 .authUUID(UUID.randomUUID().toString())
                 .enabled(false)
                 .build());
+
+        sendSignupEmail(user);
 
         createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
@@ -133,5 +140,22 @@ public class UserService implements UserDetailsService {
 
     public boolean matchPassword(String rawPassword, String encodedPassword) {
         return bcryptEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public void sendSignupEmail(User user) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
+        sb.append("http://www.stockblind.kr/users/signup/auth?uuid=");
+        sb.append(user.getAuthUUID());
+
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setFrom("stockblind.kr@gmail.com");
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
+        mailMessage.setHtmlContent(true);
+        mailMessage.setText(sb.toString());
+        mailMessage.setEncoding("UTF-8");
+
+        mailService.send(mailMessage);
     }
 }

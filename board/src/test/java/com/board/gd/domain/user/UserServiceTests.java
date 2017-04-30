@@ -2,11 +2,13 @@ package com.board.gd.domain.user;
 
 import com.board.gd.TestHelper;
 import com.board.gd.exception.UserException;
+import com.board.gd.mail.MailService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -30,6 +33,9 @@ public class UserServiceTests {
 
     @Autowired
     private UserService userService;
+
+    @MockBean
+    private MailService mailService;
 
     @Before
     public void setUp() {
@@ -285,4 +291,16 @@ public class UserServiceTests {
         assertEquals(0, testUserList.size());
     }
 
+    @Test
+    public void sendSignupEmail() {
+        // given
+        User testUser = User.builder()
+                .email("test@test.com")
+                .authUUID(UUID.randomUUID().toString())
+                .enabled(false)
+                .build();
+
+        // when
+        userService.sendSignupEmail(testUser);
+    }
 }
