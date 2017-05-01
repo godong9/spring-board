@@ -230,6 +230,22 @@ public class PostServiceTests {
         assertEquals(testPostDto.getBoardId(), post.getBoard().getId());
     }
 
+    @Test
+    public void success_createPostLike() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        Post testPost = postService.create(TestHelper.getTestPostDto(testUser.getId()));
+        PostLikeDto testPostLikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId());
+
+        // when
+        PostLike postLike = postService.createPostLike(testPostLikeDto);
+
+        // then
+        TestHelper.assertPostLikeDtoAndPostLike(testPostLikeDto, postLike);
+        Post afterPost = postService.findOne(testPost.getId());
+        assertEquals(Math.toIntExact(afterPost.getPostLikeCount()), 1);
+    }
+
     @Test(expected = PostException.class)
     public void fail_update_when_invalid_userId() {
         // given

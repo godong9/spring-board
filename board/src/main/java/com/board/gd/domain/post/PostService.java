@@ -102,6 +102,26 @@ public class PostService {
     }
 
     @Transactional(readOnly = false)
+    public PostLike createPostLike(PostLikeDto postLikeDto) {
+        User user = userService.findOne(postLikeDto.getUserId());
+        if (Objects.isNull(user)) {
+            throw new PostException("Not exist user!");
+        }
+
+        Post post = findOne(postLikeDto.getPostId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+
+        increasePostLikeCount(post);
+
+        return postLikeRepository.save(PostLike.builder()
+                .post(post)
+                .user(user)
+                .build());
+    }
+
+    @Transactional(readOnly = false)
     public Post update(PostDto postDto) {
         Post post = postRepository.findOne(postDto.getId());
         if (Objects.isNull(post)) {
