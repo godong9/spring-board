@@ -14,14 +14,14 @@ public class UserRoleTypeTests {
     @Test
     public void success_getName() {
         // then
-        assertEquals(UserRoleType.USER.name(), "USER");
-        assertEquals(UserRoleType.ADMIN.name(), "ADMIN");
+        assertEquals("USER", UserRoleType.USER.name());
+        assertEquals("ADMIN", UserRoleType.ADMIN.name());
     }
 
     @Test
     public void success_getDescription() {
         // then
-        assertEquals(UserRoleType.USER.getDescription(), "기본유저");
-        assertEquals(UserRoleType.ADMIN.getDescription(), "어드민유저");
+        assertEquals("기본유저", UserRoleType.USER.getDescription());
+        assertEquals("어드민유저", UserRoleType.ADMIN.getDescription());
     }
 }

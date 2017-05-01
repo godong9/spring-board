@@ -2,11 +2,13 @@ package com.board.gd.domain.user;
 
 import com.board.gd.TestHelper;
 import com.board.gd.exception.UserException;
+import com.board.gd.mail.MailService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -31,6 +34,9 @@ public class UserServiceTests {
     @Autowired
     private UserService userService;
 
+    @MockBean
+    private MailService mailService;
+
     @Before
     public void setUp() {
         userService.deleteAll();
@@ -46,7 +52,7 @@ public class UserServiceTests {
         User user = userService.findOne(-1L);
 
         // then
-        assertEquals(user, null);
+        assertEquals(null, user);
     }
 
     @Test
@@ -73,7 +79,7 @@ public class UserServiceTests {
         User user = userService.findByEmail("test1@");
 
         // then
-        assertEquals(user, null);
+        assertEquals(null, user);
     }
 
     @Test
@@ -98,7 +104,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(-1L);
 
         // then
-        assertEquals(roles.size(), 0);
+        assertEquals(0, roles.size());
     }
 
     @Test
@@ -111,7 +117,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
-        assertEquals(roles.size(), 1);
+        assertEquals(1, roles.size());
         roles
                 .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
     }
@@ -127,7 +133,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
-        assertEquals(roles.size(), 1);
+        assertEquals(1, roles.size());
         roles
                 .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
     }
@@ -143,7 +149,7 @@ public class UserServiceTests {
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
-        assertEquals(roles.size(), 2);
+        assertEquals(2, roles.size());
     }
 
     @Test(expected = UserException.class)
@@ -164,7 +170,7 @@ public class UserServiceTests {
         UserRole userRole = userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         // then
-        assertEquals(userRole.getRole(), UserRoleType.USER);
+        assertEquals(UserRoleType.USER, userRole.getRole());
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -236,7 +242,7 @@ public class UserServiceTests {
         Long userCount = userService.count();
 
         // then
-        assertEquals(Math.toIntExact(userCount), 0);
+        assertEquals(0, Math.toIntExact(userCount));
     }
 
     @Test
@@ -251,7 +257,7 @@ public class UserServiceTests {
         Long userCount = userService.count();
 
         // then
-        assertEquals(Math.toIntExact(userCount), 2);
+        assertEquals(2, Math.toIntExact(userCount));
     }
 
     @Test
@@ -266,7 +272,7 @@ public class UserServiceTests {
         List<User> testUserList = userService.findAll();
 
         // then
-        assertEquals(testUserList.size(), 2);
+        assertEquals(2, testUserList.size());
     }
 
     @Test
@@ -282,7 +288,54 @@ public class UserServiceTests {
 
         // then
         List<User> testUserList = userService.findAll();
-        assertEquals(testUserList.size(), 0);
+        assertEquals(0, testUserList.size());
     }
 
+    @Test(expected = UserException.class)
+    public void fail_authUser_not_exist_user() {
+        // given
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        User testUser1 = userService.create(testUserDto1);
+
+        // when
+        userService.authUser(-1L, testUser1.getAuthUUID());
+    }
+
+    @Test(expected = UserException.class)
+    public void fail_authUser_invalid_uuid() {
+        // given
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        User testUser1 = userService.create(testUserDto1);
+
+        // when
+        userService.authUser(testUser1.getId(), "failuuid");
+    }
+
+    @Test
+    public void success_authUser() {
+        // given
+        UserDto testUserDto1 = TestHelper.getTestUserDto("test1");
+        User testUser1 = userService.create(testUserDto1);
+
+        // when
+        userService.authUser(testUser1.getId(), testUser1.getAuthUUID());
+
+        // then
+        User afterTestUser1 = userService.findOne(testUser1.getId());
+        assertThat(afterTestUser1.getEnabled(), is(true));
+    }
+
+    @Test
+    public void success_sendSignupEmail() {
+        // given
+        User testUser = User.builder()
+                .id(1L)
+                .email("test@test.com")
+                .authUUID(UUID.randomUUID().toString())
+                .enabled(false)
+                .build();
+
+        // when
+        userService.sendSignupEmail(testUser);
+    }
 }

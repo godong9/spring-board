@@ -20,8 +20,6 @@ mail:
   host: smtp.gmail.com
   port: 587
   encoding: UTF-8
-  username: id@gmail.com
-  password: password
   debug: true
   smtp:
     start-tls-enable: true
@@ -37,3 +35,11 @@ spring:
     username: test
     password: test
     url: jdbc:mysql://localhost/board?useUnicode=true&characterEncoding=utf8&useSSL=false
+
+server:
+  host: http://localhost:9000
+
+mail:
+  from: stockblind.kr@gmail.com
+  username: id@gmail.com
+  password: password

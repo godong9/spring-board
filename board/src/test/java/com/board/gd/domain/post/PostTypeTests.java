@@ -14,14 +14,14 @@ public class PostTypeTests {
     @Test
     public void success_getName() {
         // then
-        assertEquals(PostType.FREE.name(), "FREE");
-        assertEquals(PostType.PAID.name(), "PAID");
+        assertEquals("FREE", PostType.FREE.name());
+        assertEquals("PAID", PostType.PAID.name());
     }
 
     @Test
     public void success_getDescription() {
         // then
-        assertEquals(PostType.FREE.getDescription(), "무료");
-        assertEquals(PostType.PAID.getDescription(), "유료");
+        assertEquals("무료", PostType.FREE.getDescription());
+        assertEquals("유료", PostType.PAID.getDescription());
     }
 }

@@ -24,6 +24,7 @@ public class TestHelper {
                 .name("test" + id.toString())
                 .password("test")
                 .email("test" + id.toString() + "@test.com")
+                .authUUID("testuuid")
                 .build();
     }
 
@@ -68,7 +69,8 @@ public class TestHelper {
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getEmail(), user.getEmail());
         assertEquals(userDto.getProfileImg(), user.getProfileImg());
-        assertEquals(user.getEnabled(), true);
+        assertEquals(user.getEnabled(), false);
+        assertNotNull(user.getAuthUUID());
         assertNotNull(user.getCreatedAt());
         assertNotNull(user.getUpdatedAt());
     }

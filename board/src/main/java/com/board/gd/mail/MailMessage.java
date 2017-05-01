@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
 import java.io.File;
@@ -22,13 +23,19 @@ import java.util.Objects;
 public class MailMessage extends SimpleMailMessage {
     private static final long serialVersionUID = 1830106734321133565L;
 
-    private List<File> attachments;
+    @Value("${mail.from}")
+    private String from;
+
+    @Value("${mail.encoding}")
     private String encoding;
+
+    private List<File> attachments;
     private boolean htmlContent;
 
     public MailMessage() {
         super();
         super.setSentDate(Calendar.getInstance().getTime());
+        super.setFrom(from);
         this.attachments = Lists.newArrayList();
     }
 

@@ -7,11 +7,13 @@ import com.board.gd.domain.post.PostService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.CommentException;
+import com.board.gd.mail.MailService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,9 @@ public class CommentServiceTests {
 
     @Autowired
     private CommentService commentService;
+
+    @MockBean
+    private MailService mailService;
 
     @Before
     public void setUp() {
@@ -160,6 +165,6 @@ public class CommentServiceTests {
         commentService.delete(deleteDto);
 
         // then
-        assertEquals(commentService.findOne(deletedId), null);
+        assertEquals(null, commentService.findOne(deletedId));
     }
 }

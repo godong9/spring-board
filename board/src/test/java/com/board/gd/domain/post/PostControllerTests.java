@@ -66,8 +66,9 @@ public class PostControllerTests {
         User testUser2 = TestHelper.getTestUser(2L);
         PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId());
         PostDto testPostDto2 = TestHelper.getTestPostDto(testUser2.getId());
-        postService.create(testPostDto1);
-        postService.create(testPostDto2);
+        Post post1 = postService.create(testPostDto1);
+        Thread.sleep(1000);
+        Post post2 = postService.create(testPostDto2);
         String testUser1Id = testUser1.getId().toString();
         String testUser2Id = testUser2.getId().toString();
 
@@ -76,7 +77,9 @@ public class PostControllerTests {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(2))
-                .andExpect(jsonPath("$.data", hasSize(2)));
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.data[0].id").value(post2.getId()))
+                .andExpect(jsonPath("$.data[1].id").value(post1.getId()));
 
         mockMvc.perform(get("/posts")
                 .param("user.id", testUser1Id)
@@ -84,9 +87,12 @@ public class PostControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(1))
                 .andExpect(jsonPath("$.data", hasSize(1)))
-                .andExpect(jsonPath("$.data[0].id").isNotEmpty())
+                .andExpect(jsonPath("$.data[0].id").value(post1.getId()))
                 .andExpect(jsonPath("$.data[0].title").value(testPostDto1.getTitle()))
                 .andExpect(jsonPath("$.data[0].content").value(testPostDto1.getContent()))
+                .andExpect(jsonPath("$.data[0].view_count").value(0))
+                .andExpect(jsonPath("$.data[0].comment_count").value(0))
+                .andExpect(jsonPath("$.data[0].post_like_count").value(0))
                 .andExpect(jsonPath("$.data[0].user.id").value(testUser1Id));
 
         mockMvc.perform(get("/posts")
@@ -132,6 +138,30 @@ public class PostControllerTests {
     }
 
     @Test
+    public void success_getPosts_orderBy_updatedAt() throws Exception {
+        // given
+        Long boardId = 1L;
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+
+        User testUser1 = TestHelper.getTestUser(1L);
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId(), boardId);
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser1.getId(), boardId);
+        Post post1 = postService.create(testPostDto1);
+        Thread.sleep(1000);
+        Post post2 = postService.create(testPostDto2);
+
+        // when
+        mockMvc.perform(get("/posts")
+                .param("updated_at,desc", boardId.toString())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(2))
+                .andExpect(jsonPath("$.data", hasSize(2)))
+                .andExpect(jsonPath("$.data[0].id").value(post2.getId()))
+                .andExpect(jsonPath("$.data[1].id").value(post1.getId()));
+    }
+
+    @Test
     public void success_getPost() throws Exception {
         // given
         given(userService.getCurrentUser()).willReturn(User.builder()
@@ -155,6 +185,7 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.data.content").value(testPostDto.getContent()))
                 .andExpect(jsonPath("$.data.user.id").value(testUser.getId()))
                 .andExpect(jsonPath("$.data.comment_count").value(0))
+                .andExpect(jsonPath("$.data.post_like_count").value(0))
                 .andExpect(jsonPath("$.data.view_count").value(1));
     }
 

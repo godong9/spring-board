@@ -25,10 +25,25 @@ public class PostService {
     private PostRepository postRepository;
 
     @Autowired
+    private PostLikeRepository postLikeRepository;
+
+    @Autowired
     private UserService userService;
 
     public Post findOne(Long id) {
-        return postRepository.findOne(id);
+        return findOne(id, null);
+    }
+
+    public Post findOne(Long id, Long userId) {
+        Post post = postRepository.findOne(id);
+        if (Objects.isNull(userId)) {
+            return post;
+        }
+        PostLike postLike = postLikeRepository.findByPostIdAndUserId(id, userId);
+        if (!Objects.isNull(postLike)) {
+            post.setIsLiked(true);
+        }
+        return post;
     }
 
     @Transactional(readOnly = false)
@@ -44,6 +59,12 @@ public class PostService {
     @Transactional(readOnly = false)
     public void increaseCommentCount(Post post) {
         post.setCommentCount(post.getCommentCount() + 1);
+        postRepository.save(post);
+    }
+
+    @Transactional(readOnly = false)
+    public void increasePostLikeCount(Post post) {
+        post.setPostLikeCount(post.getPostLikeCount() + 1);
         postRepository.save(post);
     }
 
@@ -74,6 +95,7 @@ public class PostService {
                 .content(postDto.getContent())
                 .viewCount(0L)
                 .commentCount(0L)
+                .postLikeCount(0L)
                 .user(user)
                 .board(board)
                 .build());

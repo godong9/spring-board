@@ -29,7 +29,7 @@ public class BoardController {
      *
      * @apiParam {Number} [size=100] 가져올 개수
      * @apiParam {Number} [page=0] 가져올 페이지
-     * @apiParam {String="createdAt,desc", "updatedAt,desc"} [sort=createdAt,desc] 정렬 조건
+     * @apiParam {String="created_at,desc", "updated_at,desc"} [sort=created_at,desc] 정렬 조건
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Number} count 게시판 개수

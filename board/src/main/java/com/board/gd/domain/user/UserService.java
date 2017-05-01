@@ -1,7 +1,10 @@
 package com.board.gd.domain.user;
 
 import com.board.gd.exception.UserException;
+import com.board.gd.mail.MailMessage;
+import com.board.gd.mail.MailService;
 import com.board.gd.utils.DateUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +37,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private MailService mailService;
 
     private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
@@ -76,8 +83,11 @@ public class UserService implements UserDetailsService {
                 .email(userDto.getEmail())
                 .password(bcryptEncoder.encode(userDto.getPassword()))
                 .profileImg(userDto.getProfileImg())
-                .enabled(true)
+                .authUUID(UUID.randomUUID().toString())
+                .enabled(false)
                 .build());
+
+        sendSignupEmail(user);
 
         createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
@@ -112,6 +122,18 @@ public class UserService implements UserDetailsService {
         userRepository.deleteAll();
     }
 
+    @Transactional(readOnly = false)
+    public void authUser(Long id, String uuid) {
+        User user = findOne(id);
+        if (Objects.isNull(user)) {
+            throw new UserException("User not exist!");
+        }
+        if (ObjectUtils.notEqual(user.getAuthUUID(), uuid)) {
+            throw new UserException("Invalid UUID!");
+        }
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
 
     public void setAuthentication(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -131,5 +153,22 @@ public class UserService implements UserDetailsService {
 
     public boolean matchPassword(String rawPassword, String encodedPassword) {
         return bcryptEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public void sendSignupEmail(User user) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
+        sb.append("http://www.stockblind.kr");
+        sb.append("/users/");
+        sb.append(user.getId());
+        sb.append("/auth?uuid=");
+        sb.append(user.getAuthUUID());
+
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
+        mailMessage.setText(sb.toString());
+
+        mailService.send(mailMessage);
     }
 }

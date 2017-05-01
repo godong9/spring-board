@@ -6,6 +6,12 @@ Spring board project
 $ ./apidoc.sh
 ```
 
+# MySQL 설치 및 test 계정 추가
+- init.sql 쿼리 실행
+
+# DB 설정
+- board.sql 쿼리 실행
+
 # Server build
 ```
 $ cd /board 
