@@ -158,18 +158,16 @@ public class UserService implements UserDetailsService {
     public void sendSignupEmail(User user) {
         StringBuilder sb = new StringBuilder();
         sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
-        sb.append("http://www.stockblind.kr/users/");
+        sb.append("http://www.stockblind.kr");
+        sb.append("/users/");
         sb.append(user.getId());
         sb.append("/auth?uuid=");
         sb.append(user.getAuthUUID());
 
         MailMessage mailMessage = new MailMessage();
-        mailMessage.setFrom("stockblind.kr@gmail.com");
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
-        mailMessage.setHtmlContent(true);
         mailMessage.setText(sb.toString());
-        mailMessage.setEncoding("UTF-8");
 
         mailService.send(mailMessage);
     }

@@ -326,7 +326,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void sendSignupEmail() {
+    public void success_sendSignupEmail() {
         // given
         User testUser = User.builder()
                 .id(1L)
