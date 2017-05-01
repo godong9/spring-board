@@ -1,0 +1,9 @@
+db:
+  image: mysql:5.7
+  volumes:
+    - "./board/src/main/resources/board.sql:/docker-entrypoint-initdb.d/board.sql"
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: "stock-blind"
+  ports:
+    - "3306:3306"
