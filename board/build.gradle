@@ -54,6 +54,9 @@ dependencies {
 
 	compile('com.sun.mail:javax.mail')
 
+	// jsoup HTML parser library @ http://jsoup.org/
+	compile('org.jsoup:jsoup:1.10.2')
+
 	testCompile('org.mockito:mockito-core')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
