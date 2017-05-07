@@ -2,6 +2,7 @@ package com.board.gd.domain.post;
 
 import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.post.form.DeleteForm;
+import com.board.gd.domain.post.form.PostLikeForm;
 import com.board.gd.domain.post.form.UpdateForm;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.response.ServerResponse;
@@ -132,6 +133,24 @@ public class PostController {
         createForm.setUserId(userService.getCurrentUser().getId());
         Post post = postService.create(modelMapper.map(createForm, PostDto.class));
         return ServerResponse.success(PostResult.getPostResult(post));
+    }
+
+    /**
+     * @api {post} /posts/:id/like Request Post like
+     * @apiName LikePost
+     * @apiGroup Post
+     *
+     * @apiSuccess {Number} status 상태코드
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/posts/{id}/like")
+    public ServerResponse postPostLike(@PathVariable @Valid Long id) {
+        PostLikeForm postLikeForm = new PostLikeForm();
+        postLikeForm.setPostId(id);
+        postLikeForm.setUserId(userService.getCurrentUser().getId());
+        postService.createPostLike(modelMapper.map(postLikeForm, PostLikeDto.class));
+        return ServerResponse.success();
     }
 
     /**

@@ -4,9 +4,7 @@ import com.board.gd.domain.board.Board;
 import com.board.gd.domain.board.BoardDto;
 import com.board.gd.domain.comment.Comment;
 import com.board.gd.domain.comment.CommentDto;
-import com.board.gd.domain.post.Post;
-import com.board.gd.domain.post.PostDto;
-import com.board.gd.domain.post.PostType;
+import com.board.gd.domain.post.*;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserDto;
 
@@ -65,6 +63,13 @@ public class TestHelper {
         return boardDto;
     }
 
+    public static PostLikeDto getTestPostLikeDto(Long userId, Long postId) {
+        PostLikeDto postLikeDto = new PostLikeDto();
+        postLikeDto.setUserId(userId);
+        postLikeDto.setPostId(postId);
+        return postLikeDto;
+    }
+
     public static void assertUserDtoAndUser(UserDto userDto, User user) {
         assertEquals(userDto.getName(), user.getName());
         assertEquals(userDto.getEmail(), user.getEmail());
@@ -102,5 +107,13 @@ public class TestHelper {
         assertNotNull(board.getId());
         assertNotNull(board.getCreatedAt());
         assertNotNull(board.getUpdatedAt());
+    }
+
+    public static void assertPostLikeDtoAndPostLike(PostLikeDto postLikeDto, PostLike postLike) {
+        assertEquals(postLikeDto.getPostId(), postLike.getPost().getId());
+        assertEquals(postLikeDto.getUserId(), postLike.getUser().getId());
+        assertNotNull(postLike.getId());
+        assertNotNull(postLike.getCreatedAt());
+        assertNotNull(postLike.getUpdatedAt());
     }
 }

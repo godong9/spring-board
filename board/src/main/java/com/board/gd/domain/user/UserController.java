@@ -1,5 +1,6 @@
 package com.board.gd.domain.user;
 
+import com.board.gd.domain.user.form.EmailForm;
 import com.board.gd.domain.user.form.LoginForm;
 import com.board.gd.domain.user.form.SignupForm;
 import com.board.gd.domain.user.form.UpdateForm;
@@ -54,6 +55,26 @@ public class UserController {
     public ServerResponse userSignup(@RequestBody @Valid SignupForm signupForm) {
         User user = userService.create(modelMapper.map(signupForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
+
+    /**
+     * @api {post} /users/email Request User email
+     * @apiName AuthUserEmail
+     * @apiGroup User
+     *
+     * @apiParam {String} email 이메일
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/users/email")
+    public ServerResponse postUserEmail(@RequestBody @Valid EmailForm emailForm) {
+        userService.createUserEmail(modelMapper.map(emailForm, UserDto.class));
+        return ServerResponse.success();
     }
 
     /**

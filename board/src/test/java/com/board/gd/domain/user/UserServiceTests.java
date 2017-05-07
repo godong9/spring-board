@@ -173,6 +173,46 @@ public class UserServiceTests {
         assertEquals(UserRoleType.USER, userRole.getRole());
     }
 
+    @Test
+    public void success_createUserEmail() {
+        // given
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail("test@test.com");
+        // when
+        User testUser = userService.createUserEmail(testUserDto);
+
+        // then
+        assertEquals(testUser.getEmail(), "test@test.com");
+        assertEquals(testUser.getName(), "");
+        assertEquals(testUser.getPassword(), null);
+    }
+
+    @Test
+    public void success_createUserEmail_when_already_exist_user() {
+        // given
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail("test@test.com");
+        User beforeTestUser = userService.createUserEmail(testUserDto);
+
+        // when
+        User afterTestUser = userService.createUserEmail(testUserDto);
+
+        // then
+        assertEquals(afterTestUser.getId(), beforeTestUser.getId());
+    }
+
+    @Test(expected = UserException.class)
+    public void fail_createUserEmail_when_already_auth() {
+        // given
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail("test@test.com");
+        User testUser = userService.createUserEmail(testUserDto);
+        userService.authUser(testUser.getId(), testUser.getAuthUUID());
+
+        // when
+        userService.createUserEmail(testUserDto);
+    }
+
     @Test(expected = DataIntegrityViolationException.class)
     public void fail_create_when_invalid_email() {
         // given
