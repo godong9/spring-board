@@ -77,6 +77,33 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = false)
+    public User createUserEmail(UserDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail());
+
+        // 유저가 존재하고 인증 안되었을 경우 인증메일 재발송
+        if (!Objects.isNull(user) && !user.getEnabled()) {
+            sendSignupEmail(user);
+            return user;
+        }
+
+        // 유저가 존재할 경우
+        if (!Objects.isNull(user)) {
+            throw new UserException("이미 가입한 유저입니다. 로그인해주세요.");
+        }
+
+        user = userRepository.save(User.builder()
+                .name("")
+                .email(userDto.getEmail())
+                .authUUID(UUID.randomUUID().toString())
+                .enabled(false)
+                .build());
+
+        sendSignupEmail(user);
+
+        return user;
+    }
+
+    @Transactional(readOnly = false)
     public User create(UserDto userDto) {
         User user = userRepository.save(User.builder()
                 .name(userDto.getName())
