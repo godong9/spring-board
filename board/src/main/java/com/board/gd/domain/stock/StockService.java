@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -23,17 +22,16 @@ public class StockService {
 
     @Transactional(readOnly = false)
     public void parseHtmlAndSave() throws IOException {
-        String kospiPath = "/board/files/kospi.html";
+        String kospiPath = "https://www.hdable.co.kr/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=1&findKeyword=&searchGubun=1";
         saveStockCodeAndName(kospiPath);
 
-        String kodaqPath = "/board/files/kosdaq.html";
+        String kodaqPath = "https://www.hdable.co.kr/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=2&findKeyword=&searchGubun=1";
         saveStockCodeAndName(kodaqPath);
     }
 
     @Transactional(readOnly = false)
-    public void saveStockCodeAndName(String filePath) throws IOException {
-        File file = new File(System.getProperty("user.dir") + filePath);
-        Document doc = Jsoup.parse(file, "EUC-KR");
+    public void saveStockCodeAndName(String uri) throws IOException {
+        Document doc = Jsoup.connect(uri).get();
 
         Elements trs = doc.select(".tbScY tr");
         for (Element e: trs) {
