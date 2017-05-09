@@ -36,6 +36,9 @@ public class PostLike {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "unlike")
+    private Boolean unlike;
+
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")

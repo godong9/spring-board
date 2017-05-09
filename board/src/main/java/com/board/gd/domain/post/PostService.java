@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Transactional(readOnly = true)
@@ -39,10 +40,17 @@ public class PostService {
         if (Objects.isNull(userId)) {
             return post;
         }
-        PostLike postLike = postLikeRepository.findByPostIdAndUserId(id, userId);
-        if (!Objects.isNull(postLike)) {
-            post.setIsLiked(true);
+        List<PostLike> postLikes = postLikeRepository.findByPostIdAndUserId(id, userId);
+        if (postLikes.size() == 0) {
+            return post;
         }
+        postLikes.forEach(postLike -> {
+                    if (postLike.getUnlike()) {
+                        post.setIsUnliked(true);
+                    } else {
+                        post.setIsLiked(true);
+                    }
+                });
         return post;
     }
 
@@ -65,6 +73,12 @@ public class PostService {
     @Transactional(readOnly = false)
     public void increasePostLikeCount(Post post) {
         post.setPostLikeCount(post.getPostLikeCount() + 1);
+        postRepository.save(post);
+    }
+
+    @Transactional(readOnly = false)
+    public void increasePostUnlikeCount(Post post) {
+        post.setPostUnlikeCount(post.getPostUnlikeCount() + 1);
         postRepository.save(post);
     }
 
@@ -96,6 +110,7 @@ public class PostService {
                 .viewCount(0L)
                 .commentCount(0L)
                 .postLikeCount(0L)
+                .postUnlikeCount(0L)
                 .blocked(false)
                 .user(user)
                 .board(board)
@@ -119,6 +134,7 @@ public class PostService {
         return postLikeRepository.save(PostLike.builder()
                 .post(post)
                 .user(user)
+                .unlike(postLikeDto.getUnlike())
                 .build());
     }
 

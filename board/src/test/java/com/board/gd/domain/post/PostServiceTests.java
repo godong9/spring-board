@@ -87,6 +87,7 @@ public class PostServiceTests {
         PostLikeDto testPostLikeDto = new PostLikeDto();
         testPostLikeDto.setPostId(testPost.getId());
         testPostLikeDto.setUserId(testPost.getUser().getId());
+        testPostLikeDto.setUnlike(false);
         postService.createPostLike(testPostLikeDto);
 
         // when
@@ -244,11 +245,11 @@ public class PostServiceTests {
     }
 
     @Test
-    public void success_createPostLike() {
+    public void success_createPostLike_when_unliked_false() {
         // given
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
         Post testPost = postService.create(TestHelper.getTestPostDto(testUser.getId()));
-        PostLikeDto testPostLikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId());
+        PostLikeDto testPostLikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId(), false);
 
         // when
         PostLike postLike = postService.createPostLike(testPostLikeDto);
@@ -257,6 +258,36 @@ public class PostServiceTests {
         TestHelper.assertPostLikeDtoAndPostLike(testPostLikeDto, postLike);
         Post afterPost = postService.findOne(testPost.getId());
         assertEquals(Math.toIntExact(afterPost.getPostLikeCount()), 1);
+    }
+
+    @Test
+    public void success_createPostLike_when_unliked_true() {
+        // given
+
+        //TODO
+
+        // when
+
+        // then
+
+    }
+
+    @Test
+    public void fail_createPostLike_when_alreadyLiked() {
+        // given
+
+        // when
+
+        // then
+    }
+
+    @Test
+    public void fail_createPostLike_when_alreadyLiked_and_notUnliked() {
+        // given
+
+        // when
+
+        // then
     }
 
     @Test(expected = PostException.class)

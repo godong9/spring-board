@@ -10,4 +10,5 @@ import lombok.Data;
 public class PostLikeForm {
     private Long userId;
     private Long postId;
+    private Boolean unlike;
 }
