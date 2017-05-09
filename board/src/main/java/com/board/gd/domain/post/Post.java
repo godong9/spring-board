@@ -48,6 +48,9 @@ public class Post {
     @Column(name = "post_like_count")
     private Long postLikeCount;
 
+    @Column(name = "blocked")
+    private Boolean blocked;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

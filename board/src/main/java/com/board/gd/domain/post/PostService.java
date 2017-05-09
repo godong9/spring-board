@@ -96,6 +96,7 @@ public class PostService {
                 .viewCount(0L)
                 .commentCount(0L)
                 .postLikeCount(0L)
+                .blocked(false)
                 .user(user)
                 .board(board)
                 .build());

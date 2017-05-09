@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -77,13 +79,23 @@ public class PostServiceTests {
 
     @Test
     public void success_findOne_when_user_isLiked() {
-        // TODO
         // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        Post testPost = postService.create(testPostDto);
+
+        PostLikeDto testPostLikeDto = new PostLikeDto();
+        testPostLikeDto.setPostId(testPost.getId());
+        testPostLikeDto.setUserId(testPost.getUser().getId());
+        postService.createPostLike(testPostLikeDto);
 
         // when
+        Post afterTestPost = postService.findOne(testPost.getId(), testPost.getUser().getId());
 
         // then
-
+        TestHelper.assertPostDtoAndPost(testPostDto, afterTestPost);
+        assertThat(afterTestPost.getIsLiked(), is(true));
+        assertThat(afterTestPost.getPostLikeCount(), is(1L));
     }
 
     @Test
@@ -213,6 +225,7 @@ public class PostServiceTests {
 
         // then
         TestHelper.assertPostDtoAndPost(testPostDto, post);
+        assertEquals(post.getBlocked(), false);
     }
 
     @Test
