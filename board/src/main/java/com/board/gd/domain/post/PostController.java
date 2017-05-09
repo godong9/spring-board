@@ -141,13 +141,14 @@ public class PostController {
      * @apiName LikePost
      * @apiGroup Post
      *
+     * @apiParam {Boolean} unlike 좋아요: false, 싫어요: true
+     *
      * @apiSuccess {Number} status 상태코드
      *
      * @apiUse BadRequestError
      */
     @PostMapping("/posts/{id}/like")
-    public ServerResponse postPostLike(@PathVariable @Valid Long id) {
-        PostLikeForm postLikeForm = new PostLikeForm();
+    public ServerResponse postPostLike(@PathVariable @Valid Long id, @RequestBody @Valid PostLikeForm postLikeForm) {
         postLikeForm.setPostId(id);
         postLikeForm.setUserId(userService.getCurrentUser().getId());
         postService.createPostLike(modelMapper.map(postLikeForm, PostLikeDto.class));
