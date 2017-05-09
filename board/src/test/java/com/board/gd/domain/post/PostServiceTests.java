@@ -258,36 +258,54 @@ public class PostServiceTests {
         TestHelper.assertPostLikeDtoAndPostLike(testPostLikeDto, postLike);
         Post afterPost = postService.findOne(testPost.getId());
         assertEquals(Math.toIntExact(afterPost.getPostLikeCount()), 1);
+        assertEquals(Math.toIntExact(afterPost.getPostUnlikeCount()), 0);
     }
 
     @Test
     public void success_createPostLike_when_unliked_true() {
         // given
-
-        //TODO
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        Post testPost = postService.create(TestHelper.getTestPostDto(testUser.getId()));
+        PostLikeDto testPostUnlikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId(), true);
 
         // when
+        PostLike postLike = postService.createPostLike(testPostUnlikeDto);
 
         // then
-
+        TestHelper.assertPostLikeDtoAndPostLike(testPostUnlikeDto, postLike);
+        Post afterPost = postService.findOne(testPost.getId());
+        assertEquals(Math.toIntExact(afterPost.getPostLikeCount()), 0);
+        assertEquals(Math.toIntExact(afterPost.getPostUnlikeCount()), 1);
     }
 
-    @Test
+    @Test(expected = PostException.class)
     public void fail_createPostLike_when_alreadyLiked() {
         // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        Post testPost = postService.create(TestHelper.getTestPostDto(testUser.getId()));
+        PostLikeDto testPostLikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId(), false);
+        postService.createPostLike(testPostLikeDto);
 
         // when
-
-        // then
+        postService.createPostLike(testPostLikeDto);
     }
 
     @Test
     public void fail_createPostLike_when_alreadyLiked_and_notUnliked() {
         // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        Post testPost = postService.create(TestHelper.getTestPostDto(testUser.getId()));
+        PostLikeDto testPostLikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId(), false);
+        PostLikeDto testPostUnlikeDto = TestHelper.getTestPostLikeDto(testUser.getId(), testPost.getId(), true);
+        postService.createPostLike(testPostLikeDto);
 
         // when
+        postService.createPostLike(testPostUnlikeDto);
 
         // then
+        Post afterPost = postService.findOne(testPost.getId());
+        assertEquals(Math.toIntExact(afterPost.getPostLikeCount()), 1);
+        assertEquals(Math.toIntExact(afterPost.getPostUnlikeCount()), 1);
     }
 
     @Test(expected = PostException.class)

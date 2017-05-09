@@ -129,7 +129,16 @@ public class PostService {
             throw new PostException("Not exist post!");
         }
 
-        increasePostLikeCount(post);
+        PostLike postLike = postLikeRepository.findByPostIdAndUserIdAndUnlike(post.getId(), user.getId(), postLikeDto.getUnlike());
+        if (!Objects.isNull(postLike)) {
+            throw new PostException("Already post like or unlike!");
+        }
+
+        if (postLikeDto.getUnlike()) {
+            increasePostUnlikeCount(post);
+        } else {
+            increasePostLikeCount(post);
+        }
 
         return postLikeRepository.save(PostLike.builder()
                 .post(post)
