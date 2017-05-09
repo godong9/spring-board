@@ -93,6 +93,7 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.data[0].view_count").value(0))
                 .andExpect(jsonPath("$.data[0].comment_count").value(0))
                 .andExpect(jsonPath("$.data[0].post_like_count").value(0))
+                .andExpect(jsonPath("$.data[0].blocked").value(false))
                 .andExpect(jsonPath("$.data[0].user.id").value(testUser1Id));
 
         mockMvc.perform(get("/posts")
