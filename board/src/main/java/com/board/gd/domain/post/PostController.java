@@ -55,6 +55,7 @@ public class PostController {
      * @apiSuccess {Number} data.view_count 포스트 조회수
      * @apiSuccess {Number} data.comment_count 포스트 댓글수
      * @apiSuccess {Number} data.post_like_count 포스트 좋아요수
+     * @apiSuccess {Boolean} data.blocked 포스트 숨김 처리 여부 (true: 신고된 글. 숨김 처리)
      * @apiSuccess {Date} data.created_at 포스트 생성일
      * @apiSuccess {Date} data.updated_at 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
@@ -140,13 +141,14 @@ public class PostController {
      * @apiName LikePost
      * @apiGroup Post
      *
+     * @apiParam {Boolean} unlike 좋아요: false, 싫어요: true
+     *
      * @apiSuccess {Number} status 상태코드
      *
      * @apiUse BadRequestError
      */
     @PostMapping("/posts/{id}/like")
-    public ServerResponse postPostLike(@PathVariable @Valid Long id) {
-        PostLikeForm postLikeForm = new PostLikeForm();
+    public ServerResponse postPostLike(@PathVariable @Valid Long id, @RequestBody @Valid PostLikeForm postLikeForm) {
         postLikeForm.setPostId(id);
         postLikeForm.setUserId(userService.getCurrentUser().getId());
         postService.createPostLike(modelMapper.map(postLikeForm, PostLikeDto.class));

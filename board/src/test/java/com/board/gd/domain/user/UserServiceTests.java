@@ -188,6 +188,25 @@ public class UserServiceTests {
     }
 
     @Test
+    public void success_updateAuthInfo() {
+        // given
+        UserDto userDto = TestHelper.getTestUserDto("test1");
+        User beforeTestUser = userService.create(userDto);
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail(beforeTestUser.getEmail());
+        String beforeEmail = beforeTestUser.getEmail();
+        String beforeUUID = beforeTestUser.getAuthUUID();
+
+        // when
+        User afterTestUser = userService.updateAuthInfo(testUserDto);
+
+        // then
+        assertEquals(afterTestUser.getEmail(), beforeEmail);
+        assertNotEquals(afterTestUser.getAuthUUID(), beforeUUID);
+    }
+
+
+    @Test
     public void success_createUserEmail_when_already_exist_user() {
         // given
         UserDto testUserDto = new UserDto();
@@ -366,7 +385,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void success_sendSignupEmail() {
+    public void success_sendAuthEmail() {
         // given
         User testUser = User.builder()
                 .id(1L)
@@ -376,6 +395,6 @@ public class UserServiceTests {
                 .build();
 
         // when
-        userService.sendSignupEmail(testUser);
+        userService.sendAuthEmail(testUser);
     }
 }

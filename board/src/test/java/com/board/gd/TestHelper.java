@@ -63,10 +63,11 @@ public class TestHelper {
         return boardDto;
     }
 
-    public static PostLikeDto getTestPostLikeDto(Long userId, Long postId) {
+    public static PostLikeDto getTestPostLikeDto(Long userId, Long postId, Boolean unlike) {
         PostLikeDto postLikeDto = new PostLikeDto();
         postLikeDto.setUserId(userId);
         postLikeDto.setPostId(postId);
+        postLikeDto.setUnlike(unlike);
         return postLikeDto;
     }
 

@@ -82,7 +82,7 @@ public class UserService implements UserDetailsService {
 
         // 유저가 존재하고 인증 안되었을 경우 인증메일 재발송
         if (!Objects.isNull(user) && !user.getEnabled()) {
-            sendSignupEmail(user);
+            sendAuthEmail(user);
             return user;
         }
 
@@ -98,7 +98,18 @@ public class UserService implements UserDetailsService {
                 .enabled(false)
                 .build());
 
-        sendSignupEmail(user);
+        sendAuthEmail(user);
+
+        return user;
+    }
+
+    @Transactional(readOnly = false)
+    public User updateAuthInfo(UserDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail());
+        user.setAuthUUID(UUID.randomUUID().toString());
+        user = userRepository.save(user);
+
+        sendAuthEmail(user);
 
         return user;
     }
@@ -114,7 +125,7 @@ public class UserService implements UserDetailsService {
                 .enabled(false)
                 .build());
 
-        sendSignupEmail(user);
+        sendAuthEmail(user);
 
         createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
@@ -182,7 +193,8 @@ public class UserService implements UserDetailsService {
         return bcryptEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public void sendSignupEmail(User user) {
+    public void sendAuthEmail(User user) {
+        // TODO: 링크 파라미터로 받아서 어느 페이지로 이동하는냐에 따라 달라져야 함
         StringBuilder sb = new StringBuilder();
         sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
         sb.append("http://www.stockblind.kr");

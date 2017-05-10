@@ -78,6 +78,26 @@ public class UserController {
     }
 
     /**
+     * @api {post} /users/find/password Request User find password
+     * @apiName FindUserPassword
+     * @apiGroup User
+     *
+     * @apiParam {String} email 이메일
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/users/find/password")
+    public ServerResponse postUserFindPassword(@RequestBody @Valid EmailForm emailForm) {
+        userService.updateAuthInfo(modelMapper.map(emailForm, UserDto.class));
+        return ServerResponse.success();
+    }
+
+    /**
      * @api {post} /users/login Request User login
      * @apiName LoginUser
      * @apiGroup User

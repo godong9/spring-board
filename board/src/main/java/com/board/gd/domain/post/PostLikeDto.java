@@ -11,4 +11,5 @@ public class PostLikeDto {
     private Long id;
     private Long userId;
     private Long postId;
+    private Boolean unlike;
 }

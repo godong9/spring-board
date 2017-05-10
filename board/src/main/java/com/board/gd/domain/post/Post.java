@@ -48,6 +48,12 @@ public class Post {
     @Column(name = "post_like_count")
     private Long postLikeCount;
 
+    @Column(name = "post_unlike_count")
+    private Long postUnlikeCount;
+
+    @Column(name = "blocked")
+    private Boolean blocked;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -68,4 +74,7 @@ public class Post {
 
     @Transient
     private Boolean isLiked = false;
+
+    @Transient
+    private Boolean isUnliked = false;
 }
