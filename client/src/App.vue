@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <router-view name="nav"></router-view>
     <router-view></router-view>
   </div>
 </template>
@@ -15,13 +16,13 @@ export default {
   body {
     margin: 0;
     height: 100%;
+    width: 100%;
   }
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    font-size: 2vh;
+    font-size: 3.5vw;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
     background-color: #fff;
     height: 100%;

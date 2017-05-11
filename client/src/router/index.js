@@ -2,9 +2,12 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/Main';
 import Signup from '@/components/Signup';
+import Terms from '@/components/Terms';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
+import Nav from '@/components/Nav';
+
 
 Vue.use(Router);
 
@@ -19,6 +22,14 @@ export default new Router({
       path: '/signup',
       name: 'Signup',
       component: Signup,
+    },
+    {
+      path: '/terms',
+      name: 'Terms',
+      components: {
+        default: Terms,
+        nav: Nav,
+      },
     },
     {
       path: '/login',

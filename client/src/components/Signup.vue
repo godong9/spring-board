@@ -40,13 +40,14 @@
 <style scoped>
   .sign-up {
     padding: 5% 5% 0 5%;
+    text-align: center;
   }
   .title {
     font-weight: bold;
-    font-size: 2.5vh;
+    font-size: 4.5vw;
   }
   .service-name {
-    font-size : 6vh;
+    font-size : 8vw;
     color : red;
     font-weight: bold;
     margin: 2% 0 0 0;
@@ -60,7 +61,7 @@
   .description {
     word-break: keep-all;
     word-wrap: break-word;
-    font-size: 2.2vh;
+    font-size: 4.2vw;
   }
   .login-assistant {
     position: absolute;
@@ -73,7 +74,7 @@
     bottom: 10px;
   }
   .button-sign-up button{
-    font-size: 3vh;
+    font-size: 5vw;
     line-height: 8vh;
     width: 100%;
     color:white;
