@@ -29,6 +29,9 @@ public class PostService {
     private PostLikeRepository postLikeRepository;
 
     @Autowired
+    private PostReportRepository postReportRepository;
+
+    @Autowired
     private UserService userService;
 
     public Post findOne(Long id) {
@@ -144,6 +147,30 @@ public class PostService {
                 .post(post)
                 .user(user)
                 .unlike(postLikeDto.getUnlike())
+                .build());
+    }
+
+    @Transactional(readOnly = false)
+    public PostReport createPostReport(PostReportDto postReportDto) {
+        User user = userService.findOne(postReportDto.getUserId());
+        if (Objects.isNull(user)) {
+            throw new PostException("Not exist user!");
+        }
+
+        Post post = findOne(postReportDto.getPostId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+
+        PostReport postReport = postReportRepository.findByPostIdAndUserId(post.getId(), user.getId());
+        if (!Objects.isNull(postReport)) {
+            throw new PostException("Already post report!");
+        }
+
+        return postReportRepository.save(PostReport.builder()
+                .post(post)
+                .user(user)
+                .content(postReportDto.getContent())
                 .build());
     }
 
