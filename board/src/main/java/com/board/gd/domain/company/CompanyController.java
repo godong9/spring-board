@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -31,9 +32,11 @@ public class CompanyController {
     }
 
     /**
-     * @api {get} /companies/email/:email Request Get companies by email
+     * @api {get} /companies Request Get companies by email
      * @apiName GetCompaniesByEmail
      * @apiGroup Company
+     *
+     * @apiParam {String} email 유저 이메일
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object[]} data 회사 리스트
@@ -41,10 +44,12 @@ public class CompanyController {
      * @apiSuccess {String} data.group_name 회사 그룹 이름
      * @apiSuccess {String} data.company_name 회사 이름
      *
+     * @apiSampleRequest http://localhost:9700/companies?email=test@test.com
+     *
      * @apiUse BadRequestError
      */
-    @GetMapping("/companies/email/{email}")
-    public ServerResponse getUserCompanyList(@PathVariable @Valid String email) {
+    @GetMapping("/companies")
+    public ServerResponse getUserCompanyList(@RequestParam("email") String email) {
         List<Company> companyList = companyService.getCompaniesByEmail(email);
         return ServerResponse.success(CompanyResult.getCompanyResultList(companyList));
     }

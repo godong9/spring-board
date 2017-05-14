@@ -174,7 +174,7 @@ public class UserController {
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      *
-     * @apiSampleRequest http://localhost:9000/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
+     * @apiSampleRequest http://localhost:9700/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
      *
      * @apiUse BadRequestError
      */
