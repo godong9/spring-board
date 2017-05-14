@@ -29,6 +29,9 @@ public class PostService {
     private PostLikeRepository postLikeRepository;
 
     @Autowired
+    private PostReportRepository postReportRepository;
+
+    @Autowired
     private UserService userService;
 
     public Post findOne(Long id) {
@@ -82,6 +85,12 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional(readOnly = false)
+    public void blockPost(Post post) {
+        post.setBlocked(true);
+        postRepository.save(post);
+    }
+
     public Page<Post> findAll(Predicate predicate, Pageable pageable) {
         if (Objects.isNull(pageable)) {
             throw new PostException("Invalid pageable!");
@@ -129,13 +138,53 @@ public class PostService {
             throw new PostException("Not exist post!");
         }
 
-        increasePostLikeCount(post);
+        PostLike postLike = postLikeRepository.findByPostIdAndUserIdAndUnlike(post.getId(), user.getId(), postLikeDto.getUnlike());
+        if (!Objects.isNull(postLike)) {
+            throw new PostException("Already post like or unlike!");
+        }
+
+        if (postLikeDto.getUnlike()) {
+            increasePostUnlikeCount(post);
+        } else {
+            increasePostLikeCount(post);
+        }
 
         return postLikeRepository.save(PostLike.builder()
                 .post(post)
                 .user(user)
                 .unlike(postLikeDto.getUnlike())
                 .build());
+    }
+
+    @Transactional(readOnly = false)
+    public PostReport createPostReport(PostReportDto postReportDto) {
+        User user = userService.findOne(postReportDto.getUserId());
+        if (Objects.isNull(user)) {
+            throw new PostException("Not exist user!");
+        }
+
+        Post post = findOne(postReportDto.getPostId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+
+        PostReport postReport = postReportRepository.findByPostIdAndUserId(post.getId(), user.getId());
+        if (!Objects.isNull(postReport)) {
+            throw new PostException("Already post report!");
+        }
+
+        postReport = postReportRepository.save(PostReport.builder()
+                .post(post)
+                .user(user)
+                .content(postReportDto.getContent())
+                .build());
+
+        int reportCount = postReportRepository.countByPostId(post.getId());
+        if (reportCount > 2) { // 신고횟수가 3이상이면 블락 처리
+            blockPost(post);
+        }
+
+        return postReport;
     }
 
     @Transactional(readOnly = false)

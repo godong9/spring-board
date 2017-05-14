@@ -26,7 +26,7 @@ public class StockController {
     @GetMapping("/stocks/parse")
     public ServerResponse getStockParse() {
         try {
-            stockService.parseHtmlAndSave();
+            stockService.parseStockHtmlAndSave();
         } catch (Exception e) {
             log.error(e.getMessage());
         }

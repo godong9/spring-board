@@ -23,8 +23,10 @@ public class PostResult {
     private UserResult user;
     private Long commentCount;
     private Long postLikeCount;
+    private Long postUnlikeCount;
     private Boolean blocked;
     private Boolean isLiked;
+    private Boolean isUnliked;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private Date createdAt;
@@ -45,9 +47,11 @@ public class PostResult {
         postResult.setContent(post.getContent());
         postResult.setCommentCount(post.getCommentCount());
         postResult.setPostLikeCount(post.getPostLikeCount());
+        postResult.setPostUnlikeCount(post.getPostUnlikeCount());
         postResult.setViewCount(post.getViewCount());
         postResult.setBlocked(post.getBlocked());
         postResult.setIsLiked(post.getIsLiked());
+        postResult.setIsUnliked(post.getIsUnliked());
         postResult.setCreatedAt(post.getCreatedAt());
         postResult.setUpdatedAt(post.getUpdatedAt());
 

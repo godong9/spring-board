@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     List<PostLike> findByPostIdAndUserId(Long postId, Long userId);
+    PostLike findByPostIdAndUserIdAndUnlike(Long postId, Long userId, Boolean unlike);
 }

@@ -1,9 +1,6 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.post.form.CreateForm;
-import com.board.gd.domain.post.form.DeleteForm;
-import com.board.gd.domain.post.form.PostLikeForm;
-import com.board.gd.domain.post.form.UpdateForm;
+import com.board.gd.domain.post.form.*;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.response.ServerResponse;
 import com.querydsl.core.types.Predicate;
@@ -152,6 +149,25 @@ public class PostController {
         postLikeForm.setPostId(id);
         postLikeForm.setUserId(userService.getCurrentUser().getId());
         postService.createPostLike(modelMapper.map(postLikeForm, PostLikeDto.class));
+        return ServerResponse.success();
+    }
+
+    /**
+     * @api {post} /posts/:id/report Request Post report
+     * @apiName ReportPost
+     * @apiGroup Post
+     *
+     * @apiParam {String} content 신고 내용
+     *
+     * @apiSuccess {Number} status 상태코드
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/posts/{id}/report")
+    public ServerResponse postPostReport(@PathVariable @Valid Long id, @RequestBody @Valid PostReportForm postReportForm) {
+        postReportForm.setPostId(id);
+        postReportForm.setUserId(userService.getCurrentUser().getId());
+        postService.createPostReport(modelMapper.map(postReportForm, PostReportDto.class));
         return ServerResponse.success();
     }
 
