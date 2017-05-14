@@ -85,6 +85,12 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional(readOnly = false)
+    public void blockPost(Post post) {
+        post.setBlocked(true);
+        postRepository.save(post);
+    }
+
     public Page<Post> findAll(Predicate predicate, Pageable pageable) {
         if (Objects.isNull(pageable)) {
             throw new PostException("Invalid pageable!");
@@ -167,11 +173,18 @@ public class PostService {
             throw new PostException("Already post report!");
         }
 
-        return postReportRepository.save(PostReport.builder()
+        postReport = postReportRepository.save(PostReport.builder()
                 .post(post)
                 .user(user)
                 .content(postReportDto.getContent())
                 .build());
+
+        int reportCount = postReportRepository.countByPostId(post.getId());
+        if (reportCount > 2) { // 신고횟수가 3이상이면 블락 처리
+            blockPost(post);
+        }
+
+        return postReport;
     }
 
     @Transactional(readOnly = false)
