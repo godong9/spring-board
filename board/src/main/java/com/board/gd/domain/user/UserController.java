@@ -152,12 +152,14 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
+     * @apiSuccess {String} data.email 유저 이메일
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
-        return ServerResponse.success(userService.getCurrentUser());
+        User user = userService.getCurrentUser();
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 
     /**

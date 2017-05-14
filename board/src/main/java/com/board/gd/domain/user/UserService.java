@@ -182,7 +182,8 @@ public class UserService implements UserDetailsService {
         if (!(userDetail instanceof User)) {
             throw new UserException("Not authenticated!");
         }
-        return (User) userDetail;
+        User user = (User) userDetail;
+        return userRepository.findOne(user.getId());
     }
 
     public void clearAuthentication() {
