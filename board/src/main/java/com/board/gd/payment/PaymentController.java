@@ -16,19 +16,28 @@ import javax.servlet.http.HttpServletRequest;
 public class PaymentController {
     @GetMapping("/payment/success")
     public ServerResponse getPaymentSuccess(HttpServletRequest param) {
-        log.info(param.toString());
+        param.getParameterMap().forEach((s, strings) -> {
+            log.info("Key: {}", s);
+            log.info("Value: {}", strings[0]);
+        });
         return ServerResponse.success();
     }
 
     @GetMapping("/payment/cancel")
     public ServerResponse getPaymentCancel(HttpServletRequest param) {
-        log.info(param.toString());
+        param.getParameterMap().forEach((s, strings) -> {
+            log.info("Key: {}", s);
+            log.info("Value: {}", strings[0]);
+        });
         return ServerResponse.success();
     }
 
     @GetMapping("/payment/callback")
     public ServerResponse getPaymentCallback(HttpServletRequest param) {
-        log.info(param.toString());
+        param.getParameterMap().forEach((s, strings) -> {
+            log.info("Key: {}", s);
+            log.info("Value: {}", strings[0]);
+        });
         return ServerResponse.success();
     }
 
