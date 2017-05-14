@@ -1,6 +1,7 @@
 package com.board.gd.domain.company;
 
 import com.board.gd.domain.stock.StockService;
+import com.board.gd.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by godong9 on 2017. 5. 14..
@@ -25,6 +28,24 @@ public class CompanyService {
 
     @Autowired
     private StockService stockService;
+
+    public Company findOne(Long id) {
+        return companyRepository.findOne(id);
+    }
+
+    public List<Company> getCompaniesByEmail(String email) {
+        String[] emailSplitArray = email.split("@");
+        String emailDomain = emailSplitArray[1];
+
+        List<Company> companyList = companyRepository.findByCompanyMail(emailDomain);
+        if (Objects.isNull(companyList)) { // 회사 메일이 없으면 그룹 메일로 검색
+            companyList = companyRepository.findByGroupMail(emailDomain);
+        }
+        if (Objects.isNull(companyList)) {
+            throw new UserException("Not exist company!");
+        }
+        return companyList;
+    }
 
     @Transactional(readOnly = false)
     public void parseCompanyHtmlAndSave() throws IOException {
