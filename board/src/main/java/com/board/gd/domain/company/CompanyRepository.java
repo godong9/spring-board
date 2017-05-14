@@ -8,6 +8,6 @@ import java.util.List;
  * Created by godong9 on 2017. 5. 14..
  */
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    List<Company> findByCompanyMail(String companyMail);
     List<Company> findByGroupMail(String groupMail);
+    List<Company> findByCompanyMail(String companyMail);
 }

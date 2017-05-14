@@ -37,9 +37,9 @@ public class CompanyService {
         String[] emailSplitArray = email.split("@");
         String emailDomain = emailSplitArray[1];
 
-        List<Company> companyList = companyRepository.findByCompanyMail(emailDomain);
-        if (Objects.isNull(companyList)) { // 회사 메일이 없으면 그룹 메일로 검색
-            companyList = companyRepository.findByGroupMail(emailDomain);
+        List<Company> companyList = companyRepository.findByGroupMail(emailDomain);
+        if (Objects.isNull(companyList)) { // 그룹 메일이 없으면 회사 메일로 검색
+            companyList = companyRepository.findByCompanyMail(emailDomain);
         }
         if (Objects.isNull(companyList)) {
             throw new UserException("Not exist company!");
