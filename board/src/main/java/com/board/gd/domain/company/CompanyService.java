@@ -29,7 +29,6 @@ public class CompanyService {
     @Transactional(readOnly = false)
     public void parseCompanyHtmlAndSave() throws IOException {
         stockService.findAll().forEach(stock -> {
-//            String companyInfoPath = "http://finance.daum.net/item/company.daum?code={{codeNum}}&type=21";
             String companyInfoPath = "http://wisefn.stock.daum.net/company/c1020001.aspx?cmp_cd={{codeNum}}&frq=&rpt=";
             companyInfoPath = companyInfoPath.replace("{{codeNum}}", stock.getCode());
             log.info("companyInfoPath: {}", companyInfoPath);
