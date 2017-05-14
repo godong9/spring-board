@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/Main';
-import Signup from '@/components/Signup';
+import SignupIntro from '@/components/SignupIntro';
 import Terms from '@/components/Terms';
+import Signup from '@/components/Signup';
+import SignupSuccess from '@/components/SignupSuccess';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
@@ -19,15 +21,31 @@ export default new Router({
       component: Main,
     },
     {
-      path: '/signup',
-      name: 'Signup',
-      component: Signup,
+      path: '/signup-intro',
+      name: 'SignupIntro',
+      component: SignupIntro,
     },
     {
       path: '/terms',
       name: 'Terms',
       components: {
         default: Terms,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/signup',
+      name: 'Signup',
+      components: {
+        default: Signup,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/signup-success',
+      name: 'SignupSuccess',
+      components: {
+        default: SignupSuccess,
         nav: Nav,
       },
     },
