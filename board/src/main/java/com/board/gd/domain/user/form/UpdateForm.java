@@ -11,4 +11,5 @@ public class UpdateForm {
     private Long id;
     private String name;
     private String password;
+    private Long companyId;
 }

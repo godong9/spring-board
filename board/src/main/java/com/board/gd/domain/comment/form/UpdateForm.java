@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class UpdateForm {
     private Long id;
     private Long userId;
+    private Long companyId;
 
     @NotNull
     private String content;
