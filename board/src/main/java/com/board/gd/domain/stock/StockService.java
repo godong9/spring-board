@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by godong9 on 2017. 5. 7..
@@ -20,8 +21,12 @@ public class StockService {
     @Autowired
     private StockRepository stockRepository;
 
+    public List<Stock> findAll() {
+        return stockRepository.findAll();
+    }
+
     @Transactional(readOnly = false)
-    public void parseHtmlAndSave() throws IOException {
+    public void parseStockHtmlAndSave() throws IOException {
         String kospiPath = "https://www.hdable.co.kr/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=1&findKeyword=&searchGubun=1";
         saveStockCodeAndName(kospiPath);
 
