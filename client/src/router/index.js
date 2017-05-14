@@ -4,7 +4,8 @@ import Main from '@/components/Main';
 import SignupIntro from '@/components/SignupIntro';
 import Terms from '@/components/Terms';
 import Signup from '@/components/Signup';
-import SignupSuccess from '@/components/SignupSuccess';
+import EmailSuccess from '@/components/EmailSuccess';
+import PaymentSignup from '@/components/PaymentSignup';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
@@ -42,10 +43,18 @@ export default new Router({
       },
     },
     {
-      path: '/signup-success',
-      name: 'SignupSuccess',
+      path: '/email-success',
+      name: 'EmailSuccess',
       components: {
-        default: SignupSuccess,
+        default: EmailSuccess,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/payment-signup',
+      name: 'PaymentSignup',
+      components: {
+        default: PaymentSignup,
         nav: Nav,
       },
     },

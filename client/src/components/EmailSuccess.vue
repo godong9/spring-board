@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-up-success">
+  <div class="email-success">
     <div class="title-label">
       인증 메일 발송 완료
     </div>
@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: 'signup',
+    name: 'email-success',
     data() {
       return {
         msg: 'Signup page Message',
@@ -29,7 +29,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .sign-up-success {
+  .email-success {
     text-align: center;
     padding: 0 10px 0 10px;
   }
