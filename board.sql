@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `board`.`stocks` (
   `name` VARCHAR(20) NOT NULL,
   `code` CHAR(6) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `idx_name_on_stocks` (`name` ASC))
+  FULLTEXT (name) WITH PARSER ngram)
 ENGINE = InnoDB;
 
 
