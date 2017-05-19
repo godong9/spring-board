@@ -30,6 +30,14 @@ public class StockService {
     }
 
     @Transactional(readOnly = false)
+    public Stock create(StockDto stockDto) {
+        return stockRepository.save(Stock.builder()
+                .name(stockDto.getName())
+                .code(stockDto.getCode())
+                .build());
+    }
+
+    @Transactional(readOnly = false)
     public void parseStockHtmlAndSave() throws IOException {
         String kospiPath = "https://www.hdable.co.kr/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=1&findKeyword=&searchGubun=1";
         saveStockCodeAndName(kospiPath);

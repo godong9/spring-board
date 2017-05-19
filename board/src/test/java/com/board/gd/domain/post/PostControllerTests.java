@@ -3,6 +3,8 @@ package com.board.gd.domain.post;
 import com.board.gd.TestHelper;
 import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.post.form.UpdateForm;
+import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.UserException;
@@ -46,6 +48,9 @@ public class PostControllerTests {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private StockService stockService;
 
     @Before
     public void setup() {
@@ -185,6 +190,39 @@ public class PostControllerTests {
                 .andExpect(jsonPath("$.data.title").value(testPostDto.getTitle()))
                 .andExpect(jsonPath("$.data.content").value(testPostDto.getContent()))
                 .andExpect(jsonPath("$.data.user.id").value(testUser.getId()))
+                .andExpect(jsonPath("$.data.stock").doesNotExist())
+                .andExpect(jsonPath("$.data.comment_count").value(0))
+                .andExpect(jsonPath("$.data.post_like_count").value(0))
+                .andExpect(jsonPath("$.data.view_count").value(1));
+    }
+
+    @Test
+    public void success_getPost_when_stockId_exist() throws Exception {
+        // given
+        given(userService.getCurrentUser()).willReturn(User.builder()
+                .id(1L)
+                .name("test")
+                .email("test@test.com")
+                .build());
+        given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
+        given(stockService.findOne(1L)).willReturn(TestHelper.getTestStock(1L));
+
+        User testUser = TestHelper.getTestUser(1L);
+        Stock testStock = TestHelper.getTestStock(1L);
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        testPostDto.setStockId(1L);
+        Post testPost = postService.create(testPostDto);
+
+        // when
+        mockMvc.perform(get("/posts/" + testPost.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.data.id").isNotEmpty())
+                .andExpect(jsonPath("$.data.title").value(testPostDto.getTitle()))
+                .andExpect(jsonPath("$.data.content").value(testPostDto.getContent()))
+                .andExpect(jsonPath("$.data.user.id").value(testUser.getId()))
+                .andExpect(jsonPath("$.data.stock.id").value(testStock.getId()))
                 .andExpect(jsonPath("$.data.comment_count").value(0))
                 .andExpect(jsonPath("$.data.post_like_count").value(0))
                 .andExpect(jsonPath("$.data.view_count").value(1));

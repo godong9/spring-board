@@ -1,5 +1,7 @@
 package com.board.gd.domain.post;
 
+import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockResult;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserResult;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -21,6 +24,7 @@ public class PostResult {
     private String content;
     private Long viewCount;
     private UserResult user;
+    private StockResult stock;
     private Long commentCount;
     private Long postLikeCount;
     private Long postUnlikeCount;
@@ -54,6 +58,15 @@ public class PostResult {
         postResult.setIsUnliked(post.getIsUnliked());
         postResult.setCreatedAt(post.getCreatedAt());
         postResult.setUpdatedAt(post.getUpdatedAt());
+
+        StockResult stockResult = new StockResult();
+        Stock stock = post.getStock();
+        if (!Objects.isNull(stock)) {
+            stockResult.setId(stock.getId());
+            stockResult.setName(stock.getName());
+            stockResult.setCode(stock.getCode());
+            postResult.setStock(stockResult);
+        }
 
         return postResult;
     }

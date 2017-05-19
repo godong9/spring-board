@@ -1,7 +1,6 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.TestHelper;
-import com.board.gd.domain.stock.Stock;
 import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
@@ -256,7 +255,7 @@ public class PostServiceTests {
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
         PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
         testPostDto.setStockId(1L);
-        given(stockService.findOne(1L)).willReturn(Stock.builder().id(1L).build());
+        given(stockService.findOne(1L)).willReturn(TestHelper.getTestStock(1L));
 
         // when
         Post post = postService.create(testPostDto);
