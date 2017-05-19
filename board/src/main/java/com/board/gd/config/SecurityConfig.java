@@ -40,5 +40,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/posts**").hasAuthority("USER")
                 .antMatchers("/comments**").hasAuthority("USER");
     }
-
 }

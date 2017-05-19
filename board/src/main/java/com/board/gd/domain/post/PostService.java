@@ -5,6 +5,8 @@ package com.board.gd.domain.post;
  */
 
 import com.board.gd.domain.board.Board;
+import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PostException;
@@ -33,6 +35,9 @@ public class PostService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StockService stockService;
 
     public Post findOne(Long id) {
         return findOne(id, null);
@@ -112,6 +117,11 @@ public class PostService {
                     .build();
         }
 
+        Stock stock = null;
+        if (!Objects.isNull(postDto.getStockId())) {
+            stock = stockService.findOne(postDto.getStockId());
+        }
+
         return postRepository.save(Post.builder()
                 .type(PostType.FREE) // 디폴트로 FREE로 세팅
                 .title(postDto.getTitle())
@@ -123,6 +133,7 @@ public class PostService {
                 .blocked(false)
                 .user(user)
                 .board(board)
+                .stock(stock)
                 .build());
     }
 

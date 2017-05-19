@@ -1,6 +1,5 @@
 package com.board.gd.domain.user;
 
-import com.board.gd.domain.company.Company;
 import com.board.gd.domain.company.CompanyService;
 import com.board.gd.exception.UserException;
 import com.board.gd.mail.MailMessage;
