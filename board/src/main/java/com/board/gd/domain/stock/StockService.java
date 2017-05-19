@@ -5,6 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +23,20 @@ public class StockService {
     @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     public Stock findOne(Long id) {
         return stockRepository.findOne(id);
     }
 
     public List<Stock> findAll() {
         return stockRepository.findAll();
+    }
+
+    public List<Stock> findByName(String name) {
+        String sql = "SELECT * FROM stocks WHERE MATCH(name) AGAINST(?)";
+        return jdbcTemplate.query(sql, new String[] {name}, new BeanPropertyRowMapper(Stock.class));
     }
 
     @Transactional(readOnly = false)
@@ -65,5 +75,10 @@ public class StockService {
                         .build());
             }
         }
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteAll() {
+        stockRepository.deleteAll();
     }
 }
