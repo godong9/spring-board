@@ -58,8 +58,11 @@ public class PostController {
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     * @apiSuccess {Number} [data.stock.id] 포스트 종목 id
+     * @apiSuccess {String} [data.stock.name] 포스트 종목 이름
+     * @apiSuccess {String} [data.stock.code] 포스트 종목 코드
      *
-     * @apiSampleRequest http://localhost:9000/posts?page=1&size=10&sort=updatedAt,desc
+     * @apiSampleRequest http://localhost:9700/posts?page=1&size=10&sort=updatedAt,desc
      *
      * @apiUse BadRequestError
      */
@@ -92,6 +95,9 @@ public class PostController {
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     * @apiSuccess {Number} [data.stock.id] 포스트 종목 id
+     * @apiSuccess {String} [data.stock.name] 포스트 종목 이름
+     * @apiSuccess {String} [data.stock.code] 포스트 종목 코드
      *
      * @apiUse BadRequestError
      */

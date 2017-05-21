@@ -152,12 +152,14 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
+     * @apiSuccess {String} data.email 유저 이메일
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
-        return ServerResponse.success(userService.getCurrentUser());
+        User user = userService.getCurrentUser();
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 
     /**
@@ -172,7 +174,7 @@ public class UserController {
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      *
-     * @apiSampleRequest http://localhost:9000/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
+     * @apiSampleRequest http://localhost:9700/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
      *
      * @apiUse BadRequestError
      */
@@ -189,6 +191,7 @@ public class UserController {
      *
      * @apiParam {String} [name] 유저 이름
      * @apiParam {String} [password] 패스워드
+     * @apiParam {Long} [company_id] 회사 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 유저 객체

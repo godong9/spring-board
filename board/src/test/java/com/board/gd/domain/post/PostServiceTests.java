@@ -1,6 +1,7 @@
 package com.board.gd.domain.post;
 
 import com.board.gd.TestHelper;
+import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PostException;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -39,6 +41,9 @@ public class PostServiceTests {
 
     @Autowired
     private UserService userService;
+
+    @MockBean
+    private StockService stockService;
 
     @MockBean
     private MailService mailService;
@@ -242,6 +247,22 @@ public class PostServiceTests {
         // then
         TestHelper.assertPostDtoAndPost(testPostDto, post);
         assertEquals(testPostDto.getBoardId(), post.getBoard().getId());
+    }
+
+    @Test
+    public void success_create_when_stockId_exist() {
+        // given
+        User testUser = userService.create(TestHelper.getTestUserDto("test"));
+        PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
+        testPostDto.setStockId(1L);
+        given(stockService.findOne(1L)).willReturn(TestHelper.getTestStock(1L));
+
+        // when
+        Post post = postService.create(testPostDto);
+
+        // then
+        TestHelper.assertPostDtoAndPost(testPostDto, post);
+        assertEquals(testPostDto.getStockId(), post.getStock().getId());
     }
 
     @Test

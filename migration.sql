@@ -1,0 +1,1 @@
+CREATE FULLTEXT INDEX ft_index_name_on_stocks ON stocks (name) WITH PARSER ngram;

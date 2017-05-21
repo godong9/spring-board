@@ -5,6 +5,8 @@ import com.board.gd.domain.board.BoardDto;
 import com.board.gd.domain.comment.Comment;
 import com.board.gd.domain.comment.CommentDto;
 import com.board.gd.domain.post.*;
+import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockDto;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserDto;
 
@@ -23,6 +25,14 @@ public class TestHelper {
                 .password("test")
                 .email("test" + id.toString() + "@test.com")
                 .authUUID("testuuid")
+                .build();
+    }
+
+    public static Stock getTestStock(Long id) {
+        return Stock.builder()
+                .id(id)
+                .name("testname" + id.toString())
+                .code("00000" + id.toString())
                 .build();
     }
 
@@ -61,6 +71,13 @@ public class TestHelper {
         boardDto.setTitle("test" + code);
         boardDto.setCode(code);
         return boardDto;
+    }
+
+    public static StockDto getTestStockDto(String name, String code) {
+        StockDto stockDto = new StockDto();
+        stockDto.setName(name);
+        stockDto.setCode(code);
+        return stockDto;
     }
 
     public static PostLikeDto getTestPostLikeDto(Long userId, Long postId, Boolean unlike) {

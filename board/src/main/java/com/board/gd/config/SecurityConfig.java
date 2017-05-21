@@ -32,11 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/users/login", "/users/signup").access("permitAll")
-                    .antMatchers("/users**").hasAuthority("USER")
-                    .antMatchers("/boards**").hasAuthority("USER")
-                    .antMatchers("/posts**").hasAuthority("USER")
-                    .antMatchers("/comments**").hasAuthority("USER");
+//                .antMatchers("/users/login", "/users/signup", "/users/email").access("permitAll")
+//                .antMatchers("/users**").hasAuthority("USER")
+                .antMatchers("/users**").access("permitAll")
+                .antMatchers("/companies**").access("permitAll")
+                .antMatchers("/boards**").hasAuthority("USER")
+                .antMatchers("/posts**").hasAuthority("USER")
+                .antMatchers("/comments**").hasAuthority("USER");
     }
-
 }

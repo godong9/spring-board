@@ -1,5 +1,6 @@
 package com.board.gd.domain.user;
 
+import com.board.gd.domain.company.CompanyService;
 import com.board.gd.exception.UserException;
 import com.board.gd.mail.MailMessage;
 import com.board.gd.mail.MailService;
@@ -40,6 +41,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private CompanyService companyService;
 
     private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
@@ -144,6 +148,10 @@ public class UserService implements UserDetailsService {
             user.setPassword(bcryptEncoder.encode(userDto.getPassword()));
         }
 
+        if (!Objects.isNull(userDto.getCompanyId())) {
+            user.setCompany(companyService.findOne(userDto.getCompanyId()));
+        }
+
         return userRepository.save(user);
     }
 
@@ -182,7 +190,8 @@ public class UserService implements UserDetailsService {
         if (!(userDetail instanceof User)) {
             throw new UserException("Not authenticated!");
         }
-        return (User) userDetail;
+        User user = (User) userDetail;
+        return userRepository.findOne(user.getId());
     }
 
     public void clearAuthentication() {
