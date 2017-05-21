@@ -4,13 +4,13 @@
       회원가입
     </div>
     <div class="input-sign-up-wrapper">
-      <input type="text" placeholder="회사 이메일을 입력 해주세요.">
+      <input type="text" v-model="email" placeholder="회사 이메일을 입력 해주세요.">
     </div>
     <div class="sign-up-description">
       상장사 직원임을 판별 할 수있는 최소한의 정보로 회사이 메일을 활용합니다.
     </div>
     <div class="sign-up-assistant"> - 회원가입이 안되시나요? <a href="/">문의하기</a></div>
-    <div class="confirm-email-wrapper"><button>인증 메일 받기</button></div>
+    <div class="confirm-email-wrapper" v-on:click="signup"><button>인증 메일 받기</button></div>
   </div>
 </template>
 
@@ -19,11 +19,20 @@
     name: 'signup',
     data() {
       return {
-        msg: 'Signup page Message',
+        email: '',
       };
     },
     methods: {
-
+      signup: function signup() {
+        this.$http.post('http://localhost:9700/users/email', { email: this.email }).then((response) => {
+          // get body data
+          this.bodyData = response.body;
+          console.log(this.bodyData);
+        }, (response) => {
+          this.errorData = response.body;
+          // error callback
+        });
+      },
     },
   };
 </script>

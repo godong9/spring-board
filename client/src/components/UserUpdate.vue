@@ -4,7 +4,7 @@
       개인정보 입력
     </div>
     <div class="user-email-text">
-      gd.godong9@kakaocorp.com
+      {{ email }}
     </div>
     <div class="input-user-nickname">
       <input type="text" v-model="nickname" placeholder="닉네임 입력">
@@ -32,14 +32,28 @@
   export default {
     name: 'user-update',
     data() {
+      const self = this;
+      self.email = this.$route.query.email;
+      self.userId = this.$route.query.id;
+
+      /*eslint-disable */
+      const url = 'http://localhost:9700/companies?email=' + self.email;
+      this.$http.get(url).then((response) => {
+        let data = response.body.data;
+        self.companyOptions = data.map(function(obj) {
+          let rObj = {};
+          rObj['text'] = obj.company_name;
+          rObj['value'] = obj.id;
+          return rObj;
+        });
+      });
+      /*eslint-enable */
+
       return {
-        nickname: 'aa',
+        email: self.email,
+        companyOptions: self.companyOptions,
+        nickname: '',
         company: '',
-        companyOptions: [
-          { text: 'One', value: 'A' },
-          { text: 'Two', value: 'B' },
-          { text: 'Three', value: 'C' },
-        ],
         password: '',
         passwordConfirm: '',
       };
