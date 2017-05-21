@@ -7,6 +7,8 @@ import Signup from '@/components/Signup';
 import EmailSuccess from '@/components/EmailSuccess';
 import PaymentSignup from '@/components/PaymentSignup';
 import NeedPurchase from '@/components/NeedPurchase';
+import UserUpdate from '@/components/UserUpdate';
+import ResetPassword from '@/components/ResetPassword';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
@@ -64,6 +66,22 @@ export default new Router({
       name: 'NeedPurchase',
       components: {
         default: NeedPurchase,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/user-update',
+      name: 'UserUpdate',
+      components: {
+        default: UserUpdate,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/reset-password',
+      name: 'ResetPassword',
+      components: {
+        default: ResetPassword,
         nav: Nav,
       },
     },
