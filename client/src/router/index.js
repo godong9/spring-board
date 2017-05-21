@@ -6,6 +6,7 @@ import Terms from '@/components/Terms';
 import Signup from '@/components/Signup';
 import EmailSuccess from '@/components/EmailSuccess';
 import PaymentSignup from '@/components/PaymentSignup';
+import NeedPurchase from '@/components/NeedPurchase';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
@@ -55,6 +56,14 @@ export default new Router({
       name: 'PaymentSignup',
       components: {
         default: PaymentSignup,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/need-purchase',
+      name: 'NeedPurchase',
+      components: {
+        default: NeedPurchase,
         nav: Nav,
       },
     },
