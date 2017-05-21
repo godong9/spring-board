@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -167,6 +168,7 @@ public class UserController {
      * @apiName GetAuthUser
      * @apiGroup User
      *
+     * @apiParam {String} type 이동할 페이지 구분 (auth: 인증, password: 패스워드 초기화)
      * @apiParam {String} uuid 인증을 위한 UUID
      *
      * @apiSuccess {Number} status 상태코드
@@ -174,14 +176,35 @@ public class UserController {
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      *
-     * @apiSampleRequest http://localhost:9700/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
+     * @apiSampleRequest http://localhost:9700/users/111/auth?type=auth&uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/users/{id}/auth")
-    public ServerResponse getUserAuth(@PathVariable @Valid Long id, @RequestParam("uuid") String uuid) {
-        userService.authUser(id, uuid);
-        return ServerResponse.success();
+    public RedirectView getUserAuth(@PathVariable @Valid Long id, @RequestParam("type") String type, @RequestParam("uuid") String uuid) {
+        RedirectView redirectView = new RedirectView();
+        User user = userService.authUser(id, uuid);
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://localhost:8080/#");
+        switch(type) {
+            case "auth":
+                sb.append("/user-update?id=");
+                sb.append(user.getId());
+                sb.append("&email=");
+                sb.append(user.getEmail());
+                sb.append("&uuid=");
+                sb.append(uuid);
+                break;
+            case "password":
+                sb.append("reset-password?uuid=");
+                sb.append(uuid);
+                break;
+            default:
+                sb.append("error");
+                break;
+        }
+        redirectView.setUrl(sb.toString());
+        return redirectView;
     }
 
     /**

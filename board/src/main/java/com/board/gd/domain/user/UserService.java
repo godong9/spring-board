@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
 
         // 유저가 존재하고 인증 안되었을 경우 인증메일 재발송
         if (!Objects.isNull(user) && !user.getEnabled()) {
-            sendAuthEmail(user);
+            sendAuthEmail(user, "auth");
             return user;
         }
 
@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
                 .enabled(false)
                 .build());
 
-        sendAuthEmail(user);
+        sendAuthEmail(user, "auth");
 
         return user;
     }
@@ -113,7 +113,7 @@ public class UserService implements UserDetailsService {
         user.setAuthUUID(UUID.randomUUID().toString());
         user = userRepository.save(user);
 
-        sendResetPasswordEmail(user);
+        sendAuthEmail(user, "password");
 
         return user;
     }
@@ -129,7 +129,7 @@ public class UserService implements UserDetailsService {
                 .enabled(false)
                 .build());
 
-        sendAuthEmail(user);
+        sendAuthEmail(user, "auth");
 
         createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
@@ -169,7 +169,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = false)
-    public void authUser(Long id, String uuid) {
+    public User authUser(Long id, String uuid) {
         User user = findOne(id);
         if (Objects.isNull(user)) {
             throw new UserException("User not exist!");
@@ -179,6 +179,7 @@ public class UserService implements UserDetailsService {
         }
         user.setEnabled(true);
         userRepository.save(user);
+        return user;
     }
 
     public void setAuthentication(Authentication authentication) {
@@ -202,39 +203,21 @@ public class UserService implements UserDetailsService {
         return bcryptEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public void sendAuthEmail(User user) {
+    public void sendAuthEmail(User user, String type) {
         StringBuilder sb = new StringBuilder();
-
-        // TODO: 유저 정보 업데이트 페이지로 이동
         sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
-        sb.append("http://www.stockblind.kr");
+        sb.append("http://localhost:9700");
         sb.append("/users/");
         sb.append(user.getId());
-        sb.append("/auth?uuid=");
+        sb.append("/auth?type=");
+        sb.append(type);
+        sb.append("&uuid=");
         sb.append(user.getAuthUUID());
 
-        sendMail(user.getEmail(), sb.toString());
-    }
-
-    public void sendResetPasswordEmail(User user) {
-        StringBuilder sb = new StringBuilder();
-
-        // TODO: 패스워드 초기화 페이지로 이동
-        sb.append("링크를 클릭하면 패스워드 초기화 페이지로 이동합니다!\n");
-        sb.append("http://www.stockblind.kr");
-        sb.append("/users/");
-        sb.append(user.getId());
-        sb.append("/auth?uuid=");
-        sb.append(user.getAuthUUID());
-
-        sendMail(user.getEmail(), sb.toString());
-    }
-
-    public void sendMail(String email, String text) {
         MailMessage mailMessage = new MailMessage();
-        mailMessage.setTo(email);
+        mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
-        mailMessage.setText(text);
+        mailMessage.setText(sb.toString());
 
         mailService.send(mailMessage);
     }

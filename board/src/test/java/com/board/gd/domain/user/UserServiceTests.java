@@ -395,6 +395,6 @@ public class UserServiceTests {
                 .build();
 
         // when
-        userService.sendAuthEmail(testUser);
+        userService.sendAuthEmail(testUser, "auth");
     }
 }
