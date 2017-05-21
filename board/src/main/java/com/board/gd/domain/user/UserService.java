@@ -113,7 +113,7 @@ public class UserService implements UserDetailsService {
         user.setAuthUUID(UUID.randomUUID().toString());
         user = userRepository.save(user);
 
-        sendAuthEmail(user);
+        sendResetPasswordEmail(user);
 
         return user;
     }
@@ -203,8 +203,9 @@ public class UserService implements UserDetailsService {
     }
 
     public void sendAuthEmail(User user) {
-        // TODO: 링크 파라미터로 받아서 어느 페이지로 이동하는냐에 따라 달라져야 함
         StringBuilder sb = new StringBuilder();
+
+        // TODO: 유저 정보 업데이트 페이지로 이동
         sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
         sb.append("http://www.stockblind.kr");
         sb.append("/users/");
@@ -212,10 +213,28 @@ public class UserService implements UserDetailsService {
         sb.append("/auth?uuid=");
         sb.append(user.getAuthUUID());
 
+        sendMail(user.getEmail(), sb.toString());
+    }
+
+    public void sendResetPasswordEmail(User user) {
+        StringBuilder sb = new StringBuilder();
+
+        // TODO: 패스워드 초기화 페이지로 이동
+        sb.append("링크를 클릭하면 패스워드 초기화 페이지로 이동합니다!\n");
+        sb.append("http://www.stockblind.kr");
+        sb.append("/users/");
+        sb.append(user.getId());
+        sb.append("/auth?uuid=");
+        sb.append(user.getAuthUUID());
+
+        sendMail(user.getEmail(), sb.toString());
+    }
+
+    public void sendMail(String email, String text) {
         MailMessage mailMessage = new MailMessage();
-        mailMessage.setTo(user.getEmail());
+        mailMessage.setTo(email);
         mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
-        mailMessage.setText(sb.toString());
+        mailMessage.setText(text);
 
         mailService.send(mailMessage);
     }

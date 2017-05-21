@@ -191,7 +191,7 @@ public class UserController {
      *
      * @apiParam {String} [name] 유저 이름
      * @apiParam {String} [password] 패스워드
-     * @apiParam {Long} [company_id] 회사 ID
+     * @apiParam {Number} [company_id] 회사 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 유저 객체
