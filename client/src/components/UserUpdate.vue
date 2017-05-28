@@ -16,10 +16,10 @@
       </option>
     </select>
     <div class="user-password-input">
-      <input type="password" v-model="password" placeholder="비밀번호 입력">
+      <input type="password" v-model="password" placeholder="비밀번호를 입력하세요">
     </div>
     <div class="user-password-confirm-input">
-      <input type="password" v-model="passwordConfirm" placeholder="비밀번호 재입력">
+      <input type="password" v-model="passwordConfirm" placeholder="비밀번호를 다시 입력하세요">
     </div>
     <div class="info-message">
       닉네임과 회사는 가입 후 변경할 수 없습니다.
@@ -82,7 +82,7 @@
         }
 
         /*eslint-disable */
-        let params = {
+        const params = {
           id: self.userId,
           uuid: self.uuid,
           name: self.nickname,
@@ -91,7 +91,6 @@
           company_id: self.company
         };
         self.$http.put(self.getServerPath('/users/data'), params).then(() => {
-          // get body data
           alert('회원정보가 변경되었습니다.');
           self.$router.push('need-purchase');
         }, (response) => {

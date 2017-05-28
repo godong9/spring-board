@@ -167,11 +167,11 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = false)
     public User updateUserData(UserDto userDto) {
-        if (userDto.getName().length() < 2) {
+        if (!Objects.isNull(userDto.getName()) && userDto.getName().length() < 2) {
             throw new UserException("잘못된 닉네임입니다.(2글자 이상)");
         }
 
-        if (userDto.getPassword().length() < 6) {
+        if (!Objects.isNull(userDto.getPassword()) && userDto.getPassword().length() < 6) {
             throw new UserException("잘못된 비밀번호입니다.(6글자 이상)");
         }
 
