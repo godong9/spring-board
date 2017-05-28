@@ -5,32 +5,20 @@
     <div class="service-name">스탁 블라인드</div>
     <div class="logo-wrapper"><img class="logo" src="../assets/logo.png"></div>
     <div class="description">코스피, 코스닥에 상장된 회사(계열사 포함)에 다니고 있는 개인 투자자만 가입할 수 있는 비밀 주식 커뮤니티입니다.<br>(서비스 이용료: 10,000/월) </div>
-    <div class="login-assistant">기존 사용자세요? <a href="/">로그인</a></div>
-    <div class="button-sign-up-wrapper"><button>회사 이메일로 가입하기</button></div>
+    <div class="login-assistant">기존 사용자세요? <a v-on:click="login">로그인</a></div>
+    <div class="button-sign-up-wrapper" v-on:click="signup"><button>회사 이메일로 가입하기</button></div>
   </div>
 </template>
 
 <script>
   export default {
     name: 'signup-intro',
-    data() {
-      return {
-        msg: 'Signup page Message',
-        name: '',
-        email: '',
-        password: '',
-      };
-    },
     methods: {
-      clickSignup: function clickSignup() {
-        this.$http.post('http://localhost:9000/users/signup', { name: this.name, email: this.email, password: this.password }).then((response) => {
-          // get body data
-          this.bodyData = response.body;
-          console.log(this.bodyData);
-        }, (response) => {
-          this.errorData = response.body;
-          // error callback
-        });
+      signup: function signup() {
+        this.$router.push('signup');
+      },
+      login: function login() {
+        this.$router.push('login');
       },
     },
   };

@@ -11,6 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserRoleType {
     USER("기본유저"),
+    PAID("유료유저"),
     ADMIN("어드민유저");
 
     private String description;

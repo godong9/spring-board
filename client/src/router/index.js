@@ -10,11 +10,11 @@ import NeedPurchase from '@/components/NeedPurchase';
 import CompletePurchase from '@/components/CompletePurchase';
 import UserUpdate from '@/components/UserUpdate';
 import ResetPassword from '@/components/ResetPassword';
+import ChangePassword from '@/components/ChangePassword';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
 import Nav from '@/components/Nav';
-
 
 Vue.use(Router);
 
@@ -87,6 +87,14 @@ export default new Router({
       },
     },
     {
+      path: '/change-password',
+      name: 'ChangePassword',
+      components: {
+        default: ChangePassword,
+        nav: Nav,
+      },
+    },
+    {
       path: '/reset-password',
       name: 'ResetPassword',
       components: {
@@ -97,7 +105,10 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login,
+      components: {
+        default: Login,
+        nav: Nav,
+      },
     },
     {
       path: '/board/:id',

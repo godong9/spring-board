@@ -40,7 +40,7 @@ server:
 mail:
   from: stockblind.kr@gmail.com
   username: stockblind.kr@gmail.com
-  password: testmail
+  password: password
 
 ---
 

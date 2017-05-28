@@ -1,9 +1,6 @@
 package com.board.gd.domain.user;
 
-import com.board.gd.domain.user.form.EmailForm;
-import com.board.gd.domain.user.form.LoginForm;
-import com.board.gd.domain.user.form.SignupForm;
-import com.board.gd.domain.user.form.UpdateForm;
+import com.board.gd.domain.user.form.*;
 import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -196,7 +193,9 @@ public class UserController {
                 sb.append(uuid);
                 break;
             case "password":
-                sb.append("reset-password?uuid=");
+                sb.append("/change-password?id=");
+                sb.append(user.getId());
+                sb.append("&uuid=");
                 sb.append(uuid);
                 break;
             default:
@@ -227,7 +226,52 @@ public class UserController {
     public ServerResponse PutUser(@RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(userService.getCurrentUser().getId());
         User user = userService.update(modelMapper.map(updateForm, UserDto.class));
-        return ServerResponse.success(user);
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 
+    /**
+     * @api {put} /users/data Request User data update
+     * @apiName UpdateUserData
+     * @apiGroup User
+     *
+     * @apiParam {Number} id 유저 id
+     * @apiParam {String} uuid 인증을 위한 uuid
+     * @apiParam {String} name 유저 이름
+     * @apiParam {String} password 패스워드
+     * @apiParam {Number} company_id 회사 ID
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PutMapping("/users/data")
+    public ServerResponse PutUserData(@RequestBody @Valid UpdateDataForm updateDataForm) {
+        User user = userService.updateUserData(modelMapper.map(updateDataForm, UserDto.class));
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
+
+    /**
+     * @api {put} /users/password Request User password update
+     * @apiName UpdateUserPassword
+     * @apiGroup User
+     *
+     * @apiParam {Number} id 유저 id
+     * @apiParam {String} uuid 인증을 위한 uuid
+     * @apiParam {String} password 패스워드
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PutMapping("/users/password")
+    public ServerResponse PutUserPassword(@RequestBody @Valid UpdateForm updateForm) {
+        User user = userService.updateUserData(modelMapper.map(updateForm, UserDto.class));
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
 }

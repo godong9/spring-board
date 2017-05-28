@@ -7,6 +7,7 @@ import com.board.gd.mail.MailService;
 import com.board.gd.utils.DateUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +33,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
     private static final Date DEFAULT_ROLE_EXPIRED_DATE = new Date(4150537200000L); // 2099년 12월 31일
+
+    @Value("${server.host}")
+    private String serverHost;
 
     @Autowired
     private UserRepository userRepository;
@@ -110,6 +114,12 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = false)
     public User updateAuthInfo(UserDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail());
+
+        // 유저가 없을 경우
+        if (Objects.isNull(user)) {
+            throw new UserException("가입되지 않은 이메일입니다.");
+        }
+
         user.setAuthUUID(UUID.randomUUID().toString());
         user = userRepository.save(user);
 
@@ -151,6 +161,28 @@ public class UserService implements UserDetailsService {
         if (!Objects.isNull(userDto.getCompanyId())) {
             user.setCompany(companyService.findOne(userDto.getCompanyId()));
         }
+
+        return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = false)
+    public User updateUserData(UserDto userDto) {
+        if (!Objects.isNull(userDto.getName()) && userDto.getName().length() < 2) {
+            throw new UserException("잘못된 닉네임입니다.(2글자 이상)");
+        }
+
+        if (!Objects.isNull(userDto.getPassword()) && userDto.getPassword().length() < 6) {
+            throw new UserException("잘못된 비밀번호입니다.(6글자 이상)");
+        }
+
+        User user = userRepository.findOne(userDto.getId());
+        if (!user.getAuthUUID().equals(userDto.getUuid())) {
+            throw new UserException("잘못된 접근입니다.");
+        }
+
+        update(userDto);
+
+        createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         return userRepository.save(user);
     }
@@ -204,9 +236,19 @@ public class UserService implements UserDetailsService {
     }
 
     public void sendAuthEmail(User user, String type) {
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setTo(user.getEmail());
         StringBuilder sb = new StringBuilder();
-        sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
-        sb.append("http://localhost:9700");
+
+        if (type.equals("auth")) {
+            mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
+            sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
+        }
+        if (type.equals("password")) {
+            mailMessage.setSubject("[스탁블라인드] 비밀번호 초기화 메일입니다.");
+            sb.append("링크를 클릭하면 비밀번호 재설정 페이지로 이동합니다!\n");
+        }
+        sb.append(serverHost);
         sb.append("/users/");
         sb.append(user.getId());
         sb.append("/auth?type=");
@@ -214,9 +256,6 @@ public class UserService implements UserDetailsService {
         sb.append("&uuid=");
         sb.append(user.getAuthUUID());
 
-        MailMessage mailMessage = new MailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
         mailMessage.setText(sb.toString());
 
         mailService.send(mailMessage);

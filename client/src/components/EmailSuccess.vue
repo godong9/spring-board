@@ -5,7 +5,7 @@
     </div>
     <div class="mail-wrapper"><img class="mail" src="../assets/logo.png"></div>
     <div class="check-mail-text">이메일을 확인 해주세요.</div>
-    <div class="mail-success-text"><span class="email">jangpyo.kwon@sktechx.com</span> 으로 인증 메일이 발송되었습니다.</div>
+    <div class="mail-success-text"><span class="email">{{ email }}</span> 으로 인증 메일이 발송되었습니다.</div>
     <div class="verify-message">
       메일에 있는 <span class="verify">'인증하기' 버튼</span> 혹은<br> <span class="link">링크</span>를 클릭해 주세요.
     </div>
@@ -17,8 +17,9 @@
   export default {
     name: 'email-success',
     data() {
+      this.email = this.$route.query.email;
       return {
-        msg: 'Signup page Message',
+        email: this.email,
       };
     },
     methods: {

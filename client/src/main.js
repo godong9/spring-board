@@ -5,10 +5,12 @@ import VueResource from 'vue-resource';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import CommonUtil from './utils/CommonUtil';
 
 Vue.config.productionTip = false;
 
 Vue.use(VueResource);
+Vue.use(CommonUtil);
 
 /* eslint-disable no-new */
 new Vue({
