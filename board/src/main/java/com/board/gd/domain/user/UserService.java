@@ -155,6 +155,20 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    @Transactional(readOnly = false)
+    public User updateUserData(UserDto userDto) {
+        User user = userRepository.findOne(userDto.getId());
+
+        if (!user.getAuthUUID().equals(userDto.getUuid())) {
+            throw new UserException("Invalid uuid!");
+        }
+        user.setName(userDto.getName());
+        user.setPassword(bcryptEncoder.encode(userDto.getPassword()));
+        user.setCompany(companyService.findOne(userDto.getCompanyId()));
+
+        return userRepository.save(user);
+    }
+
     public long count() {
         return userRepository.count();
     }
