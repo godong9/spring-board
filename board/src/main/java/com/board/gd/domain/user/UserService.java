@@ -239,7 +239,7 @@ public class UserService implements UserDetailsService {
         }
         if (type.equals("password")) {
             mailMessage.setSubject("[스탁블라인드] 비밀번호 초기화 메일입니다.");
-            sb.append("링크를 클릭하면 패스워드 재설정 페이지로 이동합니다!\n");
+            sb.append("링크를 클릭하면 비밀번호 재설정 페이지로 이동합니다!\n");
         }
         sb.append("http://localhost:9700");
         sb.append("/users/");
