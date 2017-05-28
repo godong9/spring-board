@@ -24,29 +24,33 @@
     <div class="info-message">
       닉네임과 회사는 가입 후 변경할 수 없습니다.
     </div>
-    <div class="confirm-update-wrapper"><button>회원가입 완료</button></div>
+    <div class="confirm-update-wrapper" v-on:click="complete"><button>회원가입 완료</button></div>
   </div>
 </template>
 
 <script>
+
   export default {
     name: 'user-update',
     data() {
       const self = this;
       self.email = this.$route.query.email;
       self.userId = this.$route.query.id;
+      self.uuid = this.$route.query.uuid;
 
       /*eslint-disable */
-      const url = 'http://localhost:9700/companies?email=' + self.email;
-      this.$http.get(url).then((response) => {
-        let data = response.body.data;
-        self.companyOptions = data.map(function(obj) {
-          let rObj = {};
-          rObj['text'] = obj.company_name;
-          rObj['value'] = obj.id;
-          return rObj;
+      if (self.email) {
+        const url = 'http://localhost:9700/companies?email=' + self.email;
+        this.$http.get(url).then((response) => {
+          let data = response.body.data;
+          self.companyOptions = data.map(function(obj) {
+            let rObj = {};
+            rObj['text'] = obj.company_name;
+            rObj['value'] = obj.id;
+            return rObj;
+          });
         });
-      });
+      }
       /*eslint-enable */
 
       return {
@@ -59,7 +63,44 @@
       };
     },
     methods: {
-
+      complete: function complete() {
+        const self = this;
+        /*eslint-disable */
+        if (!self.validateData()) {
+            return;
+        }
+        self.$http.put(self.getServerPath('/users/data'), { id: self.userId, uuid: self.uuid, name: self.nickname, password: self.password, email: self.email, company_id: self.company }).then((response) => {
+          // get body data
+          // TODO: 성공 후 페이지 이동
+        }, (response) => {
+          if (response.body && response.body.error) {
+            alert(response.body.error.message);
+          }
+        });
+        /*eslint-enable */
+      },
+      validateData: function validateData() {
+        const self = this;
+        /*eslint-disable */
+        if (!self.nickname) {
+          alert('닉네임을 입력해주세요!');
+          return false;
+        }
+        if (!self.company) {
+          alert('회사를 선택해주세요!');
+          return false;
+        }
+        if (!self.password || !self.passwordConfirm) {
+          alert('패스워드를 입력해주세요!');
+          return false;
+        }
+        if (self.password !== self.passwordConfirm) {
+          alert('패스워드를 확인해주세요!');
+          return false;
+        }
+        return true;
+        /*eslint-enable */
+      },
     },
   };
 </script>
