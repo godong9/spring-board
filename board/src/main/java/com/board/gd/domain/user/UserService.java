@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -212,6 +214,19 @@ public class UserService implements UserDetailsService {
         user.setEnabled(true);
         userRepository.save(user);
         return user;
+    }
+
+    @Transactional(readOnly = false)
+    public void updatePaidUser(Long id) {
+        User user = findOne(id);
+        if (Objects.isNull(user)) {
+            throw new UserException("User not exist!");
+        }
+        // TODO: 구매 여부 API로 검증!
+
+        LocalDateTime expiredLdt = LocalDateTime.now().plusDays(31);
+        Date expiredDate = Date.from(expiredLdt.atZone(ZoneId.systemDefault()).toInstant());
+        createUserRole(user, UserRoleType.PAID, expiredDate);
     }
 
     public void setAuthentication(Authentication authentication) {
