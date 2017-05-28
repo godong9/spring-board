@@ -110,6 +110,12 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = false)
     public User updateAuthInfo(UserDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail());
+
+        // 유저가 없을 경우
+        if (Objects.isNull(user)) {
+            throw new UserException("가입되지 않은 이메일입니다.");
+        }
+
         user.setAuthUUID(UUID.randomUUID().toString());
         user = userRepository.save(user);
 
@@ -157,12 +163,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = false)
     public User updateUserData(UserDto userDto) {
-        User user = userRepository.findOne(userDto.getId());
-
-        if (!user.getAuthUUID().equals(userDto.getUuid())) {
-            throw new UserException("잘못된 접근입니다.");
-        }
-
         if (userDto.getName().length() < 2) {
             throw new UserException("잘못된 닉네임입니다.(2글자 이상)");
         }
@@ -171,9 +171,11 @@ public class UserService implements UserDetailsService {
             throw new UserException("잘못된 비밀번호입니다.(6글자 이상)");
         }
 
-        user.setName(userDto.getName());
-        user.setPassword(bcryptEncoder.encode(userDto.getPassword()));
-        user.setCompany(companyService.findOne(userDto.getCompanyId()));
+        User user = userRepository.findOne(userDto.getId());
+        if (!user.getAuthUUID().equals(userDto.getUuid())) {
+            throw new UserException("잘못된 접근입니다.");
+        }
+        update(userDto);
 
         return userRepository.save(user);
     }
@@ -227,8 +229,18 @@ public class UserService implements UserDetailsService {
     }
 
     public void sendAuthEmail(User user, String type) {
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setTo(user.getEmail());
         StringBuilder sb = new StringBuilder();
-        sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
+
+        if (type.equals("auth")) {
+            mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
+            sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
+        }
+        if (type.equals("password")) {
+            mailMessage.setSubject("[스탁블라인드] 비밀번호 초기화 메일입니다.");
+            sb.append("링크를 클릭하면 패스워드 재설정 페이지로 이동합니다!\n");
+        }
         sb.append("http://localhost:9700");
         sb.append("/users/");
         sb.append(user.getId());
@@ -237,9 +249,6 @@ public class UserService implements UserDetailsService {
         sb.append("&uuid=");
         sb.append(user.getAuthUUID());
 
-        MailMessage mailMessage = new MailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
         mailMessage.setText(sb.toString());
 
         mailService.send(mailMessage);

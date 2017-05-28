@@ -193,7 +193,9 @@ public class UserController {
                 sb.append(uuid);
                 break;
             case "password":
-                sb.append("reset-password?uuid=");
+                sb.append("/change-password?id=");
+                sb.append(user.getId());
+                sb.append("&uuid=");
                 sb.append(uuid);
                 break;
             default:
@@ -248,6 +250,28 @@ public class UserController {
     @PutMapping("/users/data")
     public ServerResponse PutUserData(@RequestBody @Valid UpdateDataForm updateDataForm) {
         User user = userService.updateUserData(modelMapper.map(updateDataForm, UserDto.class));
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
+
+    /**
+     * @api {put} /users/password Request User password update
+     * @apiName UpdateUserPassword
+     * @apiGroup User
+     *
+     * @apiParam {Number} id 유저 id
+     * @apiParam {String} uuid 인증을 위한 uuid
+     * @apiParam {String} password 패스워드
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PutMapping("/users/password")
+    public ServerResponse PutUserPassword(@RequestBody @Valid UpdateForm updateForm) {
+        User user = userService.updateUserData(modelMapper.map(updateForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 }
