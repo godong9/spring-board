@@ -7,6 +7,7 @@ import Signup from '@/components/Signup';
 import EmailSuccess from '@/components/EmailSuccess';
 import PaymentSignup from '@/components/PaymentSignup';
 import NeedPurchase from '@/components/NeedPurchase';
+import CompletePurchase from '@/components/CompletePurchase';
 import UserUpdate from '@/components/UserUpdate';
 import ResetPassword from '@/components/ResetPassword';
 import Login from '@/components/Login';
@@ -70,6 +71,14 @@ export default new Router({
       },
     },
     {
+      path: '/complete-purchase',
+      name: 'CompletePurchase',
+      components: {
+        default: CompletePurchase,
+        nav: Nav,
+      },
+    },
+    {
       path: '/user-update',
       name: 'UserUpdate',
       components: {
@@ -93,7 +102,10 @@ export default new Router({
     {
       path: '/board/:id',
       name: 'board',
-      component: Board,
+      components: {
+        default: Board,
+        nav: Nav,
+      },
     },
     {
       path: '/post/:id',
