@@ -9,7 +9,7 @@
     <div class="sign-up-description">
       상장사 직원임을 판별 할 수있는 최소한의 정보로 회사 이메일을 활용합니다.
     </div>
-    <div class="sign-up-assistant"> - 회원가입이 안되시나요? <a href="/">문의하기</a></div>
+    <div class="sign-up-assistant"> - 회원가입이 안되시나요? <a href="mailto:stockblind.kr@gmail.com">문의하기</a></div>
     <div class="confirm-email-wrapper" v-bind:class="classObject" v-on:click="signup"><button>인증 메일 받기</button></div>
   </div>
 </template>
@@ -40,6 +40,7 @@
           alert('올바른 이메일을 입력해주세요.');
           return;
         }
+        
         this.$http.post(self.getServerPath('/users/email'), { email: this.email }).then(() => {
           self.$router.push('email-success');
         }, (response) => {
