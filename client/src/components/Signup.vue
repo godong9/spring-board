@@ -24,7 +24,7 @@
     },
     methods: {
       signup: function signup() {
-        this.$http.post('http://localhost:9700/users/email', { email: this.email }).then((response) => {
+        this.$http.post(self.getServerPath('/users/email'), { email: this.email }).then((response) => {
           // get body data
           this.bodyData = response.body;
           console.log(this.bodyData);
