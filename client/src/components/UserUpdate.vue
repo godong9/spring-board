@@ -40,7 +40,7 @@
 
       /*eslint-disable */
       if (self.email) {
-        const url = 'http://localhost:9700/companies?email=' + self.email;
+        const url = self.getServerPath('/companies?email=' + self.email);
         this.$http.get(url).then((response) => {
           let data = response.body.data;
           self.companyOptions = data.map(function(obj) {
@@ -69,8 +69,18 @@
         if (!self.validateData()) {
             return;
         }
-        self.$http.put(self.getServerPath('/users/data'), { id: self.userId, uuid: self.uuid, name: self.nickname, password: self.password, email: self.email, company_id: self.company }).then((response) => {
+
+        let params = {
+          id: self.userId,
+          uuid: self.uuid,
+          name: self.nickname,
+          password: self.password,
+          email: self.email,
+          company_id: self.company
+        };
+        self.$http.put(self.getServerPath('/users/data'), params).then(() => {
           // get body data
+          alert('회원정보가 변경되었습니다.');
           self.$router.push('need-purchase');
         }, (response) => {
           if (response.body && response.body.error) {
