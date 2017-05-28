@@ -10,7 +10,7 @@
       상장사 직원임을 판별 할 수있는 최소한의 정보로 회사 이메일을 활용합니다.
     </div>
     <div class="sign-up-assistant"> - 회원가입이 안되시나요? <a href="/">문의하기</a></div>
-    <div class="confirm-email-wrapper" v-on:click="signup"><button>인증 메일 받기</button></div>
+    <div class="confirm-email-wrapper" v-bind:class="classObject" v-on:click="signup"><button>인증 메일 받기</button></div>
   </div>
 </template>
 
@@ -22,17 +22,31 @@
         email: '',
       };
     },
+    computed: {
+      classObject: function classObject() {
+        return {
+          active: this.email.length > 6,
+        };
+      },
+    },
     methods: {
       signup: function signup() {
         const self = this;
-        this.$http.post(self.getServerPath('/users/email'), { email: this.email }).then((response) => {
-          // get body data
-          this.bodyData = response.body;
-          console.log(this.bodyData);
+        if (!self.validateEmail(self.email)) {
+          alert('올바른 이메일을 입력해주세요.');
+          return;
+        }
+        this.$http.post(self.getServerPath('/users/email'), { email: this.email }).then(() => {
+          self.$router.push('email-success');
         }, (response) => {
-          this.errorData = response.body;
-          // error callback
+          self.errorHandler(response);
         });
+      },
+      validateEmail: function validateEmail(email) {
+        /*eslint-disable */
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+        /*eslint-enable */
       },
     },
   };

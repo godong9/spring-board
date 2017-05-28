@@ -83,9 +83,7 @@
           alert('회원정보가 변경되었습니다.');
           self.$router.push('need-purchase');
         }, (response) => {
-          if (response.body && response.body.error) {
-            alert(response.body.error.message);
-          }
+          self.errorHandler(response);
         });
         /*eslint-enable */
       },
@@ -109,7 +107,6 @@
           return false;
         }
         return true;
-        /*eslint-enable */
       },
     },
   };
