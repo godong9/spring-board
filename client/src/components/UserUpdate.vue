@@ -71,7 +71,7 @@
         }
         self.$http.put(self.getServerPath('/users/data'), { id: self.userId, uuid: self.uuid, name: self.nickname, password: self.password, email: self.email, company_id: self.company }).then((response) => {
           // get body data
-          // TODO: 성공 후 페이지 이동
+          self.$router.push('need-purchase');
         }, (response) => {
           if (response.body && response.body.error) {
             alert(response.body.error.message);
