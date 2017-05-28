@@ -96,7 +96,10 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login,
+      components: {
+        default: Login,
+        nav: Nav,
+      },
     },
     {
       path: '/board/:id',
