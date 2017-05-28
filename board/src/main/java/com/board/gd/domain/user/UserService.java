@@ -7,6 +7,7 @@ import com.board.gd.mail.MailService;
 import com.board.gd.utils.DateUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +33,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
     private static final Date DEFAULT_ROLE_EXPIRED_DATE = new Date(4150537200000L); // 2099년 12월 31일
+
+    @Value("${server.host}")
+    private String serverHost;
 
     @Autowired
     private UserRepository userRepository;
@@ -241,7 +245,7 @@ public class UserService implements UserDetailsService {
             mailMessage.setSubject("[스탁블라인드] 비밀번호 초기화 메일입니다.");
             sb.append("링크를 클릭하면 비밀번호 재설정 페이지로 이동합니다!\n");
         }
-        sb.append("http://localhost:9700");
+        sb.append(serverHost);
         sb.append("/users/");
         sb.append(user.getId());
         sb.append("/auth?type=");
