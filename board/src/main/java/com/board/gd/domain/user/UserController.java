@@ -224,7 +224,7 @@ public class UserController {
     public ServerResponse PutUser(@RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(userService.getCurrentUser().getId());
         User user = userService.update(modelMapper.map(updateForm, UserDto.class));
-        return ServerResponse.success(user);
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 
     /**
@@ -248,6 +248,6 @@ public class UserController {
     @PutMapping("/users/data")
     public ServerResponse PutUserData(@RequestBody @Valid UpdateDataForm updateDataForm) {
         User user = userService.updateUserData(modelMapper.map(updateDataForm, UserDto.class));
-        return ServerResponse.success(user);
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 }

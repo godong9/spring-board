@@ -160,8 +160,17 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findOne(userDto.getId());
 
         if (!user.getAuthUUID().equals(userDto.getUuid())) {
-            throw new UserException("Invalid uuid!");
+            throw new UserException("잘못된 접근입니다.");
         }
+
+        if (userDto.getName().length() < 2) {
+            throw new UserException("잘못된 닉네임입니다.(2글자 이상)");
+        }
+
+        if (userDto.getPassword().length() < 6) {
+            throw new UserException("잘못된 비밀번호입니다.(6글자 이상)");
+        }
+
         user.setName(userDto.getName());
         user.setPassword(bcryptEncoder.encode(userDto.getPassword()));
         user.setCompany(companyService.findOne(userDto.getCompanyId()));
