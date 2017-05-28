@@ -24,7 +24,7 @@
     <div class="info-message">
       닉네임과 회사는 가입 후 변경할 수 없습니다.
     </div>
-    <div class="confirm-update-wrapper" v-on:click="complete"><button>회원가입 완료</button></div>
+    <div class="confirm-update-wrapper" v-bind:class="classObject" v-on:click="complete"><button>회원가입 완료</button></div>
   </div>
 </template>
 
@@ -62,14 +62,26 @@
         passwordConfirm: '',
       };
     },
+    computed: {
+      classObject: function classObject() {
+        return {
+          active: this.email && this.nickname && this.company
+                  && this.password && this.passwordConfirm,
+        };
+      },
+    },
     methods: {
       complete: function complete() {
         const self = this;
-        /*eslint-disable */
-        if (!self.validateData()) {
-            return;
+        if (!self.classObject.active) {
+          return;
         }
 
+        if (!self.validateData()) {
+          return;
+        }
+
+        /*eslint-disable */
         let params = {
           id: self.userId,
           uuid: self.uuid,
@@ -89,19 +101,7 @@
       },
       validateData: function validateData() {
         const self = this;
-        /*eslint-disable */
-        if (!self.nickname) {
-          alert('닉네임을 입력해주세요!');
-          return false;
-        }
-        if (!self.company) {
-          alert('회사를 선택해주세요!');
-          return false;
-        }
-        if (!self.password || !self.passwordConfirm) {
-          alert('패스워드를 입력해주세요!');
-          return false;
-        }
+
         if (self.password !== self.passwordConfirm) {
           alert('패스워드를 확인해주세요!');
           return false;

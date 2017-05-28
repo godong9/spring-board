@@ -25,13 +25,17 @@
     computed: {
       classObject: function classObject() {
         return {
-          active: this.email.length > 6,
+          active: this.email,
         };
       },
     },
     methods: {
       signup: function signup() {
         const self = this;
+        if (!self.classObject.active) {
+          return;
+        }
+
         if (!self.validateEmail(self.email)) {
           alert('올바른 이메일을 입력해주세요.');
           return;
