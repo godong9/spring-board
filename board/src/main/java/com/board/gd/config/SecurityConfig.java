@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/companies**").access("permitAll")
                 .antMatchers("/users/login", "/users/signup", "/users/email", "/users/data", "/users/password").access("permitAll")
                 .antMatchers("/users**").hasAuthority("USER")
-                .antMatchers("/boards**").hasAuthority("USER")
-                .antMatchers("/posts**").hasAuthority("USER")
-                .antMatchers("/comments**").hasAuthority("USER");
+                .antMatchers("/boards**").hasAuthority("PAID")
+                .antMatchers("/posts**").hasAuthority("PAID")
+                .antMatchers("/comments**").hasAuthority("PAID");
     }
 }

@@ -179,7 +179,10 @@ public class UserService implements UserDetailsService {
         if (!user.getAuthUUID().equals(userDto.getUuid())) {
             throw new UserException("잘못된 접근입니다.");
         }
+
         update(userDto);
+
+        createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         return userRepository.save(user);
     }
