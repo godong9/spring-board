@@ -10,5 +10,5 @@ import lombok.Data;
 public class PaymentInfoDto {
     private String customerUid;
     private String cardName;
-    private String customerEmail;
+    private Long userId;
 }
