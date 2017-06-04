@@ -13,8 +13,10 @@ import ResetPassword from '@/components/ResetPassword';
 import ChangePassword from '@/components/ChangePassword';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
+import BoardDetail from '@/components/BoardDetail';
 import Post from '@/components/Post';
 import Nav from '@/components/Nav';
+import TitleHeader from '@/components/TitleHeader';
 import Footer from '@/components/Footer';
 
 Vue.use(Router);
@@ -113,11 +115,19 @@ export default new Router({
     },
     {
       path: '/board/:id',
-      name: 'board',
+      name: 'Board',
       components: {
         default: Board,
         nav: Nav,
         footer: Footer,
+      },
+    },
+    {
+      path: '/board/:id/detail',
+      name: 'BoardDetail',
+      components: {
+        nav: TitleHeader,
+        default: BoardDetail,
       },
     },
     {
