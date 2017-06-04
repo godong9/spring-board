@@ -1,6 +1,9 @@
 package com.board.gd.iamport;
 
 import com.board.gd.domain.payment.PaymentInfoDto;
+import com.board.gd.domain.payment.PaymentRequestDto;
+import com.board.gd.domain.payment.PaymentResultDto;
+import com.board.gd.exception.PaymentException;
 import com.board.gd.utils.JsonUtils;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Objects;
 
 /**
  * Created by godong9 on 2017. 6. 4..
@@ -28,18 +33,28 @@ public class IamportManager {
     @Value("${iamport.host}")
     private String iamportHost;
 
-    public PaymentInfoDto postSubscribeCustomer(CustomerRequestDto customerRequestDto) {
+    public PaymentInfoDto postSubscribeCustomer(SubscribeRequestDto subscribeRequestDto) {
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
                 .scheme(iamportScheme)
                 .host(iamportHost)
-                .path("/subscribe/customers/" + customerRequestDto.getCustomer_uid())
+                .path("/subscribe/customers/" + subscribeRequestDto.getCustomer_uid())
                 .build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        HttpEntity<String> entity = new HttpEntity<>(JsonUtils.toJson(customerRequestDto, PropertyNamingStrategy.LOWER_CASE), headers);
+        HttpEntity<String> entity = new HttpEntity<>(JsonUtils.toJson(subscribeRequestDto, PropertyNamingStrategy.LOWER_CASE), headers);
 
         ResponseEntity<SubscribeResponseDto> responseEntity = iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, SubscribeResponseDto.class);
-        return responseEntity.getBody().getResponse();
+        SubscribeResponseDto subscribeResponseDto = responseEntity.getBody();
+        PaymentInfoDto paymentInfoDto = subscribeResponseDto.getResponse();
+
+        if (Objects.isNull(paymentInfoDto)) {
+            log.error("[빌링키 발급 에러] userId: {}, message: {}", subscribeRequestDto.getCustomer_uid(), subscribeResponseDto.getMessage());
+            throw new PaymentException("정기결제 등록 중 에러 발생");
+        }
+        return paymentInfoDto;
     }
 
+    public PaymentResultDto postPaymentRequest(PaymentRequestDto paymentRequestDto) {
+        return new PaymentResultDto();
+    }
 }

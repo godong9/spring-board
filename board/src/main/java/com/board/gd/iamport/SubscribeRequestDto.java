@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-public class CustomerRequestDto {
+public class SubscribeRequestDto {
     @NotNull(message = "카드번호는 반드시 값이 있어야 합니다.")
     private String card_number;
 
