@@ -29,15 +29,6 @@ public class PaymentInfo {
     @Column(name = "customer_uid")
     private String customerUid;
 
-    @Column(name = "code")
-    private Integer code;
-
-    @Column(name = "status")
-    private PaymentStatus status;
-
-    @Column(name = "message")
-    private String message;
-
     @Column(name = "card_name")
     private String cardName;
 

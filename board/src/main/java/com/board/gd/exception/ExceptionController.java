@@ -64,7 +64,6 @@ public class ExceptionController {
     @ExceptionHandler(PaymentException.class)
     public ResponseEntity<ServerResponse> handlePaymentException(PaymentException exception) throws Exception {
         String message = exception.getMessage();
-        log.warn("[PaymentException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
         return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
     }
 
