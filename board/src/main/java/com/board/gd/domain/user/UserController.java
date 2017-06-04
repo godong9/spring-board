@@ -223,7 +223,7 @@ public class UserController {
      * @apiUse BadRequestError
      */
     @PutMapping("/users")
-    public ServerResponse PutUser(@RequestBody @Valid UpdateForm updateForm) {
+    public ServerResponse putUser(@RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(userService.getCurrentUser().getId());
         User user = userService.update(modelMapper.map(updateForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
@@ -248,7 +248,7 @@ public class UserController {
      * @apiUse BadRequestError
      */
     @PutMapping("/users/data")
-    public ServerResponse PutUserData(@RequestBody @Valid UpdateDataForm updateDataForm) {
+    public ServerResponse putUserData(@RequestBody @Valid UpdateDataForm updateDataForm) {
         User user = userService.updateUserData(modelMapper.map(updateDataForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
@@ -270,8 +270,20 @@ public class UserController {
      * @apiUse BadRequestError
      */
     @PutMapping("/users/password")
-    public ServerResponse PutUserPassword(@RequestBody @Valid UpdateForm updateForm) {
+    public ServerResponse putUserPassword(@RequestBody @Valid UpdateForm updateForm) {
         User user = userService.updateUserData(modelMapper.map(updateForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
+
+    /**
+     * @api {get}
+     * @apiName GetUserPaid
+     * @apiGroup User
+     *
+     */
+    @GetMapping("/users/paid")
+    public ServerResponse getUserPaid(@RequestParam("id") Long id) {
+        userService.updatePaidUser(id);
+        return ServerResponse.success();
     }
 }

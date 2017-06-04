@@ -1,4 +1,4 @@
-package com.board.gd.payment;
+package com.board.gd.domain.payment;
 
 import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;

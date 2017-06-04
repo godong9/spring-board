@@ -124,6 +124,7 @@ public class UserControllerTests {
                 .name(userName)
                 .password(bcryptEncoder.encode(userPassword))
                 .email(userEmail)
+                .enabled(true)
                 .build());
 
         given(userService.findRolesByUserId(any(Long.class))).willReturn(null);
