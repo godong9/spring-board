@@ -36,6 +36,9 @@ public class PaymentInfo {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "enabled")
+    private Boolean enabled;
+
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")

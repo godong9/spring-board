@@ -24,6 +24,14 @@ public class PaymentService {
                 .cardName(paymentInfoDto.getCardName())
                 .customerUid(paymentInfoDto.getCustomerUid())
                 .user(user)
+                .enabled(true)
                 .build());
+    }
+
+    @Transactional(readOnly = false)
+    public void disablePaymentInfo(Long userId) {
+        PaymentInfo paymentInfo = paymentInfoRepository.findByUserId(userId);
+        paymentInfo.setEnabled(false);
+        paymentInfoRepository.save(paymentInfo);
     }
 }
