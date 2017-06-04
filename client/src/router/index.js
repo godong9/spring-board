@@ -15,6 +15,7 @@ import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Post from '@/components/Post';
 import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 
 Vue.use(Router);
 
@@ -116,6 +117,7 @@ export default new Router({
       components: {
         default: Board,
         nav: Nav,
+        footer: Footer,
       },
     },
     {

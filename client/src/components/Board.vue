@@ -7,25 +7,112 @@
     </div>
     <ul class="item-list">
       <li class="item">
-        <div class="title">
-          이제 막차떠납니다.
+        <div class="content">
+          <div class="title">
+            이제 막차떠납니다.
+          </div>
+          <div class="info">
+            <span class="text">닉네임(회사명)</span>
+            <span class="divider">|</span>
+            <span class="text">18:01</span>
+            <span class="divider">|</span>
+            <span class="text">조회 <span>67</span></span>
+          </div>
+          <div class="count-info">
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
+            <div class="company-info">#카카오</div>
+          </div>
         </div>
-        <div class="info">
-          <span class="text">닉네(회사명)</span>
-          <span class="text">18:01</span>
-          <span class="text">조 67</span>
+        <div class="line"></div>
+      </li>
+      <li class="item">
+        <div class="content">
+          <div class="title">
+            이제 막차떠납니다.
+          </div>
+          <div class="info">
+            <span class="text">닉네임(회사명)</span>
+            <span class="divider">|</span>
+            <span class="text">18:01</span>
+            <span class="divider">|</span>
+            <span class="text">조회 <span>67</span></span>
+          </div>
+          <div class="count-info">
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
+            <div class="company-info">#카카오</div>
+          </div>
         </div>
-        <div class="count-info">
-          <span>100</span>
-          <span>100</span>
-          <span>100</span>
-          <span>카카</span>
+        <div class="line"></div>
+      </li>
+      <li class="item">
+        <div class="content">
+          <div class="title">
+            이제 막차떠납니다.
+          </div>
+          <div class="info">
+            <span class="text">닉네임(회사명)</span>
+            <span class="divider">|</span>
+            <span class="text">18:01</span>
+            <span class="divider">|</span>
+            <span class="text">조회 <span>67</span></span>
+          </div>
+          <div class="count-info">
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
+            <div class="company-info">#카카오</div>
+          </div>
         </div>
+        <div class="line"></div>
+      </li>
+      <li class="item">
+        <div class="content">
+          <div class="title">
+            이제 막차떠납니다.
+          </div>
+          <div class="info">
+            <span class="text">닉네임(회사명)</span>
+            <span class="divider">|</span>
+            <span class="text">18:01</span>
+            <span class="divider">|</span>
+            <span class="text">조회 <span>67</span></span>
+          </div>
+          <div class="count-info">
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
+            <div class="company-info">#카카오</div>
+          </div>
+        </div>
+        <div class="line"></div>
+      </li>
+      <li class="item">
+        <div class="content">
+          <div class="title">
+            이제 막차떠납니다.
+          </div>
+          <div class="info">
+            <span class="text">닉네임(회사명)</span>
+            <span class="divider">|</span>
+            <span class="text">18:01</span>
+            <span class="divider">|</span>
+            <span class="text">조회 <span>67</span></span>
+          </div>
+          <div class="count-info">
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
+            <div class="company-info">#카카오</div>
+          </div>
+        </div>
+        <div class="line"></div>
       </li>
     </ul>
-    <div class="footer">
-
-    </div>
+    <div class="more-btn">더보기</div>
   </div>
 </template>
 
@@ -54,7 +141,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .board {
-    background-color: #101319;
+    /*background-color: #101319;*/
   }
   .search-wrapper {
     height: 7vw;
@@ -86,23 +173,49 @@
   .item-list {
     list-style: none;
     padding:0;
-    background: #151921;
     color: #ffffff;
-    margin: 0 16px 0 16px;
+    margin: 0;
   }
   .item {
-    width:100%;
-    padding:10px 0 10px 0;
+    background-color: #151921;
   }
-  .item .title {
+  .item .content {
+    padding:10px 16px 10px 16px;
+  }
+  .item .content .title {
     font-size: 4.8vw;
   }
-  .item .info .text {
+  .item .content .info .text {
     font-size: 3.2vw;
     color: #6f7782;
   }
-  .item .count-info {
+  .item .content .info .divider {
+    color: #6f7782;
+  }
+  .item .content .count-info {
     margin: 2.5vw 0 0 0;
     font-size: 2.7vw;
+  }
+  .item .content .count-info img {
+    width: 12px;
+    height: 12px;
+    margin: 0 2px 0 0;
+  }
+  .item .content .count-info .count-wrapper {
+    display: inline-block;
+    margin: 0 10px 0 0;
+  }
+  .item .content .company-info {
+    color: #ff595f;
+    float: right;
+  }
+  .item .line {
+    border: solid 1px #191d26;
+  }
+  .more-btn {
+    text-align: center;
+    font-size: 14px;
+    line-height: 70px;
+    background-color: #151921;
   }
 </style>
