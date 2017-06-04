@@ -59,6 +59,13 @@ public class PaymentController {
         return ServerResponse.success();
     }
 
+    @PostMapping("/payments/unsubscribe")
+    public ServerResponse postPaymentUnsubscribe() {
+        User user = userService.getCurrentUser();
+        // TODO: unsubscribe 로직 추가
+        return ServerResponse.success();
+    }
+
     /**
      * @api {get} /payments/charge Request Get payment charge
      * @apiName GetChargePayment

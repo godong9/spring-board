@@ -54,6 +54,8 @@ public class IamportManager {
         return paymentInfoDto;
     }
 
+    //TODO: postUnsubscribeCustomer
+
     public PaymentResultDto postPaymentRequest(PaymentRequestDto paymentRequestDto) {
         return new PaymentResultDto();
     }
