@@ -1,5 +1,6 @@
 package com.board.gd.iamport;
 
+import com.board.gd.domain.payment.PaymentInfoDto;
 import lombok.Data;
 
 /**
@@ -7,8 +8,8 @@ import lombok.Data;
  */
 
 @Data
-public class AccessTokenDto {
+public class SubscribeResponseDto {
     private Integer code;
     private String message;
-    private AccessTokenResponseDto response;
+    private PaymentInfoDto response;
 }

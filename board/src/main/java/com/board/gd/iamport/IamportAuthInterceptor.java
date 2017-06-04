@@ -92,9 +92,9 @@ public class IamportAuthInterceptor implements ClientHttpRequestInterceptor {
         HttpEntity<String> entity = new HttpEntity<>(JsonUtils.toJson(authRequestDto), headers);
 
         try {
-            ResponseEntity<AccessTokenDto> responseEntity = restTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, AccessTokenDto.class);
-            AccessTokenDto accessTokenDto = responseEntity.getBody();
-            return accessTokenDto.getResponse().getAccessToken();
+            ResponseEntity<AuthResponseDto> responseEntity = restTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, AuthResponseDto.class);
+            AuthResponseDto authResponseDto = responseEntity.getBody();
+            return authResponseDto.getResponse().getAccessToken();
         } catch (Exception e) {
             log.error(Throwables.getStackTraceAsString(e));
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);

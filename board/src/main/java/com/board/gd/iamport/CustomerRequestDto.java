@@ -9,9 +9,9 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-public class CustomerDto {
+public class CustomerRequestDto {
     @NotNull(message = "카드번호는 반드시 값이 있어야 합니다.")
-    private String cardNumber;
+    private String card_number;
 
     @NotNull(message = "유효기간은 반드시 값이 있어야 합니다.")
     private String expiry;
@@ -20,8 +20,13 @@ public class CustomerDto {
     private String birth;
 
     @NotNull(message = "비밀번호 앞 두자리는 반드시 값이 있어야 합니다.")
-    private String pwd2digit;
+    private String pwd_2digit;
 
-    private String customerUid;
-    private String customerEmail;
+    private String customer_uid;
+    private String customer_email;
+
+    private String customer_name;
+    private String customer_tel;
+    private String customer_addr;
+    private String customer_postcode;
 }
