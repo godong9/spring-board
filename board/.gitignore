@@ -26,4 +26,4 @@ nbdist/
 
 generated/
 
-resources/application.yml
+application.yml
