@@ -10,9 +10,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum PaymentStatus {
+    INIT("생성"),
+    REQUESTED("요청"),
     SUCCESS("성공"),
-    FAIL("실패"),
-    CANCEL("취소");
+    FAIL("실패");
 
     private String description;
 }
