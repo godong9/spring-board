@@ -1,5 +1,6 @@
 package com.board.gd.domain.payment;
 
+import com.board.gd.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,7 +26,27 @@ public class Payment {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
 
+    @Column(name = "amount")
+    private Double amount;
+
+    @Column(name = "status")
+    private PaymentStatus status;
+
+    @Column(name = "imp_uid")
+    private String impUid;
+
+    @Column(name = "merchant_uid")
+    private String merchantUid;
+
+    @Column(name = "customer_uid")
+    private String customerUid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
