@@ -17,6 +17,10 @@ public class PaymentService {
     @Autowired
     private PaymentInfoRepository paymentInfoRepository;
 
+    public PaymentInfo findByUserId(Long userId) {
+        return paymentInfoRepository.findByUserId(userId);
+    }
+
     @Transactional(readOnly = false)
     public PaymentInfo createPaymentInfo(PaymentInfoDto paymentInfoDto) {
         User user = User.builder().id(paymentInfoDto.getUserId()).build();

@@ -54,8 +54,18 @@ public class IamportManager {
         return paymentInfoDto;
     }
 
-    //TODO: postUnsubscribeCustomer
+    public void deleteUnsubscribeCustomer(String customerUid) {
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .scheme(iamportScheme)
+                .host(iamportHost)
+                .path("/subscribe/customers/" + customerUid)
+                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.DELETE, null, String.class);
+    }
 
+    //TODO: postPaymentRequest
     public PaymentResultDto postPaymentRequest(PaymentRequestDto paymentRequestDto) {
         return new PaymentResultDto();
     }

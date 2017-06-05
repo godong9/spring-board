@@ -2,6 +2,7 @@ package com.board.gd.domain.payment;
 
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
+import com.board.gd.exception.PaymentException;
 import com.board.gd.iamport.IamportManager;
 import com.board.gd.iamport.SubscribeRequestDto;
 import com.board.gd.response.ServerResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 /**
  * Created by godong9 on 2017. 5. 14..
@@ -63,6 +65,12 @@ public class PaymentController {
     public ServerResponse postPaymentUnsubscribe() {
         User user = userService.getCurrentUser();
         // TODO: unsubscribe 로직 추가
+        PaymentInfo paymentInfo = paymentService.findByUserId(user.getId());
+        if (Objects.isNull(paymentInfo) || !paymentInfo.getEnabled()) {
+            throw new PaymentException("잘못된 접근입니다.");
+        }
+        iamportManager.deleteUnsubscribeCustomer(paymentInfo.getCustomerUid());
+        paymentService.disablePaymentInfo(user.getId());
         return ServerResponse.success();
     }
 
