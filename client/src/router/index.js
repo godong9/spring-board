@@ -131,7 +131,7 @@ export default new Router({
       },
     },
     {
-      path: '/post/:id',
+      path: '/board/:id/post',
       name: 'post',
       component: Post,
     },

@@ -40,6 +40,28 @@
         <textarea placeholder="댓글을 입력하세요 (최대 300자)"></textarea>
         <div class="word-count-wrapper">300 / <span class="count">0</span></div>
       </div>
+      <div class="write-btn-wrapper"><button>등록</button></div>
+    </div>
+    <div class="comment-list">
+      <div class="comment-item">
+        <div class="comment-title">
+          <span>닉네임 (회사명) </span><span>|</span> <span>17.3.14</span>
+          <a class="delete-ic"><img src="../assets/delete-ic.png"></a>
+        </div>
+        <div class="comment-content">
+          초보인 제가 생각하기엔 30000~100000 초보인 제가 생각하기엔 30000~100000
+        </div>
+        <div class="line"></div>
+      </div>
+      <div class="comment-item">
+        <div class="comment-title">
+          <span>닉네임 (회사명) </span><span>|</span> <span>17.3.14</span>
+        </div>
+        <div class="comment-content">
+          초보인 제가 생각하기엔 30000~100000 초보인 제가 생각하기엔 30000~100000
+        </div>
+        <div class="line"></div>
+      </div>
     </div>
   </div>
 
@@ -225,4 +247,38 @@
   .write-area .word-count-wrapper .count{
     color: #636b7d;
   }
+  .write-btn-wrapper {
+    margin: 12px 0 15px 0;
+  }
+  .write-btn-wrapper button {
+    float:right;
+    color: white;
+    width: 60px;
+    height: 30px;
+    border-radius: 4px;
+    background-color: #ff595f;
+    border: solid 1px #ff595f;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+  }
+  .comment-item {
+    background-color: #151921;
+    padding: 0 18px 18px 18px;
+  }
+  .comment-item .comment-title{
+    height: 18px;
+    font-size: 12px;
+    color: #6f7782;
+  }
+  .comment-item .comment-content {
+    font-size: 14px;
+    color: #c2c7cb;
+  }
+  .comment-item .delete-ic img{
+    width: 10px;
+    height: 10px;
+    float:right;
+  }
+
 </style>
