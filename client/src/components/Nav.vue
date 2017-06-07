@@ -27,6 +27,8 @@
 <style scoped>
   .nav {
     text-align: left;
+    height: 50px;
+    background-color: #ffffff;
   }
   .blind-logo {
     margin: 10px;
@@ -39,7 +41,7 @@
   }
   .title {
     display: inline-block;
-    font-size: 6vw;
+    font-size: 18px;
     font-weight: bold;
   }
   .button-wrapper {

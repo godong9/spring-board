@@ -7,7 +7,7 @@
     </div>
     <div class="bar">
       <div class="search-bar">
-        <input type="text" placeholder="#종목추천"><i class="search-icon"></i>
+        <input type="text" placeholder="#종목추천"><i class="delete-icon"></i><i class="search-icon"></i>
       </div>
     </div>
     <div>
@@ -68,6 +68,7 @@
     width: 100%;
   }
   .bar .search-bar {
+    position: relative;
     height: 32px;
     border-radius: 2px;
     background-color: #ffffff;
@@ -86,6 +87,17 @@
     width:16px;
     height:16px;
     background: url(../assets/search-icon.png) no-repeat center;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .delete-icon {
+    position: absolute;
+    top: 8px;
+    right: 25px;
+    width:16px;
+    height:16px;
+    background: url(../assets/delete-tag-ic.png) no-repeat center;
     background-size: contain;
     display: inline-block;
     vertical-align: middle;

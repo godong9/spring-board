@@ -18,6 +18,7 @@ import Post from '@/components/Post';
 import Nav from '@/components/Nav';
 import TitleHeader from '@/components/TitleHeader';
 import Footer from '@/components/Footer';
+import MyPage from '@/components/MyPage';
 
 Vue.use(Router);
 
@@ -132,8 +133,17 @@ export default new Router({
     },
     {
       path: '/board/:id/post',
-      name: 'post',
+      name: 'Post',
       component: Post,
+    },
+    {
+      path: '/mypage/:id',
+      name: 'MyPage',
+      components: {
+        default: MyPage,
+        nav: TitleHeader,
+        footer: Footer,
+      },
     },
   ],
 });

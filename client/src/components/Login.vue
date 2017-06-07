@@ -59,9 +59,62 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-    font-size: 50px;
+  .login {
+
+  }
+  .login .title-label {
+    margin: 30px 0 19px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #f0f2f5;
+  }
+  .user-password-input,
+  .user-email-input {
+    margin: 11px 0 0 0;
+    padding:0 25px 0 25px;
+  }
+  .user-password-input input,
+  .user-email-input input {
+    font-size:14px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 50px;
+    border-radius: 4px;
+    background-color: rgba(31, 37, 51, 0.88);
+    border: solid 1px #3b4251;
+    padding: 0 14px 0 14px;
+    color:#f6f6f6;
+  }
+  .login-description {
+    font-size: 12px;
+    color: #636b7d;
+    float:right;
+    margin:5px 25px 25px 0;
+  }
+  .confirm-login-wrapper{
+    margin:0px 25px 20px 25px
+  }
+  .confirm-login-wrapper button{
+    font-size: 16px;
+    color: #f0f2f5;
+    border: none;
+    width:100%;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #ff595f;
+  }
+  .signup-description {
+    text-align: center;
+    font-size: 14px;
+    color: #c2c7cb;
+  }
+
+  .signup-description .signup-text {
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #ff595f;
   }
 
 </style>
