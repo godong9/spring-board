@@ -1,8 +1,8 @@
 <template>
   <div class="nav">
-    <div class="blind-logo">B</div>
+    <div class="blind-logo"></div>
     <div class="title">StockBlind</div>
-    <div class="button-wrapper">
+    <div v-if="showButton" class="button-wrapper">
       <a class="btn"><i class="write"></i>글쓰기</a>
       <a class="btn"><i class="person"></i>My</a>
     </div>
@@ -14,11 +14,13 @@
     name: 'nav',
     data() {
       return {
-        msg: 'Nav page Message',
+        showButton: this.showButton || false,
       };
     },
     methods: {
-
+      setShowButton(show) {
+        this.showButton = show;
+      },
     },
   };
 </script>
@@ -31,18 +33,18 @@
     background-color: #ffffff;
   }
   .blind-logo {
-    margin: 10px;
-    font-size: 6vw;
-    width: 7vw;
-    background: red;
-    text-align: center;
-    color: white;
+    width: 23px;
+    height: 23px;
+    background-color: #d8d8d8;
     display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 0 10px;
   }
   .title {
     display: inline-block;
     font-size: 18px;
     font-weight: bold;
+    line-height: 50px;
   }
   .button-wrapper {
     font-size: 7vw;
