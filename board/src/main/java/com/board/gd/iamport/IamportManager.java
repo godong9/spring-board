@@ -39,6 +39,7 @@ public class IamportManager {
                 .host(iamportHost)
                 .path("/subscribe/customers/" + subscribeRequestDto.getCustomer_uid())
                 .build();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         HttpEntity<String> entity = new HttpEntity<>(JsonUtils.toJson(subscribeRequestDto, PropertyNamingStrategy.LOWER_CASE), headers);
@@ -60,9 +61,17 @@ public class IamportManager {
                 .host(iamportHost)
                 .path("/subscribe/customers/" + customerUid)
                 .build();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.DELETE, null, String.class);
+
+        ResponseEntity<SubscribeResponseDto> responseEntity = iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.DELETE, null, SubscribeResponseDto.class);
+        SubscribeResponseDto subscribeResponseDto = responseEntity.getBody();
+
+        if (subscribeResponseDto.getCode() != 0) {
+            log.error("[빌링키 삭제 에러] userId: {}, message: {}", customerUid, subscribeResponseDto.getMessage());
+            throw new PaymentException("정기결제 삭제 중 에러 발생");
+        }
     }
 
     //TODO: postPaymentRequest

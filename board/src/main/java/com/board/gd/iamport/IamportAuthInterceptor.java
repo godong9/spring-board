@@ -53,7 +53,7 @@ public class IamportAuthInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws HttpServerErrorException, IOException {
         if (isAccessTokenExpired()) {
-            log.info("[Metakage] AuthToken is expired!");
+            log.info("[Iamport] AuthToken is expired!");
             lastCachedDateTime.set(LocalDateTime.now()); // 캐시타임 갱신
             accessToken.set(auth());
         }

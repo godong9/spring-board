@@ -8,10 +8,7 @@ import com.board.gd.iamport.SubscribeRequestDto;
 import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -48,29 +45,43 @@ public class PaymentController {
      */
     @PostMapping("/payments/subscribe")
     public ServerResponse postPaymentSubscribe(@RequestBody @Valid SubscribeRequestDto subscribeRequestDto) {
-        User user = userService.getCurrentUser();
-//        subscribeRequestDto.setCustomer_uid(user.getId().toString());
-//        subscribeRequestDto.setCustomer_email(user.getEmail());
-        // TODO: 테스트 후 위 코드 주석 풀고 밑 코드 삭제 필요!
-        subscribeRequestDto.setCustomer_uid("customer_1234");
-        subscribeRequestDto.setCustomer_email("godong9@gmail.com");
+        // TODO: 테스트용 코드.
+//        subscribeRequestDto.setCustomer_uid("customer_1234");
+//        subscribeRequestDto.setCustomer_email("godong9@gmail.com");
 
+        User user = userService.getCurrentUser();
+        subscribeRequestDto.setCustomer_uid(user.getId().toString());
+        subscribeRequestDto.setCustomer_email(user.getEmail());
         PaymentInfoDto paymentInfoDto = iamportManager.postSubscribeCustomer(subscribeRequestDto);
         paymentInfoDto.setUserId(user.getId());
         paymentService.createPaymentInfo(paymentInfoDto);
+
         return ServerResponse.success();
     }
 
-    @PostMapping("/payments/unsubscribe")
-    public ServerResponse postPaymentUnsubscribe() {
+    /**
+     * @api {delete} /payments/subscribe Request Delete payment subscribe
+     * @apiName DeleteSubscribePayment
+     * @apiGroup Payment
+     * @apiDescription 현재 세션 유저의 구독 삭제
+     *
+     * @apiSuccess {Number} status 상태코드
+     *
+     * @apiUse BadRequestError
+     */
+    @DeleteMapping("/payments/subscribe")
+    public ServerResponse deletePaymentUnsubscribe() {
+        // TODO: 테스트용 코드.
+//        iamportManager.deleteUnsubscribeCustomer("customer_1234");
+
         User user = userService.getCurrentUser();
-        // TODO: unsubscribe 로직 추가
         PaymentInfo paymentInfo = paymentService.findByUserId(user.getId());
         if (Objects.isNull(paymentInfo) || !paymentInfo.getEnabled()) {
             throw new PaymentException("잘못된 접근입니다.");
         }
         iamportManager.deleteUnsubscribeCustomer(paymentInfo.getCustomerUid());
         paymentService.disablePaymentInfo(user.getId());
+
         return ServerResponse.success();
     }
 
