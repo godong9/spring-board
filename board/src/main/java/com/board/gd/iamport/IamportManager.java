@@ -74,8 +74,32 @@ public class IamportManager {
         }
     }
 
-    //TODO: postPaymentRequest
-    public PaymentResultDto postPaymentRequest(PaymentRequestDto paymentRequestDto) {
-        return new PaymentResultDto();
+    public PaymentResultDto postPaymentCharge(ChargeRequestDto chargeRequestDto) {
+        //TODO: postPaymentCharge
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .scheme(iamportScheme)
+                .host(iamportHost)
+                .path("/subscribe/payments/again")
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        HttpEntity<String> entity = new HttpEntity<>(JsonUtils.toJson(chargeRequestDto), headers);
+
+        ResponseEntity<ChargeResponseDto> responseEntity = iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, ChargeResponseDto.class);
+        ChargeResponseDto chargeResponseDto = responseEntity.getBody();
+
+        PaymentResultDto paymentResultDto = chargeResponseDto.getResponse();
+        paymentResultDto.setCode(chargeResponseDto.getCode());
+        paymentResultDto.setMessage(chargeResponseDto.getMessage());
+
+        // TODO: PaymentResult 데이터 생성
+
+        if (chargeResponseDto.getCode() != 0) {
+            log.error("[결제 에러] userId: {}, message: {}", chargeRequestDto.getCustomerUid(), chargeResponseDto.getMessage());
+            throw new PaymentException("결제 중 에러 발생");
+        }
+
+        return paymentResultDto;
     }
 }
