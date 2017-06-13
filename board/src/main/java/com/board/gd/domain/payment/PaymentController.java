@@ -3,15 +3,14 @@ package com.board.gd.domain.payment;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PaymentException;
+import com.board.gd.iamport.ChargeRequestDto;
 import com.board.gd.iamport.IamportManager;
 import com.board.gd.iamport.SubscribeRequestDto;
 import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -32,6 +31,9 @@ public class PaymentController {
     @Autowired
     IamportManager iamportManager;
 
+    @Value("${charge.amount}")
+    private Double amount;
+
     /**
      * @api {post} /payments/subscribe Request Post payment subscribe
      * @apiName PostSubscribePayment
@@ -48,29 +50,64 @@ public class PaymentController {
      */
     @PostMapping("/payments/subscribe")
     public ServerResponse postPaymentSubscribe(@RequestBody @Valid SubscribeRequestDto subscribeRequestDto) {
-        User user = userService.getCurrentUser();
-//        subscribeRequestDto.setCustomer_uid(user.getId().toString());
-//        subscribeRequestDto.setCustomer_email(user.getEmail());
-        // TODO: 테스트 후 위 코드 주석 풀고 밑 코드 삭제 필요!
+        // TODO: 테스트용 코드.
         subscribeRequestDto.setCustomer_uid("customer_1234");
         subscribeRequestDto.setCustomer_email("godong9@gmail.com");
 
+//        User user = userService.getCurrentUser();
+//        subscribeRequestDto.setCustomer_uid(user.getId().toString());
+//        subscribeRequestDto.setCustomer_email(user.getEmail());
         PaymentInfoDto paymentInfoDto = iamportManager.postSubscribeCustomer(subscribeRequestDto);
-        paymentInfoDto.setUserId(user.getId());
-        paymentService.createPaymentInfo(paymentInfoDto);
+//        paymentInfoDto.setUserId(user.getId());
+//        paymentService.createPaymentInfo(paymentInfoDto);
+
         return ServerResponse.success();
     }
 
-    @PostMapping("/payments/unsubscribe")
-    public ServerResponse postPaymentUnsubscribe() {
+    /**
+     * @api {delete} /payments/subscribe Request Delete payment subscribe
+     * @apiName DeleteSubscribePayment
+     * @apiGroup Payment
+     * @apiDescription 현재 세션 유저의 구독 삭제
+     *
+     * @apiSuccess {Number} status 상태코드
+     *
+     * @apiUse BadRequestError
+     */
+    @DeleteMapping("/payments/subscribe")
+    public ServerResponse deletePaymentUnsubscribe() {
+        // TODO: 테스트용 코드.
+//        iamportManager.deleteUnsubscribeCustomer("customer_1234");
+
         User user = userService.getCurrentUser();
-        // TODO: unsubscribe 로직 추가
         PaymentInfo paymentInfo = paymentService.findByUserId(user.getId());
         if (Objects.isNull(paymentInfo) || !paymentInfo.getEnabled()) {
             throw new PaymentException("잘못된 접근입니다.");
         }
         iamportManager.deleteUnsubscribeCustomer(paymentInfo.getCustomerUid());
         paymentService.disablePaymentInfo(user.getId());
+
+        return ServerResponse.success();
+    }
+
+    @PostMapping("/payments/charge")
+    public ServerResponse postPaymentCharge() {
+        // TODO: 테스트용 코드.
+        ChargeRequestDto chargeRequestDto = new ChargeRequestDto();
+        chargeRequestDto.setCustomerUid("customer_1234");
+        chargeRequestDto.setAmount(100.0);
+        chargeRequestDto.setMerchantUid("10101");
+
+        // TODO: Payment 생성 후 payment_id를 merchant_uid로 세팅해서 전달
+//        User user = userService.getCurrentUser();
+//        ChargeRequestDto chargeRequestDto = new ChargeRequestDto();
+//        chargeRequestDto.setCustomerUid(user.getId().toString());
+//        chargeRequestDto.setAmount(amount);
+//        chargeRequestDto.setMerchantUid("10101");
+
+        PaymentResultDto paymentResultDto = iamportManager.postPaymentCharge(chargeRequestDto);
+        // TODO: paymentResult 확인해서 정상 결제일 경우 PAID ROLE 한달 연장
+
         return ServerResponse.success();
     }
 
