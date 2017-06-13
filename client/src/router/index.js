@@ -1,11 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/Main';
-import SignupIntro from '@/components/SignupIntro';
 import Terms from '@/components/Terms';
 import Signup from '@/components/Signup';
 import EmailSuccess from '@/components/EmailSuccess';
-import PaymentSignup from '@/components/PaymentSignup';
+import SignupStep2 from '@/components/SignupStep2';
 import NeedPurchase from '@/components/NeedPurchase';
 import CompletePurchase from '@/components/CompletePurchase';
 import UserUpdate from '@/components/UserUpdate';
@@ -28,11 +27,6 @@ export default new Router({
       path: '/',
       name: 'Main',
       component: Main,
-    },
-    {
-      path: '/signup-intro',
-      name: 'SignupIntro',
-      component: SignupIntro,
     },
     {
       path: '/terms',
@@ -59,10 +53,10 @@ export default new Router({
       },
     },
     {
-      path: '/payment-signup',
-      name: 'PaymentSignup',
+      path: '/signup-step2',
+      name: 'SignupStep2',
       components: {
-        default: PaymentSignup,
+        default: SignupStep2,
         nav: Nav,
       },
     },

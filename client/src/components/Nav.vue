@@ -38,7 +38,7 @@
     background-color: #d8d8d8;
     display: inline-block;
     vertical-align: middle;
-    margin: 0 0 0 10px;
+    margin: 0 0 5px  10px;
   }
   .title {
     display: inline-block;

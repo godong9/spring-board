@@ -1,13 +1,10 @@
 <template>
   <div class="email-success">
-    <div class="title-label">
-      인증 메일 발송 완료
-    </div>
-    <div class="mail-wrapper"><img class="mail" src="../assets/logo.png"></div>
-    <div class="check-mail-text">이메일을 확인 해주세요.</div>
-    <div class="mail-success-text"><span class="email">{{ email }}</span> 으로 인증 메일이 발송되었습니다.</div>
-    <div class="verify-message">
-      메일에 있는 <span class="verify">'인증하기' 버튼</span> 혹은<br> <span class="link">링크</span>를 클릭해 주세요.
+    <img class="mail" src="../assets/sending-mail-ic.png">
+    <div class="title-label">인증 메일 발송 완료!</div>
+    <div class="message-wrapper">
+      <span class="email">{{ email }}</span> 으로<br> 인증 메일이 발송되었습니다.
+      <br>메일에 있는 <span class="verify">'인증하기'</span> 버튼 혹은<br> <a v-bind:href="verifyLink"  class="link">링크를 클릭</a>해 주세요.
     </div>
     <div class="spam-check-message">메일을 받지 못하신 경우 스팸메일함을 확인해주세요.</div>
   </div>
@@ -18,6 +15,7 @@
     name: 'email-success',
     data() {
       this.email = this.$route.query.email;
+      this.verifyLink = this.$route.query.verifyLink;
       return {
         email: this.email,
       };
@@ -32,42 +30,40 @@
 <style scoped>
   .email-success {
     text-align: center;
-    padding: 0 10px 0 10px;
   }
   .title-label {
-    font-size: 4vw;
+    font-size: 18px;
     font-weight: bold;
-    margin: 10vw 0 0 0;
+    text-align: center;
+    color: #f0f2f5;
   }
-  .mail-wrapper {
-    margin: 25px 0 25px 0
+  .mail {
+    margin: 62px 0 14px 0;
+    width: 52px;
+    height: 70px;
+    object-fit: contain;
   }
-  .mail-wrapper .mail {
-    max-width : 30%;
+  .message-wrapper {
+    margin: 30px 30px 10px 30px;
+    padding: 23px 0 23px 0;
+    border-radius: 4px;
+    background-color: rgba(31, 37, 51, 0.6);
+    border: solid 1px #3b4251;
+    font-size: 14px;
+    color: #f6f6f6;
   }
-  .check-mail-text {
-    font-size: 5vw;
+  .email{
     font-weight: bold;
+    color: #ff595f;
   }
-  .mail-success-text {
-    margin: 4vw 0 0 0;
-  }
-  .mail-success-text .email{
-    color: red;
-  }
-  .verify-message {
-    margin: 10vw 0 0 0;
-    background-color: lightgray;
-    padding: 4vw;
-    font-size: 4vw;
-  }
-  .verify-message .link,
-  .verify-message .verify {
+  .message-wrapper .link,
+  .message-wrapper .verify {
     font-weight: bold;
+    text-decoration: none;
+    color: #f6f6f6;
   }
   .spam-check-message {
-    margin: 10vw 0 0 0;
-    font-size: 3vw;
-    color: gray;
+    font-size: 14px;
+    color: #636b7d;
   }
 </style>
