@@ -1,14 +1,13 @@
 <template>
   <div class="need-purchase">
-    <div class="dim">
-      <div class="modal">
-        <div class="modal-content">
-          <div class="purchase-img-wrapper"><img class="purchase-img" src="../assets/logo.png"></div>
-          <div class="notice">이용권 구매완료!</div>
-          <div class="describe">구매 이용권으로<br><span class="duration">2017.05.31 까지</span> 입장 가능하며 <br>매달 1일에 자동결제 됩니다.</div>
-          <div class="purchase-btn-wrapper">
-            <button>입장하기</button>
-          </div>
+    <div class="dim"></div>
+    <div class="modal">
+      <div class="modal-content">
+        <img class="purchase-img" src="../assets/ticket-complete.png">
+        <div class="notice">이용권 구매완료!</div>
+        <div class="describe">구매 이용권으로<br><span class="duration">2017.05.31 까지</span> 입장 가능하며 <br>매달 1일에 자동결제 됩니다.</div>
+        <div class="purchase-btn-wrapper">
+          <button>입장하기</button>
         </div>
       </div>
     </div>
@@ -35,56 +34,63 @@
     text-align: center;
   }
   .dim {
-    background-color: rgba(0,0,0,0.75);
-    top:0;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: solid 1px #979797;
     position: absolute;
-    display: table;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
   }
   .modal {
     text-align: center;
-    display:table-cell;
-    vertical-align: middle;
-    z-index: 100;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width:100%;
   }
   .modal .modal-content {
-    margin: 0 30px 0 30px;
-    background-color: white;
+    margin: 0 27px 0 27px;
+    background-color: #ffffff;
     opacity: 1;
-    border: 1px solid rgba(0,0,0,.2);
-    border-radius: 6px;
+    border: 1px solid;
+    border-radius: 5px;
   }
-  .purchase-img-wrapper {
-    width: 20vw;
-    height: 20vw;
-    display: inline-block;
-  }
-  .purchase-img-wrapper .purchase-img {
-    max-width: 100%;
+
+  .purchase-img {
+    margin: 40px 73px 14px 73px;
+    width: 174px;
+    height: 124px;
   }
   .notice {
-    font-size: 5vw;
+    font-size: 20px;
     font-weight: bold;
+    color: #3b4251;
   }
   .describe {
-    margin: 10px 0 10px 0;
-    color: lightgray;
-    font-size: 3vw;
+    margin:17px 54px 50px 54px;
+    font-size: 16px;
+    text-align: center;
+    color: #6f7782;
   }
   .duration {
-    color: red;
+    font-weight: bold;
+    color: #ff595f;
   }
   .purchase-btn-wrapper {
-    background-color: red;
-    height: 40px;
-    border: 1px solid rgba(0,0,0,.2);
-    border-radius: 6px;
+    background-color: #ff595f;
+    border-radius: 4px;
+    height: 60px;
   }
   .purchase-btn-wrapper button{
-    height: 100%;
-    color:white;
-    font-size: 3vw;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #f0f2f5;
+    border: none;
+    margin:0;
+    padding:0;
+    height: 60px;
+    background-color: #ff595f;
   }
 </style>

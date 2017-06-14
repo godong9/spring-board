@@ -1,9 +1,36 @@
 <template>
   <div class="terms">
+    <div class="title-label">
+      이용권 결제하기
+    </div>
+    <div class="tab-container">
+      <div class="tab1">1. 결제 정보 확인</div>
+      <div class="tab2">2. 카드 정보 입력</div>
+    </div>
+    <div class="info">
+      <div class="label">상품</div>
+      <div class="value">스탁블라인드 1개월 이용권</div>
+      <div class="line"></div>
+    </div>
+    <div class="info">
+      <div class="label">주문자</div>
+      <div class="value">올라라</div>
+      <div class="line"></div>
+    </div>
+    <div class="info">
+      <div class="label">결제금액</div>
+      <div class="value price">13,000</div>
+    </div>
     <div class="wrapper">
       <div class="service-agreement">
+        <div class="period-payment">
+          <span>30일마다 자동 결제 되는 서비스임을 확인했습니다.</span>
+          <input type="checkbox">
+        </div>
+      </div>
+      <div class="service-agreement">
         <div class="title">
-          <span>서비스 이용약관</span>
+          <span>서비스 이용약관에 동의합니다.</span>
           <input type="checkbox">
         </div>
         <div class="line"></div>
@@ -18,7 +45,7 @@
       </div>
       <div class="service-agreement">
         <div class="title">
-          <span>개인정보 처리방침</span>
+          <span>해지, 환불 규정을 확인했습니다.</span>
           <input type="checkbox">
         </div>
         <div class="line"></div>
@@ -32,20 +59,14 @@
           만 14세 미만 회원의 경우 회원가입 처리를 위한 법정 대리인
         </div>
       </div>
-      <div class="service-agreement">
-        <div class="title">
-          만<span class="red"> 14세 이상</span>입니다.
-          <input type="checkbox">
-        </div>
-      </div>
     </div>
-    <div class="button-agreement-wrapper"><button>동의합니다. </button></div>
+    <div class="button-agreement-wrapper"><button>카드 정보 입력하기</button></div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'terms',
+    name: 'payment-terms',
     data() {
       return {
         msg: 'Signup page Message',
@@ -63,6 +84,66 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .title-label {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #f0f2f5;
+    margin:36px 0 32px 0;
+  }
+  .tab-container {
+    font-size: 12px;
+    color: #3b4251;
+    position: relative;
+    height: 54px;
+    font-weight: bold;
+  }
+  .tab-container .tab1 {
+    position: absolute;
+    left: 75px;
+    color: #ff595f;
+    border-bottom: solid 1px #ff595f;
+    display: inline;
+    padding-bottom: 3px;
+    padding-right: 5px;
+  }
+  .tab-container .tab2 {
+    position: absolute;
+    right:75px;
+    border-bottom: solid 1px #3b4251;
+    display: inline;
+    padding-bottom: 3px;
+    padding-right: 5px;
+  }
+  .info {
+    font-size:14px;
+    position: relative;
+    height: 34px;
+    line-height: 22px;
+    margin: 20px 0 0 0;
+    font-weight: bold;
+    color:#969fa6;
+  }
+  .info .label {
+    position: absolute;
+    left: 29px;
+  }
+  .info .value {
+    position: absolute;
+    right: 29px;
+    color: #f6f6f6;
+  }
+  .info .price {
+    color: #ff595f;
+    font-size:18px;
+  }
+  .info .line {
+    position: absolute;
+    border: solid 1px rgba(60, 67, 81, 0.5);
+    bottom:0px;
+    left:15px;
+    right:15px;
+  }
   .wrapper {
     padding: 13px 15px 0px 15px;
     word-wrap: break-word;
@@ -73,7 +154,15 @@
     background-color: #ffffff;
     margin: 0 0 10px 0;
   }
-
+  .service-agreement .period-payment {
+    font-size: 16px;
+    color: #17181a;
+    padding: 11px 0 11px 15px;
+  }
+  .service-agreement .period-payment span{
+    display: inline-block;
+    width:220px;
+  }
   .service-agreement .title{
     font-size: 16px;
     color: #17181a;
@@ -96,10 +185,7 @@
     padding:15px 15px 7px 15px;
   }
   .button-agreement-wrapper{
-    position: fixed;
-    bottom: 20px;
-    left: 15px;
-    right: 15px;
+    padding: 3px 15px 26px 15px;
   }
   .button-agreement-wrapper button{
     font-size: 16px;
@@ -109,18 +195,9 @@
     height: 50px;
     border-radius: 4px;
     background-color: #ff595f;
-  }
-  .line {
-    border-top: solid 1px #d5d5d5;
-  }
-  .red {
     font-weight: bold;
-    color: #ff595f;
   }
-  input[type=checkbox]:after {
-    content: " ";
-    background-color: #9FFF9D;
-    display: inline-block;
-    visibility: visible;
+  .service-agreement .line {
+    border-top: solid 1px #d5d5d5;
   }
 </style>

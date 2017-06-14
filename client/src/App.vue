@@ -22,12 +22,11 @@ export default {
   }
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    /*font-size: 3.5vw;*/
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
     background-color: #151921;
-    /*height: 100%;*/
+    height: 100%;
     position:relative;
   }
 </style>

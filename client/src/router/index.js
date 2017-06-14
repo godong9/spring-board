@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/Main';
-import Terms from '@/components/Terms';
+import SignupTerms from '@/components/SignupTerms';
 import Signup from '@/components/Signup';
 import EmailSuccess from '@/components/EmailSuccess';
 import SignupStep2 from '@/components/SignupStep2';
 import NeedPurchase from '@/components/NeedPurchase';
 import CompletePurchase from '@/components/CompletePurchase';
+import PaymentTerms from '@/components/PaymentTerms';
 import UserUpdate from '@/components/UserUpdate';
 import ResetPassword from '@/components/ResetPassword';
 import ChangePassword from '@/components/ChangePassword';
@@ -29,10 +30,10 @@ export default new Router({
       component: Main,
     },
     {
-      path: '/terms',
-      name: 'Terms',
+      path: '/signup-terms',
+      name: 'SignupTerms',
       components: {
-        default: Terms,
+        default: SignupTerms,
         nav: Nav,
       },
     },
@@ -73,6 +74,14 @@ export default new Router({
       name: 'CompletePurchase',
       components: {
         default: CompletePurchase,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/payment-terms',
+      name: 'PaymentTerms',
+      components: {
+        default: PaymentTerms,
         nav: Nav,
       },
     },
