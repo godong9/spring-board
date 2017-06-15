@@ -139,7 +139,7 @@
   }
   .info .line {
     position: absolute;
-    border: solid 1px rgba(60, 67, 81, 0.5);
+    border-top: solid 1px rgba(60, 67, 81, 0.5);
     bottom:0px;
     left:15px;
     right:15px;

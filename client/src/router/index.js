@@ -8,6 +8,7 @@ import SignupStep2 from '@/components/SignupStep2';
 import NeedPurchase from '@/components/NeedPurchase';
 import CompletePurchase from '@/components/CompletePurchase';
 import PaymentTerms from '@/components/PaymentTerms';
+import Payment from '@/components/Payment';
 import UserUpdate from '@/components/UserUpdate';
 import ResetPassword from '@/components/ResetPassword';
 import ChangePassword from '@/components/ChangePassword';
@@ -82,6 +83,14 @@ export default new Router({
       name: 'PaymentTerms',
       components: {
         default: PaymentTerms,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/payment',
+      name: 'Payment',
+      components: {
+        default: Payment,
         nav: Nav,
       },
     },
