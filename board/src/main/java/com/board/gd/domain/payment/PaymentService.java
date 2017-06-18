@@ -1,6 +1,7 @@
 package com.board.gd.domain.payment;
 
 import com.board.gd.domain.user.User;
+import com.board.gd.domain.user.UserService;
 import com.board.gd.iamport.ChargeRequestDto;
 import com.board.gd.iamport.IamportManager;
 import com.board.gd.iamport.SubscribeRequestDto;
@@ -30,6 +31,9 @@ public class PaymentService {
 
     @Autowired
     private PaymentResultRepository paymentResultRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     IamportManager iamportManager;
@@ -77,11 +81,12 @@ public class PaymentService {
 
     @Transactional(readOnly = false)
     public void requestPayment(PaymentRequestDto paymentRequestDto) {
+        Long userId = paymentRequestDto.getUserId();
         String customerUid = paymentRequestDto.getUserId().toString();
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setName(chargeName);
         paymentDto.setAmount(chargeAmount);
-        paymentDto.setUserId(paymentRequestDto.getUserId());
+        paymentDto.setUserId(userId);
         paymentDto.setCustomerUid(customerUid);
 
         Payment payment = createPayment(paymentDto);
@@ -97,7 +102,7 @@ public class PaymentService {
         createPaymentResult(paymentResultDto);
 
         if (paymentResultDto.getPaymentStatus() == PaymentStatus.SUCCESS) {
-            // TODO: paymentResult 확인해서 정상 결제일 경우 PAID ROLE 한달 연장
+            userService.upsertPaidRole(userId);
         }
     }
 

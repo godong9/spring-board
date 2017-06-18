@@ -34,6 +34,7 @@ public class Payment {
     @Column(name = "amount")
     private Double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private PaymentStatus status;
 
