@@ -10,7 +10,7 @@
       상장사 직원임을 판별 할 수있는 최소한의 정보로 <br>회사 이메일을 활용합니다.
     </div>
     <div class="confirm-email-wrapper" v-bind:class="classObject" v-on:click="signup"><button>인증 메일 받기</button></div>
-    <div class="sign-up-assistant"> - 회원가입이 안되시나요? <a href="mailto:stockblind.kr@gmail.com">문의하기</a></div>
+    <div class="sign-up-assistant">회원가입이 안되시나요? <a href="mailto:stockblind.kr@gmail.com">문의하기</a></div>
 
   </div>
 </template>

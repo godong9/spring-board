@@ -8,7 +8,7 @@
         <div class="describe">서비스를 계속 이용하시려면<br>이용권을 구매해주세요.</div>
         <div class="fee">(서비스 이용료:10,000/월)</div>
         <div class="purchase-btn-wrapper">
-          <button>Paypal로 결제하기</button>
+          <button>이용권 구매</button>
         </div>
       </div>
     </div>

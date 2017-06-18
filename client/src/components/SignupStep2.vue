@@ -1,7 +1,7 @@
 <template>
   <div class="signup-step2">
     <div class="title-label">이메일 인증 완료</div>
-    <div class="description"> 닉네임과 비밀번호를 설해주세요</div>
+    <div class="description"> 닉네임과 비밀번호를 설정해주세요</div>
     <div class="input-email-wrapper">
       <input type="text" placeholder="회사 이메일을 입력 해주세요.">
     </div>
@@ -44,7 +44,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .title-label {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     color: #f0f2f5;

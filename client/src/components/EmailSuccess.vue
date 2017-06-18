@@ -4,7 +4,7 @@
     <div class="title-label">인증 메일 발송 완료!</div>
     <div class="message-wrapper">
       <span class="email">{{ email }}</span> 으로<br> 인증 메일이 발송되었습니다.
-      <br>메일에 있는 <span class="verify">'인증하기'</span> 버튼 혹은<br> <a v-bind:href="verifyLink"  class="link">링크를 클릭</a>해 주세요.
+      <br>메일에 있는 <span class="verify">'인증하기'</span> 버튼 혹은<br> <a v-bind:href="verifyLink"  class="link">링크를 클릭</a>해주세요.
     </div>
     <div class="spam-check-message">메일을 받지 못하신 경우 스팸메일함을 확인해주세요.</div>
   </div>
@@ -50,7 +50,7 @@
     background-color: rgba(31, 37, 51, 0.6);
     border: solid 1px #3b4251;
     font-size: 14px;
-    color: #f6f6f6;
+    color: #d5d5d5;
   }
   .email{
     font-weight: bold;

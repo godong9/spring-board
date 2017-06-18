@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="button-agreement-wrapper"><button>동의합니다. </button></div>
+    <div class="button-agreement-wrapper"><button>동의합니다 </button></div>
   </div>
 </template>
 
@@ -109,6 +109,7 @@
     height: 50px;
     border-radius: 4px;
     background-color: #ff595f;
+    font-weight: bold;
   }
   .line {
     border-top: solid 1px #d5d5d5;

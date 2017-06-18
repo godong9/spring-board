@@ -60,7 +60,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .login {
-
+    background-color: #151921;
   }
   .login .title-label {
     margin: 30px 0 19px 0;
@@ -103,6 +103,7 @@
     height: 50px;
     border-radius: 4px;
     background-color: #ff595f;
+    font-weight: bold;
   }
   .signup-description {
     text-align: center;

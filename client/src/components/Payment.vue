@@ -74,7 +74,7 @@
     <div class="line"></div>
     <div class="info">
       <div class="label">결제금액</div>
-      <div class="value price">13,000</div>
+      <div class="value price">13,000원</div>
     </div>
     <div class="button-payment-wrapper"><button>결제하기</button></div>
   </div>

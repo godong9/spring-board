@@ -19,7 +19,7 @@
     </div>
     <div class="info">
       <div class="label">결제금액</div>
-      <div class="value price">13,000</div>
+      <div class="value price">13,000원</div>
     </div>
     <div class="wrapper">
       <div class="service-agreement">

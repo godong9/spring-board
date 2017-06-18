@@ -38,9 +38,9 @@
   .back {
     display: inline-block;
     line-height: 50px;
-    float:left;
+    position: absolute;
     width: 12px;
-    margin: 0 0 0 12px;
+    left: 12px;
     font-size: 18px;
     font-weight: bold;
   }

@@ -20,7 +20,7 @@
             <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
             <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
             <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">#카카오</div>
+            <div class="company-info">카카오톡</div>
           </div>
         </div>
         <div class="line"></div>
@@ -41,7 +41,7 @@
             <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
             <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
             <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">#카카오</div>
+            <div class="company-info">카카오톡</div>
           </div>
         </div>
         <div class="line"></div>
@@ -62,7 +62,7 @@
             <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
             <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
             <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">#카카오</div>
+            <div class="company-info">카카오톡</div>
           </div>
         </div>
         <div class="line"></div>
@@ -182,8 +182,9 @@
   .more-btn {
     text-align: center;
     font-size: 14px;
-    line-height: 70px;
-    background-color: #151921;
+    margin: 20px 0 18px 0;
+    font-weight: bold;
+    color: #969fa6;
   }
   .license-info {
     margin: 0 16px 0 16px;
@@ -206,6 +207,7 @@
   }
   .button-wrapper {
     margin: 30px 16px 30px 16px;
+    font-weight: bold;
   }
   .license-cancel {
     width: 160px;

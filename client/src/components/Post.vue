@@ -7,13 +7,13 @@
     </div>
     <div class="bar">
       <div class="search-bar">
-        <input type="text" placeholder="#종목추천"><i class="delete-icon"></i><i class="search-icon"></i>
+        <input type="text" placeholder="종목추가"><i class="delete-icon"></i><i class="search-icon"></i>
       </div>
     </div>
-    <div>
-      <input class="title" type="text" placeholder="제목을 입력하세요 (50자 이내)">
-      <div class="line"></div>
+    <div class="post-title-wrapper">
+      <input class="post-title" type="text" placeholder="제목을 입력하세요 (50자 이내)">
     </div>
+    <div class="line"></div>
     <div class="content" contenteditable="true" placeholder="내용을 입력하세요"></div>
   </div>
 </template>
@@ -31,6 +31,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .post {
+    background-color: #ffffff;
+    min-height: 110vh;
+  }
   .post-header {
     height: 50px;
     background-color: #ffffff;
@@ -123,39 +127,45 @@
     line-height: 20px;
     color:#c2c7cb;
   }
-  .title {
-    width: 340px;
+  .post-title-wrapper {
     height: 56px;
     background-color: #ffffff;
     padding:0 16px 0 16px;
   }
-  .title::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  .post-title {
+    width:100%;
+    height: 22px;
+    font-size: 15px;
+    margin:18px 0 16px 0;
+    padding:0;
+    border:none;
+  }
+  .post-title::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     font-size:15px;
     line-height: 22px;
     color:#c2c7cb;
   }
-  .title::-moz-placeholder { /* Firefox 19+ */
+  .post-title::-moz-placeholder { /* Firefox 19+ */
     font-size:15px;
     line-height: 22px;
     color:#c2c7cb;
   }
-  .title:-ms-input-placeholder { /* IE 10+ */
+  .post-title:-ms-input-placeholder { /* IE 10+ */
     font-size:15px;
     line-height: 22px;
     color:#c2c7cb;
   }
-  .title:-moz-placeholder { /* Firefox 18- */
+  .post-title:-moz-placeholder { /* Firefox 18- */
     font-size:15px;
     line-height: 22px;
     color:#c2c7cb;
   }
   .line {
-    width: 375px;
-    border: solid 1px #ececec;
+    width: 100%;
+    border-top: solid 1px #ececec;
   }
   .content {
     padding: 18px 16px 0 16px;
-    height: 90vh;
   }
 
   [contenteditable=true]:empty:before{

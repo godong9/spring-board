@@ -38,7 +38,7 @@
       </div>
       <div class="write-area">
         <textarea placeholder="댓글을 입력하세요 (최대 300자)"></textarea>
-        <div class="word-count-wrapper">300 / <span class="count">0</span></div>
+        <div class="word-count-wrapper"> <span class="count">0</span> / 300</div>
       </div>
       <div class="write-btn-wrapper"><button>등록</button></div>
     </div>
@@ -122,7 +122,7 @@
     float: right;
   }
   .content-title .line {
-    border: solid 1px #191d26;
+    border-top: solid 1px #191d26;
     margin: 10px 0 0 0;
   }
   .content-wrapper {
@@ -176,21 +176,21 @@
     font-size: 14px;
     line-height: 26px;
     float: right;
+    color:#c2c7cb;
   }
   .content-info .text-btn.report{
     color: #ff595f;
     margin: 0 26px 0 0;
   }
   .line {
-    border: solid 1px #191d26;
+    border-top: solid 1px #191d26;
   }
   .write-wrapper {
-    padding: 0px 16px 0 16px;
+    padding: 17px 16px 0 16px;
     height: 190px;
     background-color: #12161d;
   }
   .comment-label {
-    margin: 17px 0 0 0;
     height: 15px;
     font-size: 14px;
     font-weight: bold;
@@ -202,16 +202,19 @@
   }
   .write-area {
     position: relative;
+    left:0;
+    right:0;
   }
   .write-area textarea{
     height: 86px;
-    width: 98%;
+    width: 100%;
     margin: 15px 0 0 0;
     background-color: rgba(31, 37, 51, 0.88);
     border-radius: 4px;
     resize: none;
     color:#c2c7cb;
     font-size: 14px;
+    border: none;
   }
   ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     font-size:14px;
@@ -249,10 +252,11 @@
   }
   .write-btn-wrapper {
     margin: 12px 0 15px 0;
+    float:right;
   }
   .write-btn-wrapper button {
-    float:right;
-    color: white;
+    color: #ffffff;
+    font-weight: bold;
     width: 60px;
     height: 30px;
     border-radius: 4px;
@@ -264,7 +268,7 @@
   }
   .comment-item {
     background-color: #151921;
-    padding: 0 18px 18px 18px;
+    padding: 15px 20px 13px 20px;
   }
   .comment-item .comment-title{
     height: 18px;

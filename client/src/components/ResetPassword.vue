@@ -77,5 +77,6 @@
     height: 50px;
     border-radius: 4px;
     background-color: #ff595f;
+    font-weight: bold;
   }
 </style>

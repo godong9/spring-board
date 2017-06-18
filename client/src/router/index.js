@@ -20,6 +20,11 @@ import Nav from '@/components/Nav';
 import TitleHeader from '@/components/TitleHeader';
 import Footer from '@/components/Footer';
 import MyPage from '@/components/MyPage';
+import Withdraw from '@/components/Withdraw';
+import Cancel from '@/components/Cancel';
+import CancelComplete from '@/components/CancelComplete';
+import Terms from '@/components/Terms';
+import Privacy from '@/components/Privacy';
 
 Vue.use(Router);
 
@@ -155,6 +160,46 @@ export default new Router({
         default: MyPage,
         nav: TitleHeader,
         footer: Footer,
+      },
+    },
+    {
+      path: '/mypage/:id/withdraw',
+      name: 'Withdraw',
+      components: {
+        default: Withdraw,
+        nav: TitleHeader,
+      },
+    },
+    {
+      path: '/mypage/:id/cancel',
+      name: 'Cancel',
+      components: {
+        default: Cancel,
+        nav: TitleHeader,
+      },
+    },
+    {
+      path: '/mypage/:id/cancel-complete',
+      name: 'CancelComplete',
+      components: {
+        default: CancelComplete,
+        nav: TitleHeader,
+      },
+    },
+    {
+      path: '/terms',
+      name: 'Terms',
+      components: {
+        default: Terms,
+        nav: Nav,
+      },
+    },
+    {
+      path: '/privacy',
+      name: 'Privacy',
+      components: {
+        default: Privacy,
+        nav: Nav,
       },
     },
   ],
