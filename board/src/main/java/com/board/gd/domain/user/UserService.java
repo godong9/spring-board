@@ -241,19 +241,6 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    @Transactional(readOnly = false)
-    public void updatePaidUser(Long id) {
-        User user = findOne(id);
-        if (Objects.isNull(user)) {
-            throw new UserException("User not exist!");
-        }
-        // TODO: 구매 여부 API로 검증!
-
-        LocalDateTime expiredLdt = LocalDateTime.now().plusDays(31);
-        Date expiredDate = Date.from(expiredLdt.atZone(ZoneId.systemDefault()).toInstant());
-        createUserRole(user, UserRoleType.PAID, expiredDate);
-    }
-
     public void setAuthentication(Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
