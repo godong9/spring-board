@@ -4,6 +4,7 @@ import com.board.gd.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "payment_infos")
+@EntityListeners({AuditingEntityListener.class})
 public class PaymentInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

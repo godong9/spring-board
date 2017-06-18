@@ -1,9 +1,6 @@
 package com.board.gd.domain.payment;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * Created by godong9 on 2017. 6. 4..
@@ -14,8 +11,8 @@ public class PaymentResultDto {
     private String impUid;
     private String merchantUid;
     private String payMethod;
-    private String pg_provider;
-    private String pg_tid;
+    private String pgProvider;
+    private String pgTid;
     private String applyNum;
     private String cardName;
     private String name;
@@ -23,10 +20,9 @@ public class PaymentResultDto {
     private String status;
     private String failReason;
     private String receiptUrl;
-
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    private Date paidAt;
+    private String paidAt; // 타임스탬프라 String으로 받음
 
     private Integer code;
     private String message;
+    private PaymentStatus paymentStatus;
 }

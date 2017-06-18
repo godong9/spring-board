@@ -3,7 +3,6 @@ package com.board.gd.domain.payment;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PaymentException;
-import com.board.gd.iamport.ChargeRequestDto;
 import com.board.gd.iamport.IamportManager;
 import com.board.gd.iamport.SubscribeRequestDto;
 import com.board.gd.response.ServerResponse;
@@ -51,15 +50,12 @@ public class PaymentController {
     @PostMapping("/payments/subscribe")
     public ServerResponse postPaymentSubscribe(@RequestBody @Valid SubscribeRequestDto subscribeRequestDto) {
         // TODO: 테스트용 코드.
-        subscribeRequestDto.setCustomer_uid("customer_1234");
-        subscribeRequestDto.setCustomer_email("godong9@gmail.com");
+        User user = User.builder().id(111L).email("gd").build();
 
 //        User user = userService.getCurrentUser();
-//        subscribeRequestDto.setCustomer_uid(user.getId().toString());
-//        subscribeRequestDto.setCustomer_email(user.getEmail());
-        PaymentInfoDto paymentInfoDto = iamportManager.postSubscribeCustomer(subscribeRequestDto);
-//        paymentInfoDto.setUserId(user.getId());
-//        paymentService.createPaymentInfo(paymentInfoDto);
+        subscribeRequestDto.setCustomer_uid(user.getId().toString());
+        subscribeRequestDto.setCustomer_email(user.getEmail());
+        paymentService.requestSubscribe(subscribeRequestDto);
 
         return ServerResponse.success();
     }
@@ -75,38 +71,26 @@ public class PaymentController {
      * @apiUse BadRequestError
      */
     @DeleteMapping("/payments/subscribe")
-    public ServerResponse deletePaymentUnsubscribe() {
+    public ServerResponse deletePaymentSubscribe() {
         // TODO: 테스트용 코드.
-//        iamportManager.deleteUnsubscribeCustomer("customer_1234");
+        User user = User.builder().id(111L).build();
 
-        User user = userService.getCurrentUser();
-        PaymentInfo paymentInfo = paymentService.findByUserId(user.getId());
+//        User user = userService.getCurrentUser();
+        PaymentInfo paymentInfo = paymentService.findPaymentInfoByUserId(user.getId());
         if (Objects.isNull(paymentInfo) || !paymentInfo.getEnabled()) {
             throw new PaymentException("잘못된 접근입니다.");
         }
-        iamportManager.deleteUnsubscribeCustomer(paymentInfo.getCustomerUid());
-        paymentService.disablePaymentInfo(user.getId());
+        paymentService.requestUnsubscribe(paymentInfo.getCustomerUid());
 
         return ServerResponse.success();
     }
 
     @PostMapping("/payments/charge")
     public ServerResponse postPaymentCharge() {
-        // TODO: 테스트용 코드.
-        ChargeRequestDto chargeRequestDto = new ChargeRequestDto();
-        chargeRequestDto.setCustomerUid("customer_1234");
-        chargeRequestDto.setAmount(100.0);
-        chargeRequestDto.setMerchantUid("10101");
+        PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
+        paymentRequestDto.setUserId(111L);
 
-        // TODO: Payment 생성 후 payment_id를 merchant_uid로 세팅해서 전달
-//        User user = userService.getCurrentUser();
-//        ChargeRequestDto chargeRequestDto = new ChargeRequestDto();
-//        chargeRequestDto.setCustomerUid(user.getId().toString());
-//        chargeRequestDto.setAmount(amount);
-//        chargeRequestDto.setMerchantUid("10101");
-
-        PaymentResultDto paymentResultDto = iamportManager.postPaymentCharge(chargeRequestDto);
-        // TODO: paymentResult 확인해서 정상 결제일 경우 PAID ROLE 한달 연장
+        paymentService.requestPayment(paymentRequestDto);
 
         return ServerResponse.success();
     }
