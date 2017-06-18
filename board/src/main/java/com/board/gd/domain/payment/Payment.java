@@ -4,6 +4,7 @@ import com.board.gd.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "payments")
+@EntityListeners({AuditingEntityListener.class})
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +34,9 @@ public class Payment {
     @Column(name = "amount")
     private Double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private PaymentStatus status;
-
-    @Column(name = "imp_uid")
-    private String impUid;
-
-    @Column(name = "merchant_uid")
-    private String merchantUid;
 
     @Column(name = "customer_uid")
     private String customerUid;

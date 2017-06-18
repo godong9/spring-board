@@ -39,6 +39,9 @@ public class UserService implements UserDetailsService {
     @Value("${server.host}")
     private String serverHost;
 
+    @Value("${charge.period}")
+    private int chargePeriod;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -75,6 +78,22 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = false)
+    public void upsertPaidRole(Long userId) {
+        User user = userRepository.findOne(userId);
+        UserRole paidRole = userRoleRepository.findByUserId(userId).stream()
+                .filter(userRole -> userRole.getRole() == UserRoleType.PAID)
+                .findFirst().orElse(null);
+
+        LocalDateTime expiredLdt = LocalDateTime.now().plusDays(chargePeriod);
+        Date expiredDate = Date.from(expiredLdt.atZone(ZoneId.systemDefault()).toInstant());
+        if (!Objects.isNull(paidRole)) {
+            updateUserRole(paidRole, expiredDate);
+        } else {
+            createUserRole(user, UserRoleType.PAID, expiredDate);
+        }
+    }
+
+    @Transactional(readOnly = false)
     public UserRole createUserRole(User user, UserRoleType userRole, Date expiredAt) {
         if (Objects.isNull(user)) {
             throw new UserException("Fail createUserRole!");
@@ -84,6 +103,12 @@ public class UserService implements UserDetailsService {
                 .user(user)
                 .expiredAt(expiredAt)
                 .build());
+    }
+
+    @Transactional(readOnly = false)
+    public void updateUserRole(UserRole userRole, Date expiredAt) {
+        userRole.setExpiredAt(expiredAt);
+        userRoleRepository.save(userRole);
     }
 
     @Transactional(readOnly = false)
@@ -214,19 +239,6 @@ public class UserService implements UserDetailsService {
         user.setEnabled(true);
         userRepository.save(user);
         return user;
-    }
-
-    @Transactional(readOnly = false)
-    public void updatePaidUser(Long id) {
-        User user = findOne(id);
-        if (Objects.isNull(user)) {
-            throw new UserException("User not exist!");
-        }
-        // TODO: 구매 여부 API로 검증!
-
-        LocalDateTime expiredLdt = LocalDateTime.now().plusDays(31);
-        Date expiredDate = Date.from(expiredLdt.atZone(ZoneId.systemDefault()).toInstant());
-        createUserRole(user, UserRoleType.PAID, expiredDate);
     }
 
     public void setAuthentication(Authentication authentication) {

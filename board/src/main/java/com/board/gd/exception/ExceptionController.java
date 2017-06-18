@@ -35,9 +35,8 @@ import java.util.stream.Collectors;
 public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ServerResponse> handleException(Exception exception) throws Exception {
-        String message = exception.getMessage();
         log.error("[Exception] {}\n{}", exception.getMessage(), Throwables.getStackTraceAsString(exception));
-        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error());
     }
 
     @ExceptionHandler(UserException.class)

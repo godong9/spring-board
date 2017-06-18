@@ -3,8 +3,6 @@ package com.board.gd.domain.payment;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PaymentException;
-import com.board.gd.iamport.ChargeRequestDto;
-import com.board.gd.iamport.IamportManager;
 import com.board.gd.iamport.SubscribeRequestDto;
 import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +26,6 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    IamportManager iamportManager;
-
     @Value("${charge.amount}")
     private Double amount;
 
@@ -50,16 +45,17 @@ public class PaymentController {
      */
     @PostMapping("/payments/subscribe")
     public ServerResponse postPaymentSubscribe(@RequestBody @Valid SubscribeRequestDto subscribeRequestDto) {
-        // TODO: 테스트용 코드.
-        subscribeRequestDto.setCustomer_uid("customer_1234");
-        subscribeRequestDto.setCustomer_email("godong9@gmail.com");
+        User user = userService.getCurrentUser();
 
-//        User user = userService.getCurrentUser();
-//        subscribeRequestDto.setCustomer_uid(user.getId().toString());
-//        subscribeRequestDto.setCustomer_email(user.getEmail());
-        PaymentInfoDto paymentInfoDto = iamportManager.postSubscribeCustomer(subscribeRequestDto);
-//        paymentInfoDto.setUserId(user.getId());
-//        paymentService.createPaymentInfo(paymentInfoDto);
+        // 정기결제 등록
+        subscribeRequestDto.setCustomer_uid(user.getId().toString());
+        subscribeRequestDto.setCustomer_email(user.getEmail());
+        paymentService.requestSubscribe(subscribeRequestDto);
+
+        // 등록 후 바로 결제 요청
+        PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
+        paymentRequestDto.setUserId(user.getId());
+        paymentService.requestPayment(paymentRequestDto);
 
         return ServerResponse.success();
     }
@@ -75,56 +71,40 @@ public class PaymentController {
      * @apiUse BadRequestError
      */
     @DeleteMapping("/payments/subscribe")
-    public ServerResponse deletePaymentUnsubscribe() {
-        // TODO: 테스트용 코드.
-//        iamportManager.deleteUnsubscribeCustomer("customer_1234");
-
+    public ServerResponse deletePaymentSubscribe() {
         User user = userService.getCurrentUser();
-        PaymentInfo paymentInfo = paymentService.findByUserId(user.getId());
+        PaymentInfo paymentInfo = paymentService.findPaymentInfoByUserId(user.getId());
         if (Objects.isNull(paymentInfo) || !paymentInfo.getEnabled()) {
             throw new PaymentException("잘못된 접근입니다.");
         }
-        iamportManager.deleteUnsubscribeCustomer(paymentInfo.getCustomerUid());
-        paymentService.disablePaymentInfo(user.getId());
-
-        return ServerResponse.success();
-    }
-
-    @PostMapping("/payments/charge")
-    public ServerResponse postPaymentCharge() {
-        // TODO: 테스트용 코드.
-        ChargeRequestDto chargeRequestDto = new ChargeRequestDto();
-        chargeRequestDto.setCustomerUid("customer_1234");
-        chargeRequestDto.setAmount(100.0);
-        chargeRequestDto.setMerchantUid("10101");
-
-        // TODO: Payment 생성 후 payment_id를 merchant_uid로 세팅해서 전달
-//        User user = userService.getCurrentUser();
-//        ChargeRequestDto chargeRequestDto = new ChargeRequestDto();
-//        chargeRequestDto.setCustomerUid(user.getId().toString());
-//        chargeRequestDto.setAmount(amount);
-//        chargeRequestDto.setMerchantUid("10101");
-
-        PaymentResultDto paymentResultDto = iamportManager.postPaymentCharge(chargeRequestDto);
-        // TODO: paymentResult 확인해서 정상 결제일 경우 PAID ROLE 한달 연장
+        paymentService.requestUnsubscribe(paymentInfo.getCustomerUid());
 
         return ServerResponse.success();
     }
 
     /**
-     * @api {get} /payments/charge Request Get payment charge
-     * @apiName GetChargePayment
-     * @apiDescription 매일 12시에 결제 만료 예정인 유저들 재결제 요청
+     * @api {get} /payments/charge/list Request Get payment charge list
+     * @apiName GetChargePaymentList
+     * @apiDescription 매일 오전 11시에 결제 만료 예정인 유저들 재결제 요청
      * @apiGroup Payment
      *
      * @apiSuccess {Number} status 상태코드
      *
      * @apiUse BadRequestError
      */
-    @GetMapping("/payments/charge")
-    public ServerResponse getPaymentCharge() {
+    @GetMapping("/payments/charges")
+    public ServerResponse getPaymentChargeList() {
+
         // TODO: UserRole에서 PAID이고 만료일이 24시간보다 적게 남은 것들 가져와서
         // TODO: PaymentInfo에 enabled true인지 확인 후 Payment 생성해서 결제 요청
+
+
+
+        PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
+        paymentRequestDto.setUserId(111L);
+
+        paymentService.requestPayment(paymentRequestDto);
+
         return ServerResponse.success();
     }
 }

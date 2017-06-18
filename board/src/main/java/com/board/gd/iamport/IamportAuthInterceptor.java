@@ -75,7 +75,6 @@ public class IamportAuthInterceptor implements ClientHttpRequestInterceptor {
     }
 
     private String auth() {
-
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
                 .scheme(iamportScheme)
                 .host(iamportHost)

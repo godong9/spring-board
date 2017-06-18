@@ -1,8 +1,8 @@
 package com.board.gd.iamport;
 
 import com.board.gd.domain.payment.PaymentInfoDto;
-import com.board.gd.domain.payment.PaymentRequestDto;
 import com.board.gd.domain.payment.PaymentResultDto;
+import com.board.gd.domain.payment.PaymentStatus;
 import com.board.gd.exception.PaymentException;
 import com.board.gd.utils.JsonUtils;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -46,6 +46,7 @@ public class IamportManager {
 
         ResponseEntity<SubscribeResponseDto> responseEntity = iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, SubscribeResponseDto.class);
         SubscribeResponseDto subscribeResponseDto = responseEntity.getBody();
+        log.info("[Iamport] 카드등록 응답 - code: {}, message: {}", subscribeResponseDto.getCode(), subscribeResponseDto.getMessage());
         PaymentInfoDto paymentInfoDto = subscribeResponseDto.getResponse();
 
         if (Objects.isNull(paymentInfoDto)) {
@@ -75,7 +76,6 @@ public class IamportManager {
     }
 
     public PaymentResultDto postPaymentCharge(ChargeRequestDto chargeRequestDto) {
-        //TODO: postPaymentCharge
         UriComponents uriComponents = UriComponentsBuilder.newInstance()
                 .scheme(iamportScheme)
                 .host(iamportHost)
@@ -88,16 +88,21 @@ public class IamportManager {
 
         ResponseEntity<ChargeResponseDto> responseEntity = iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, ChargeResponseDto.class);
         ChargeResponseDto chargeResponseDto = responseEntity.getBody();
+        log.info("[Iamport] 결제응답 - code: {}, message: {}", chargeResponseDto.getCode(), chargeResponseDto.getMessage());
 
         PaymentResultDto paymentResultDto = chargeResponseDto.getResponse();
+        if (Objects.isNull(paymentResultDto)) {
+            paymentResultDto = new PaymentResultDto();
+            paymentResultDto.setMerchantUid(chargeRequestDto.getMerchantUid());
+        }
         paymentResultDto.setCode(chargeResponseDto.getCode());
         paymentResultDto.setMessage(chargeResponseDto.getMessage());
 
-        // TODO: PaymentResult 데이터 생성
-
-        if (chargeResponseDto.getCode() != 0) {
+        if (chargeResponseDto.getCode() != 0) { // 결제 실패
             log.error("[결제 에러] userId: {}, message: {}", chargeRequestDto.getCustomerUid(), chargeResponseDto.getMessage());
-            throw new PaymentException("결제 중 에러 발생");
+            paymentResultDto.setPaymentStatus(PaymentStatus.FAIL);
+        } else {
+            paymentResultDto.setPaymentStatus(PaymentStatus.SUCCESS);
         }
 
         return paymentResultDto;

@@ -274,16 +274,4 @@ public class UserController {
         User user = userService.updateUserData(modelMapper.map(updateForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
-
-    /**
-     * @api {get}
-     * @apiName GetUserPaid
-     * @apiGroup User
-     *
-     */
-    @GetMapping("/users/paid")
-    public ServerResponse getUserPaid(@RequestParam("id") Long id) {
-        userService.updatePaidUser(id);
-        return ServerResponse.success();
-    }
 }
