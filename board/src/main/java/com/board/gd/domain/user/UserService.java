@@ -77,6 +77,14 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    public List<Long> findRolesExpiredSoon() {
+        LocalDateTime expiredCriteriaLdt = LocalDateTime.now().plusDays(1);
+        Date expiredCriteriaDate = Date.from(expiredCriteriaLdt.atZone(ZoneId.systemDefault()).toInstant());
+        return userRoleRepository.findByExpiredAtBefore(expiredCriteriaDate).stream()
+                .map(userRole -> userRole.getUser().getId())
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = false)
     public void upsertPaidRole(Long userId) {
         User user = userRepository.findOne(userId);

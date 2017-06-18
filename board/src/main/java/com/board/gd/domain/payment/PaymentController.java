@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Created by godong9 on 2017. 5. 14..
@@ -83,27 +85,24 @@ public class PaymentController {
     }
 
     /**
-     * @api {get} /payments/charge/list Request Get payment charge list
-     * @apiName GetChargePaymentList
-     * @apiDescription 매일 오전 11시에 결제 만료 예정인 유저들 재결제 요청
+     * @api {get} /admin/payments/charge Request Get payment charge list by admin
+     * @apiName GetChargePaymentListByAdmin
+     * @apiDescription 어드민에 의해 매일 오전 11시에 결제 만료 예정인 유저들 재결제 요청
      * @apiGroup Payment
      *
      * @apiSuccess {Number} status 상태코드
      *
      * @apiUse BadRequestError
      */
-    @GetMapping("/payments/charges")
+    @GetMapping("/admin/payments/charge/list")
     public ServerResponse getPaymentChargeList() {
+        List<Long> userIdList = userService.findRolesExpiredSoon();
+        userIdList.forEach(userId -> {
+            PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
+            paymentRequestDto.setUserId(userId);
 
-        // TODO: UserRole에서 PAID이고 만료일이 24시간보다 적게 남은 것들 가져와서
-        // TODO: PaymentInfo에 enabled true인지 확인 후 Payment 생성해서 결제 요청
-
-
-
-        PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
-        paymentRequestDto.setUserId(111L);
-
-        paymentService.requestPayment(paymentRequestDto);
+            paymentService.requestPayment(paymentRequestDto);
+        });
 
         return ServerResponse.success();
     }
