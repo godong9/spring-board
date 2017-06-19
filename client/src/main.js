@@ -6,6 +6,8 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import CommonUtil from './utils/CommonUtil';
+import store from './store';
+
 
 Vue.config.productionTip = false;
 
@@ -16,6 +18,7 @@ Vue.use(CommonUtil);
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
 });

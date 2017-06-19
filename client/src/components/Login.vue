@@ -10,11 +10,11 @@
       <input type="password" v-model="password" placeholder="비밀번호를 입력하세요">
     </div>
     <div class="login-description">
-      <a v-on:click="findPassword">비밀번호를 잊어버리셨나요?</a>
+      <router-link to="reset-password">비밀번호를 잊어버리셨나요?</router-link>
     </div>
     <div class="confirm-login-wrapper" v-bind:class="classObject" v-on:click="login"><button>로그인</button></div>
     <div class="signup-description">
-      아직 회원이 아니신가요? <span class="signup-text" v-on:click="signup">회원가입</span>
+      아직 회원이 아니신가요? <router-link to="signup" class="signup-text">회원가입</router-link>
     </div>
   </div>
 </template>
@@ -46,12 +46,6 @@
         }, (response) => {
           self.errorHandler(response);
         });
-      },
-      findPassword: function findPassword() {
-        this.$router.push('reset-password');
-      },
-      signup: function signup() {
-        this.$router.push('signup');
       },
     },
   };
@@ -91,6 +85,10 @@
     color: #636b7d;
     float:right;
     margin:5px 25px 25px 0;
+  }
+  .login-description a {
+    text-decoration: none;
+    color:#636b7d;
   }
   .confirm-login-wrapper{
     margin:0px 25px 20px 25px
