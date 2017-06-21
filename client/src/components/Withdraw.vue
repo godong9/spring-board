@@ -13,10 +13,8 @@
 <script>
   export default {
     name: 'withdraw',
-    data() {
-      return {
-        email: this.email,
-      };
+    created() {
+      this.$store.dispatch('setTitle', '탈퇴하기');
     },
     methods: {
     },

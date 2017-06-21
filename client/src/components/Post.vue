@@ -21,10 +21,8 @@
 <script>
   export default {
     name: 'post',
-    data() {
-      return {
-        msg: 'Post page Message',
-      };
+    created() {
+      this.$store.dispatch('setTitle', '글쓰기');
     },
   };
 </script>

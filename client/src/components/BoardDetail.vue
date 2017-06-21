@@ -71,6 +71,8 @@
   export default {
     name: 'board-detail',
     created() {
+      this.$store.dispatch('setTitle', '상세글보기');
+      this.$store.dispatch('showHeaderButton');
     },
   };
 

@@ -36,6 +36,7 @@ module.exports = {
     "no-console": "off",
     "no-alert": "off",
     "prefer-template": "off",
+    "no-param-reassign": ["error", { "props": false }],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }

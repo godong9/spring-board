@@ -120,10 +120,8 @@
 <script>
   export default {
     name: 'board',
-    data() {
-      return {
-        msg: 'Board page Message',
-      };
+    created() {
+      this.$store.dispatch('showHeaderButton');
     },
     beforeCreated() {
       // 참고: https://github.com/pagekit/vue-resource/blob/develop/docs/recipes.md

@@ -8,14 +8,9 @@
 <script>
   export default {
     name: 'title-header',
-    data() {
-      return {
-        title: this.title || '글쓰기',
-      };
-    },
-    methods: {
-      updateTitle(title) {
-        this.title = title;
+    computed: {
+      title() {
+        return this.$store.getters.titleText;
       },
     },
   };

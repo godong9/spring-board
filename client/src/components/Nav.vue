@@ -12,14 +12,9 @@
 <script>
   export default {
     name: 'nav',
-    data() {
-      return {
-        showButton: this.showButton || false,
-      };
-    },
-    methods: {
-      setShowButton(show) {
-        this.showButton = show;
+    computed: {
+      showButton() {
+        return this.$store.getters.showHeaderButton;
       },
     },
   };

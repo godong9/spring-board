@@ -93,10 +93,8 @@
 <script>
   export default {
     name: 'mypage',
-    data() {
-      return {
-        msg: 'Board page Message',
-      };
+    created() {
+      this.$store.dispatch('setTitle', '닉네임');
     },
     beforeCreated() {
       // 참고: https://github.com/pagekit/vue-resource/blob/develop/docs/recipes.md

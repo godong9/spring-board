@@ -10,10 +10,8 @@
 <script>
   export default {
     name: 'cancel-complete',
-    data() {
-      return {
-        email: this.email,
-      };
+    created() {
+      this.$store.dispatch('setTitle', '이용권 해지하기');
     },
     methods: {
     },
