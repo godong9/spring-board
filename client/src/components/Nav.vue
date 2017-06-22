@@ -3,7 +3,7 @@
     <div class="blind-logo"></div>
     <div class="title">StockBlind</div>
     <div v-if="showButton" class="button-wrapper">
-      <a class="btn"><i class="write"></i>글쓰기</a>
+      <a class="btn write"><i class="write"></i>글쓰기</a>
       <a class="btn"><i class="person"></i>My</a>
     </div>
   </div>
@@ -42,13 +42,12 @@
     line-height: 50px;
   }
   .button-wrapper {
-    font-size: 7vw;
     float: right;
-    display: table-cell;
-    vertical-align: middle;
-    margin: 0 15px 0 0;
+    line-height: 50px;
+    margin: 0 8px 0 0;
   }
   .btn {
+    font-size: 12px;
     background-color:#ffffff;
     -moz-border-radius:6px;
     -webkit-border-radius:6px;
@@ -57,9 +56,9 @@
     display:inline-block;
     cursor:pointer;
     color:#ff595f;
-    font-size:3vw;
     font-weight:bold;
-    padding:6px 6px;
+    line-height: 28px;
+    padding: 0 8px 0 8px;
     text-decoration:none;
     text-shadow:0px 1px 0px #ffffff;
   }
@@ -70,21 +69,24 @@
     position:relative;
     top:1px;
   }
-  i.write {
-    width: 2.5vw;
-    height: 2.5vw;
-    margin: 0 5px 0 0;
-    background: url(../assets/write-ic.png) no-repeat;
-    background-size: contain;
+  .btn i {
+    width: 15px;
+    height: 15px;
+    margin: 0 5px 2px 0;
+    line-height: 28px;
+    vertical-align: middle;
     display: inline-block;
   }
+  .btn.write {
+
+  }
+  i.write {
+    background: url(../assets/write-ic.png) no-repeat;
+    background-size: contain;
+  }
   i.person {
-    width: 2.5vw;
-    height: 2.5vw;
-    margin: 0 5px 0 0;
     background: url(../assets/mypage-ic.png) no-repeat;
     background-size: contain;
-    display: inline-block;
   }
 
 </style>
