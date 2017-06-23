@@ -82,6 +82,8 @@ public class PaymentService {
     @Transactional(readOnly = false)
     public void requestPayment(PaymentRequestDto paymentRequestDto) {
         Long userId = paymentRequestDto.getUserId();
+        log.info("[PaymentService] Request payment userId: {}", userId);
+
         String customerUid = paymentRequestDto.getUserId().toString();
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setName(chargeName);
@@ -102,6 +104,7 @@ public class PaymentService {
         createPaymentResult(paymentResultDto);
 
         if (paymentResultDto.getPaymentStatus() == PaymentStatus.SUCCESS) {
+            log.info("[PaymentService] Renew payment userId: {}", userId);
             userService.upsertPaidRole(userId);
         }
     }
