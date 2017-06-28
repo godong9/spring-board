@@ -151,10 +151,11 @@
     height: 20px;
     border-radius: 2px;
     background-color: #ffffff;
-    padding: 6px 10px 6px 10px;
+    padding: 6px 28px 6px 10px;
+    position: relative;
   }
   .search-wrapper input {
-    width: 313px;
+    width: 100%;
     height: 20px;
     font-size: 14px;
     color: #c2c7cb;
@@ -183,7 +184,9 @@
     width: 16px;
     height: 16px;
     border-radius: 1px;
-
+    position: absolute;
+    right: 6px;
+    bottom: 8px;
   }
   .item-list {
     list-style: none;
