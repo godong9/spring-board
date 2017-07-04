@@ -5,6 +5,7 @@ import com.board.gd.domain.user.UserService;
 import com.board.gd.iamport.ChargeRequestDto;
 import com.board.gd.iamport.IamportManager;
 import com.board.gd.iamport.SubscribeRequestDto;
+import com.board.gd.slack.SlackManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +37,10 @@ public class PaymentService {
     private UserService userService;
 
     @Autowired
-    IamportManager iamportManager;
+    private IamportManager iamportManager;
+
+    @Autowired
+    private SlackManager slackManager;
 
     @Value("${charge.amount}")
     private Double chargeAmount;
@@ -82,6 +86,9 @@ public class PaymentService {
     @Transactional(readOnly = false)
     public void requestPayment(PaymentRequestDto paymentRequestDto) {
         Long userId = paymentRequestDto.getUserId();
+        log.info("[PaymentService] Request payment userId: {}", userId);
+        slackManager.sendPaymentMessage("[결제 요청] userId: " + userId);
+
         String customerUid = paymentRequestDto.getUserId().toString();
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setName(chargeName);
@@ -97,11 +104,22 @@ public class PaymentService {
         chargeRequestDto.setAmount(chargeAmount);
 
         PaymentResultDto paymentResultDto = iamportManager.postPaymentCharge(chargeRequestDto);
-        updatePaymentStatus(payment, paymentResultDto.getPaymentStatus());
 
+        StringBuilder paymentResultSb = new StringBuilder();
+        paymentResultSb.append("[결제 결과] userId: ");
+        paymentResultSb.append(userId);
+        paymentResultSb.append(", status: ");
+        paymentResultSb.append(paymentResultDto.getPaymentStatus());
+        paymentResultSb.append(", message: ");
+        paymentResultSb.append(paymentResultDto.getMessage());
+        slackManager.sendPaymentMessage(paymentResultSb.toString());
+
+        updatePaymentStatus(payment, paymentResultDto.getPaymentStatus());
         createPaymentResult(paymentResultDto);
 
         if (paymentResultDto.getPaymentStatus() == PaymentStatus.SUCCESS) {
+            log.info("[PaymentService] Renew payment userId: {}", userId);
+            slackManager.sendPaymentMessage("[결제 갱신] userId: " + userId);
             userService.upsertPaidRole(userId);
         }
     }
