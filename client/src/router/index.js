@@ -9,7 +9,6 @@ import NeedPurchase from '@/components/NeedPurchase';
 import CompletePurchase from '@/components/CompletePurchase';
 import PaymentTerms from '@/components/PaymentTerms';
 import Payment from '@/components/Payment';
-import UserUpdate from '@/components/UserUpdate';
 import ResetPassword from '@/components/ResetPassword';
 import ChangePassword from '@/components/ChangePassword';
 import Login from '@/components/Login';
@@ -103,14 +102,6 @@ export default new Router({
       name: 'Payment',
       components: {
         default: Payment,
-        nav: Nav,
-      },
-    },
-    {
-      path: '/user-update',
-      name: 'UserUpdate',
-      components: {
-        default: UserUpdate,
         nav: Nav,
       },
     },
