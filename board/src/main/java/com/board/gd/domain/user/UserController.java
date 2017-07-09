@@ -33,7 +33,7 @@ public class UserController {
     @Value("${spring.session.key}")
     private String sessionKey;
 
-    @Value("${spring.client.host}")
+    @Value("${client.host}")
     private String clientHost;
 
     /**
