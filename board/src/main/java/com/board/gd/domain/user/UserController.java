@@ -33,6 +33,9 @@ public class UserController {
     @Value("${spring.session.key}")
     private String sessionKey;
 
+    @Value("${client.host}")
+    private String clientHost;
+
     /**
      * @api {post} /users/signup Request User signup
      * @apiName SignupUser
@@ -182,10 +185,10 @@ public class UserController {
         RedirectView redirectView = new RedirectView();
         User user = userService.authUser(id, uuid);
         StringBuilder sb = new StringBuilder();
-        sb.append("http://localhost:8080/#");
+        sb.append(clientHost);
         switch(type) {
             case "auth":
-                sb.append("/user-update?id=");
+                sb.append("/signup-step2?id=");
                 sb.append(user.getId());
                 sb.append("&email=");
                 sb.append(user.getEmail());
