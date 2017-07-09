@@ -2,7 +2,15 @@
   <div class="board">
     <div class="search-wrapper">
       <div class="search-bar">
-        <input type="text" placeholder="종목명 및 종목코드로 검색하세요.">
+        <vue-typeahead placeholder="종목명 및 종목코드를 입력하세요"
+                       v-model="value"
+                       :default-suggestion="false"
+                       :suggestion-template="myTemplate"
+                       :local="companies"
+                       display-key='name'
+                       classes="search-input"
+                       v-on:selected="done">
+        </vue-typeahead>
         <i class="search-icon"></i>
       </div>
     </div>
@@ -118,62 +126,128 @@
 </template>
 
 <script>
+  import Vue from 'vue';
+
+  Vue.component('vueTypeahead', require('vuejs-autocomplete'));
+
   export default {
     name: 'board',
+    data() {
+      return {
+        showDelete: false,
+        value: '',
+        myTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
+        companies: [{ code: '1111', name: '카카오', type: '코스닥' }, { code: '2222', name: 'SKT', type: '코스닥' }, { code: '9999', name: '이더리움', type: '코스닥' }],
+      };
+    },
     created() {
       this.$store.dispatch('showHeaderButton');
     },
-    beforeCreated() {
-      // 참고: https://github.com/pagekit/vue-resource/blob/develop/docs/recipes.md
-      this.$http.get('https://httpbin.org/get').then((response) => {
-        // get body data
-        this.bodyData = response.body;
-        console.log(this.bodyData);
-      }, (response) => {
-        this.errorData = response.body;
-        // error callback
-      });
+    methods: {
+      done: function done(data) {
+        console.log(data);
+      },
     },
   };
 </script>
-
+<style>
+  .search-wrapper .twitter-typeahead {
+    height: 20px;
+    font-size: 14px;
+    background-color: #ffffff!important;
+    width:100%;
+    border: none;
+    padding:0;
+    margin:0;
+  }
+  .search-wrapper .twitter-typeahead .tt-menu {
+    background-color: #ffffff;
+    padding: 0 0 0 10px;
+    left:-10px!important;
+    right:0;
+  }
+  .search-wrapper .twitter-typeahead .tt-suggestion {
+    background-color: #ffffff;
+  }
+  .tt-menu {
+    margin:6px 0 0 0;
+  }
+  .tt-suggestion {
+    position: relative;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+  }
+  .tt-suggestion .code {
+    color: #969fa6;
+  }
+  .tt-suggestion .name {
+    color: #17181a;
+    margin: 0 0 0 23px;
+  }
+  .tt-suggestion .name .tt-highlight {
+    color: #ff595f;
+  }
+  .tt-suggestion .type {
+    font-size: 12px;
+    color: #969fa6;
+    float: right;
+    margin: 0 10px 0 0;
+  }
+</style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .board {
-    /*background-color: #101319;*/
-  }
   .search-wrapper {
-    height: 32px;
+    height: 44px;
     background-color: #ededed;
-    padding: 6px 8px 6px 8px;
+    display: inline-block;
+    width: 100%;
+    position: relative;
   }
-  .search-bar {
+  .search-wrapper .search-bar {
     height: 20px;
     border-radius: 2px;
     background-color: #ffffff;
-    padding: 6px 28px 6px 10px;
-    position: relative;
+    margin: 6px 8px 6px 8px;
+    padding: 6px 0px 6px 10px;
   }
-  .search-wrapper input {
-    width: 100%;
-    height: 20px;
-    font-size: 14px;
-    color: #c2c7cb;
+  .search-wrapper .search-input {
+    width:100%;
+    padding:0;
     margin:0;
-    padding: 0;
-    border: none;
-    color: #17181a;
+    border:none;
+    height: 20px;
+  }
+  .search-icon {
+    position: absolute;
+    top: 14px;
+    right: 8px;
+    width:16px;
+    height:16px;
+    background: url(../assets/search-icon.png) no-repeat center;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: middle;
   }
   .search-wrapper input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-size:14px;
+    line-height: 20px;
     color: #c2c7cb;
   }
   .search-wrapper input::-moz-placeholder { /* Firefox 19+ */
+    font-size:14px;
+    line-height: 20px;
     color: #c2c7cb;
   }
   .search-wrapper input:-ms-input-placeholder { /* IE 10+ */
+    font-size:14px;
+    line-height: 20px;
     color: #c2c7cb;
   }
   .search-wrapper input:-moz-placeholder { /* Firefox 18- */
+    font-size:14px;
+    line-height: 20px;
     color: #c2c7cb;
   }
   .search-icon {
@@ -185,7 +259,7 @@
     height: 16px;
     border-radius: 1px;
     position: absolute;
-    right: 6px;
+    right: 18px;
     bottom: 8px;
   }
   .item-list {

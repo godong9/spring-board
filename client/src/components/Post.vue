@@ -5,7 +5,7 @@
       <span class="title">글쓰기</span>
       <span class="write" v-on:click="write"><i class="ok-ic"></i>등록</span>
     </div>
-    <div class="bar">
+    <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목추가"
                        v-model="value"
@@ -30,12 +30,6 @@
 <script>
   import Vue from 'vue';
 
-  window.Vue = Vue;
-
-  window.jQuery = require('jquery');
-
-  window.$ = window.jQuery;
-
   Vue.component('vueTypeahead', require('vuejs-autocomplete'));
 
   export default {
@@ -44,7 +38,7 @@
       return {
         showDelete: false,
         value: '',
-        myTemplate: '<div><span>{{code}}</span><span>{{name}}</span><span>{{type}}</span></div>',
+        myTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         companies: [{ code: '1111', name: '카카오', type: '코스닥' }, { code: '2222', name: 'SKT', type: '코스닥' }, { code: '9999', name: '이더리움', type: '코스닥' }],
       };
     },
@@ -64,9 +58,8 @@
   };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-  .bar .twitter-typeahead {
+  .search-wrapper .twitter-typeahead {
     height: 20px;
     font-size: 14px;
     background-color: #ffffff!important;
@@ -75,16 +68,43 @@
     padding:0;
     margin:0;
   }
-  .bar .twitter-typeahead .tt-menu {
+  .search-wrapper .twitter-typeahead .tt-menu {
     background-color: #ffffff;
     padding: 0 0 0 10px;
     left:-10px!important;
     right:0;
   }
-  .bar .twitter-typeahead .tt-suggestion {
+  .search-wrapper .twitter-typeahead .tt-suggestion {
     background-color: #ffffff;
   }
+  .tt-menu {
+    margin:6px 0 0 0;
+  }
+  .tt-suggestion {
+    position: relative;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+  }
+  .tt-suggestion .code {
+    color: #969fa6;
+  }
+  .tt-suggestion .name {
+    color: #17181a;
+    margin: 0 0 0 23px;
+  }
+  .tt-suggestion .name .tt-highlight {
+    color: #ff595f;
+  }
+  .tt-suggestion .type {
+    font-size: 12px;
+    color: #969fa6;
+    float: right;
+    margin: 0 10px 0 0;
+  }
 </style>
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .post {
     background-color: #ffffff;
@@ -122,21 +142,21 @@
     display: inline-block;
     margin: 0 8px 0 0;
   }
-  .bar {
+  .search-wrapper {
     height: 44px;
     background-color: #ededed;
     display: inline-block;
     width: 100%;
     position: relative;
   }
-  .bar .search-bar {
+  .search-wrapper .search-bar {
     height: 20px;
     border-radius: 2px;
     background-color: #ffffff;
     margin: 6px 8px 6px 8px;
     padding: 6px 0px 6px 10px;
   }
-  .bar .search-input {
+  .search-wrapper .search-input {
     width:100%;
     padding:0;
     margin:0;
@@ -146,7 +166,7 @@
   .search-icon {
     position: absolute;
     top: 14px;
-    right: 8px;
+    right: 18px;
     width:16px;
     height:16px;
     background: url(../assets/search-icon.png) no-repeat center;
@@ -157,7 +177,7 @@
   .delete-icon {
     position: absolute;
     top: 8px;
-    right: 8px;
+    right: 18px;
     width:16px;
     height:16px;
     background: url(../assets/delete-tag-ic.png) no-repeat center;
@@ -165,23 +185,22 @@
     display: inline-block;
     vertical-align: middle;
   }
-  .bar input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  .search-wrapper input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     font-size:14px;
     line-height: 20px;
     color:#ff595f;
   }
-  .bar input::-moz-placeholder { /* Firefox 19+ */
-    font-size:14px;
-    line-height: 20px;
-    padding:12px 0 0 12px;
-    color:#ff595f;
-  }
-  .bar input:-ms-input-placeholder { /* IE 10+ */
+  .search-wrapper input::-moz-placeholder { /* Firefox 19+ */
     font-size:14px;
     line-height: 20px;
     color:#ff595f;
   }
-  .bar input:-moz-placeholder { /* Firefox 18- */
+  .search-wrapper input:-ms-input-placeholder { /* IE 10+ */
+    font-size:14px;
+    line-height: 20px;
+    color:#ff595f;
+  }
+  .search-wrapper input:-moz-placeholder { /* Firefox 18- */
     font-size:14px;
     line-height: 20px;
     color:#c2c7cb;

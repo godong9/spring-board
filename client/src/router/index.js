@@ -27,7 +27,11 @@ import Terms from '@/components/Terms';
 import Privacy from '@/components/Privacy';
 
 Vue.use(Router);
+window.Vue = Vue;
 
+window.jQuery = require('jquery');
+
+window.$ = window.jQuery;
 export default new Router({
   mode: 'history',
   scrollBehavior: (to, from, savedPosition) => {
