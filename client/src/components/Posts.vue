@@ -1,5 +1,5 @@
 <template>
-  <div class="board">
+  <div class="posts">
     <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목명 및 종목코드를 입력하세요"
@@ -15,107 +15,23 @@
       </div>
     </div>
     <ul class="item-list">
-      <li class="item">
+      <li class="item" v-for="item in postItems">
         <div class="content">
           <div class="title">
-            이제 막차떠납니다.
+            {{ item.title }}
           </div>
           <div class="info">
-            <span class="text">닉네임(회사명)</span>
+            <span class="text">{{ item.user.name }}(회사명)</span>
             <span class="divider">|</span>
-            <span class="text">18:01</span>
+            <span class="text">{{ moment(item.created_at).format('HH:MM') }}</span>
             <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
+            <span class="text">조회 <span>{{ item.view_count }}</span></span>
           </div>
           <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">{{ item.post_like_count }}</span></div>
             <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">{{ item.comment_count }}</span></div>
             <div class="company-info">카카오</div>
-          </div>
-        </div>
-        <div class="line"></div>
-      </li>
-      <li class="item">
-        <div class="content">
-          <div class="title">
-            이제 막차떠납니다.
-          </div>
-          <div class="info">
-            <span class="text">닉네임(회사명)</span>
-            <span class="divider">|</span>
-            <span class="text">18:01</span>
-            <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
-          </div>
-          <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
-          </div>
-        </div>
-        <div class="line"></div>
-      </li>
-      <li class="item">
-        <div class="content">
-          <div class="title">
-            이제 막차떠납니다.
-          </div>
-          <div class="info">
-            <span class="text">닉네임(회사명)</span>
-            <span class="divider">|</span>
-            <span class="text">18:01</span>
-            <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
-          </div>
-          <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
-          </div>
-        </div>
-        <div class="line"></div>
-      </li>
-      <li class="item">
-        <div class="content">
-          <div class="title">
-            이제 막차떠납니다.
-          </div>
-          <div class="info">
-            <span class="text">닉네임(회사명)</span>
-            <span class="divider">|</span>
-            <span class="text">18:01</span>
-            <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
-          </div>
-          <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
-          </div>
-        </div>
-        <div class="line"></div>
-      </li>
-      <li class="item">
-        <div class="content">
-          <div class="title">
-            이제 막차떠납니다.
-          </div>
-          <div class="info">
-            <span class="text">닉네임(회사명)</span>
-            <span class="divider">|</span>
-            <span class="text">18:01</span>
-            <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
-          </div>
-          <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
           </div>
         </div>
         <div class="line"></div>
@@ -127,11 +43,16 @@
 
 <script>
   import Vue from 'vue';
+  import { mapGetters } from 'vuex';
 
   Vue.component('vueTypeahead', require('vuejs-autocomplete'));
 
+
   export default {
-    name: 'board',
+    name: 'posts',
+    computed: mapGetters({
+      postItems: 'postItems',
+    }),
     data() {
       return {
         showDelete: false,
@@ -142,6 +63,7 @@
     },
     created() {
       this.$store.dispatch('showHeaderButton');
+      this.$store.dispatch('getPosts');
     },
     methods: {
       done: function done(data) {

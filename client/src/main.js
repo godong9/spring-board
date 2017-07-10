@@ -4,10 +4,9 @@ import VueResource from 'vue-resource';
 
 import Vue from 'vue';
 import App from './App';
+import store from './store';
 import router from './router';
 import CommonUtil from './utils/CommonUtil';
-import store from './store';
-
 
 Vue.config.productionTip = false;
 

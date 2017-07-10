@@ -12,7 +12,7 @@ import Payment from '@/components/Payment';
 import ResetPassword from '@/components/ResetPassword';
 import ChangePassword from '@/components/ChangePassword';
 import Login from '@/components/Login';
-import Board from '@/components/Board';
+import Posts from '@/components/Posts';
 import BoardDetail from '@/components/BoardDetail';
 import Post from '@/components/Post';
 import Nav from '@/components/Nav';
@@ -134,10 +134,10 @@ export default new Router({
       },
     },
     {
-      path: '/board/:id',
-      name: 'Board',
+      path: '/posts/:id',
+      name: 'Posts',
       components: {
-        default: Board,
+        default: Posts,
         nav: Nav,
         footer: Footer,
       },
@@ -203,6 +203,10 @@ export default new Router({
         default: Privacy,
         nav: Nav,
       },
+    },
+    {
+      path: '*',
+      redirect: '/',
     },
   ],
 });
