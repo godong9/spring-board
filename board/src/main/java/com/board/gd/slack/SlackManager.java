@@ -3,6 +3,7 @@ package com.board.gd.slack;
 import com.board.gd.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,7 +20,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 @Component
 public class SlackManager {
-    private static final String PAYMENT_WEBHOOK_PATH = "https://hooks.slack.com/services/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";
+    private static final String PAYMENT_WEBHOOK_PATH = "/services/T5XSEDKCZ/B5XPB42SC/VLsh5HzaZWLDaLqu48TUDPbg";
+
+    @Value("${slack.scheme}")
+    private String slackScheme;
+
+    @Value("${slack.host}")
+    private String slackHost;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -27,8 +34,10 @@ public class SlackManager {
     public void sendPaymentMessage(String message) {
         SlackMessageDto slackMessageDto = new SlackMessageDto();
         slackMessageDto.setText(message);
-        UriComponents uriComponents = UriComponentsBuilder
-                .fromPath(PAYMENT_WEBHOOK_PATH)
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .scheme(slackScheme)
+                .host(slackHost)
+                .path(PAYMENT_WEBHOOK_PATH)
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
