@@ -4,6 +4,7 @@ import com.board.gd.domain.company.CompanyService;
 import com.board.gd.exception.UserException;
 import com.board.gd.mail.MailMessage;
 import com.board.gd.mail.MailService;
+import com.board.gd.slack.SlackManager;
 import com.board.gd.utils.DateUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private SlackManager slackManager;
 
     private static final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
@@ -142,6 +146,7 @@ public class UserService implements UserDetailsService {
                 .build());
 
         sendAuthEmail(user, "auth");
+        slackManager.sendPaymentMessage("[이메일 등록] email: " + userDto.getEmail());
 
         return user;
     }
