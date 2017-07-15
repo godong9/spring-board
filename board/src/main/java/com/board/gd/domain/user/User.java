@@ -50,7 +50,7 @@ public class User implements UserDetails {
     @Column(name = "auth_uuid")
     private String authUUID;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 

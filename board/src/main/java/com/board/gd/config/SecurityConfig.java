@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/companies/**").access("permitAll")
+                .antMatchers("/stocks/**").access("permitAll")
                 .antMatchers("/users/login", "/users/signup", "/users/email", "/users/*/auth", "/users/data").access("permitAll")
                 .antMatchers("/users/password", "/users/find/password").access("permitAll")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")

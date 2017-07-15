@@ -49,10 +49,10 @@ public class StockService {
 
     @Transactional(readOnly = false)
     public void parseStockHtmlAndSave() throws IOException {
-        String kospiPath = "https://www.hdable.co.kr/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=1&findKeyword=&searchGubun=1";
+        String kospiPath = "https://www.kbsec.com/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=1&findKeyword=&searchGubun=1";
         saveStockCodeAndName(kospiPath);
 
-        String kodaqPath = "https://www.hdable.co.kr/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=2&findKeyword=&searchGubun=1";
+        String kodaqPath = "https://www.kbsec.com/go.able?linkcd=s03090010P1I1&gubun=0&actionType=G&radiotype=2&findKeyword=&searchGubun=1";
         saveStockCodeAndName(kodaqPath);
     }
 
