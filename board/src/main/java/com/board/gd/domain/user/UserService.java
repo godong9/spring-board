@@ -143,6 +143,7 @@ public class UserService implements UserDetailsService {
                 .email(userDto.getEmail())
                 .authUUID(UUID.randomUUID().toString())
                 .enabled(false)
+                .withdrawn(false)
                 .build());
 
         sendAuthEmail(user, "auth");
@@ -177,6 +178,7 @@ public class UserService implements UserDetailsService {
                 .profileImg(userDto.getProfileImg())
                 .authUUID(UUID.randomUUID().toString())
                 .enabled(false)
+                .withdrawn(false)
                 .build());
 
         sendAuthEmail(user, "auth");
