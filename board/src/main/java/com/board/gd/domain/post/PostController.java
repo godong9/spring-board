@@ -94,6 +94,8 @@ public class PostController {
      * @apiSuccess {Number} data.comment_count 포스트 댓글수
      * @apiSuccess {Number} data.post_like_count 포스트 좋아요수
      * @apiSuccess {Number} data.post_unlike_count 포스트 싫어요수
+     * @apiSuccess {Boolean} data.is_liked 포스트 좋아요 여부
+     * @apiSuccess {Boolean} data.is_unliked 포스트 싫어요 여부
      * @apiSuccess {Date} data.created_at 포스트 생성일
      * @apiSuccess {Date} data.updated_at 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
@@ -119,7 +121,7 @@ public class PostController {
      *
      * @apiParam {String} title 제목
      * @apiParam {String} content 내용
-     * @apiParam {Number} [stockId] 글 작성할 종목 ID
+     * @apiParam {Number} [stock_id] 글 작성할 종목 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체
@@ -190,7 +192,7 @@ public class PostController {
      *
      * @apiParam {String} [title] 제목
      * @apiParam {String} [content] 내용
-     * @apiParam {Number} [stockId] 글 작성할 게시판 ID
+     * @apiParam {Number} [stock_id] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체

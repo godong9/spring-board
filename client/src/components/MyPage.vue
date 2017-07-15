@@ -79,10 +79,10 @@
       </span>
     </div>
     <div class="button-wrapper">
-      <div class="license-cancel">
+      <div class="license-cancel" v-on:click="unsubscribe">
         이용권해지
       </div>
-      <div class="withdraw">
+      <div class="withdraw" v-on:click="withdraw">
         탈퇴하기
       </div>
     </div>
@@ -96,16 +96,21 @@
     created() {
       this.$store.dispatch('setTitle', '닉네임');
     },
-    beforeCreated() {
-      // 참고: https://github.com/pagekit/vue-resource/blob/develop/docs/recipes.md
-      this.$http.get('https://httpbin.org/get').then((response) => {
-        // get body data
-        this.bodyData = response.body;
-        console.log(this.bodyData);
-      }, (response) => {
-        this.errorData = response.body;
-        // error callback
-      });
+    methods: {
+      unsubscribe: function unsubscribe() {
+        const self = this;
+        if (!confirm('정말 해지하시겠습니까?')) {
+          return;
+        }
+        self.$http.delete(self.getServerPath('/payments/subscribe'), {}).then(() => {
+          this.$router.push('/mypage/1'); // TODO: userId 수정. 새로고침 수정
+        }, (response) => {
+          self.errorHandler(response);
+        });
+      },
+      withdraw: function withdraw() {
+        this.$router.push('/mypage/1/withdraw'); // TODO: userId 수정
+      },
     },
   };
 </script>
