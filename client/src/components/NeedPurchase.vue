@@ -26,7 +26,7 @@
     },
     methods: {
       submit: function submit() {
-        this.$router.push('/payment');
+        this.$router.push('/payment-terms');
       },
       logout: function logout() {
         const self = this;

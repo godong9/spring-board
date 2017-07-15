@@ -41,7 +41,7 @@ public class CompanyService {
             companyList = companyRepository.findByCompanyMail(emailDomain);
         }
         if (companyList.size() == 0) {
-            throw new UserException("Not exist company!");
+            throw new UserException("상장된 회사의 이메일이 아닙니다. 상장사 이메일인데 가입이 안될 경우 ‘문의하기’를 통해 알려주세요.");
         }
         return companyList;
     }
