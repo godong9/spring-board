@@ -1,7 +1,5 @@
 package com.board.gd.domain.stock;
 
-import com.board.gd.domain.board.Board;
-import com.board.gd.domain.board.BoardRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,11 +24,7 @@ public class StockService {
     private StockRepository stockRepository;
 
     @Autowired
-    private BoardRepository boardRepository;
-
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-
 
     public Stock findOne(Long id) {
         return stockRepository.findOne(id);
@@ -77,11 +71,6 @@ public class StockService {
 
                 stockRepository.save(Stock.builder()
                         .name(nameStr)
-                        .code(codeStr)
-                        .build());
-
-                boardRepository.save(Board.builder()
-                        .title(nameStr)
                         .code(codeStr)
                         .build());
             }

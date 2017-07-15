@@ -1,6 +1,5 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.board.Board;
 import com.board.gd.domain.stock.Stock;
 import com.board.gd.domain.user.User;
 import lombok.*;
@@ -58,10 +57,6 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = true)
-    private Board board;
 
     @ManyToOne
     @JoinColumn(name = "stock_id", nullable = true)

@@ -4,7 +4,6 @@ package com.board.gd.domain.post;
  * Created by gd.godong9 on 2017. 4. 4.
  */
 
-import com.board.gd.domain.board.Board;
 import com.board.gd.domain.stock.Stock;
 import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
@@ -113,13 +112,6 @@ public class PostService {
             throw new PostException("Not exist user!");
         }
 
-        Board board = null;
-        if (!Objects.isNull(postDto.getBoardId())) {
-            board = Board.builder()
-                    .id(postDto.getBoardId()) // 게시판 ID는 validation 체크 제외
-                    .build();
-        }
-
         Stock stock = null;
         if (!Objects.isNull(postDto.getStockId())) {
             stock = stockService.findOne(postDto.getStockId());
@@ -139,7 +131,6 @@ public class PostService {
                 .postUnlikeCount(0L)
                 .blocked(false)
                 .user(user)
-                .board(board)
                 .stock(stock)
                 .build());
     }
@@ -223,10 +214,8 @@ public class PostService {
             post.setContent(postDto.getContent());
         }
 
-        if (!Objects.isNull(postDto.getBoardId())) {
-            post.setBoard(Board.builder()
-                    .id(postDto.getBoardId()) // 게시판 ID는 validation 체크 제외
-                    .build());
+        if (!Objects.isNull(postDto.getStockId())) {
+            post.setStock(stockService.findOne(postDto.getStockId()));
         }
 
         return postRepository.save(post);

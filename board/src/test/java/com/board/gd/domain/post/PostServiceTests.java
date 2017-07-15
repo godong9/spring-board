@@ -235,18 +235,18 @@ public class PostServiceTests {
     }
 
     @Test
-    public void success_create_when_boardId_exist() {
+    public void success_create_when_stockId_not_exist() {
         // given
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
         PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
-        testPostDto.setBoardId(1L);
+        testPostDto.setStockId(1L);
 
         // when
         Post post = postService.create(testPostDto);
 
         // then
         TestHelper.assertPostDtoAndPost(testPostDto, post);
-        assertEquals(testPostDto.getBoardId(), post.getBoard().getId());
+        assertEquals(post.getStock(), null);
     }
 
     @Test
@@ -348,6 +348,7 @@ public class PostServiceTests {
     @Test
     public void success_update() {
         // given
+        given(stockService.findOne(1L)).willReturn(TestHelper.getTestStock(1L));
         User testUser = userService.create(TestHelper.getTestUserDto("test"));
         PostDto testPostDto = TestHelper.getTestPostDto(testUser.getId());
         Post post = postService.create(testPostDto);
@@ -357,7 +358,7 @@ public class PostServiceTests {
         changedPostDto.setId(post.getId());
         changedPostDto.setUserId(testUser.getId());
         changedPostDto.setTitle(changedTitle);
-        changedPostDto.setBoardId(1L);
+        changedPostDto.setStockId(1L);
 
         // when
         Post changedPost = postService.update(changedPostDto);
@@ -365,7 +366,7 @@ public class PostServiceTests {
         // then
         assertEquals(post.getId(), changedPost.getId());
         assertEquals(changedTitle, changedPost.getTitle());
-        assertEquals(changedPostDto.getBoardId(), changedPost.getBoard().getId());
+        assertEquals(changedPostDto.getStockId(), changedPost.getStock().getId());
         assertEquals(testPostDto.getContent(), changedPost.getContent());
     }
 

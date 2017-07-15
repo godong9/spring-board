@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardException extends RuntimeException {
-    private String message = "게시판 처리 중 에러가 발생하였습니다.";
+public class StockException extends RuntimeException {
+    private String message = "종목 처리 중 에러가 발생하였습니다.";
 }

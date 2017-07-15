@@ -13,6 +13,5 @@ public class PostDto {
     private PostType type;
     private String content;
     private Long userId;
-    private Long boardId;
     private Long stockId;
 }
