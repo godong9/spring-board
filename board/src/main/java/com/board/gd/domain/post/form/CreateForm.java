@@ -13,10 +13,10 @@ public class CreateForm {
     private Long userId;
     private Long boardId;
 
-    @NotNull
+    @NotNull(message = "제목은 반드시 값이 있어야 합니다.")
     private String title;
 
-    @NotNull
+    @NotNull(message = "내용은 반드시 값이 있어야 합니다.")
     private String content;
 
 }
