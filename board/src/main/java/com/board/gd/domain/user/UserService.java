@@ -81,10 +81,9 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getUserRoles(Long userId) {
+    public List<UserRole> getUserRoles(Long userId) {
         return userRoleRepository.findByUserId(userId).stream()
                 .filter(userRole -> !DateUtils.isExpired(userRole.getExpiredAt())) // 만료되지 않은 role만 가져옴
-                .map(userRole -> userRole.getRole().name())
                 .collect(Collectors.toList());
     }
 
