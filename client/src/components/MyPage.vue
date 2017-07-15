@@ -75,7 +75,7 @@
       </span>
       <br>
       <span class="duration">
-        2017년 5월 1일 ~ 2017년 5월 31일
+        {{ formatDate(me.paid_expired_at) }}
       </span>
     </div>
     <div class="button-wrapper">
@@ -91,10 +91,17 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'mypage',
     created() {
       this.$store.dispatch('setTitle', '닉네임');
+    },
+    computed: {
+      ...mapGetters([
+        'me',
+      ]),
     },
     methods: {
       unsubscribe: function unsubscribe() {

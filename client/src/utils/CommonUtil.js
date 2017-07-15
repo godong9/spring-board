@@ -24,6 +24,7 @@ ServerPlugin.install = (Vue) => {
     }
     return moment(inputDate).format('HH:mm');
   };
+  Vue.prototype.formatDate = date => moment(date).format('YYYY년 M월 D일');
 };
 
 export default ServerPlugin;

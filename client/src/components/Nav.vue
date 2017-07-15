@@ -2,29 +2,26 @@
   <div class="nav">
     <div class="blind-logo"></div>
     <div class="title">StockBlind</div>
-    <div v-if="showButton" class="button-wrapper">
+    <div v-if="showHeaderButton" class="button-wrapper">
       <router-link class="btn write" to="/posts/write"><i class="write"></i>글쓰기</router-link>
-      <a class="btn"><i class="person"></i>My</a>
+      <router-link class="btn" v-bind:to="'mypage/'+me.id"><i class="person"></i>My</router-link>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'nav',
     created() {
-      const self = this;
-      // TODO: 수정 필요
-      this.$http.get(self.getServerPath('/users/me'), {}).then((me) => {
-        console.log(me);
-      }, (response) => {
-        self.errorHandler(response);
-      });
+      this.$store.dispatch('getMe');
     },
     computed: {
-      showButton() {
-        return this.$store.getters.showHeaderButton;
-      },
+      ...mapGetters([
+        'showHeaderButton',
+        'me',
+      ]),
     },
   };
 </script>

@@ -10,4 +10,7 @@ export default {
   signupUser(data) {
     return Api.put('/users/data', data);
   },
+  getMe() {
+    return Api.get('/users/me');
+  },
 };

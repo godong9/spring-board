@@ -2,3 +2,5 @@ export const SET_HEADER_TEXT = 'SET_HEADER_TEXT';
 export const SHOW_HEADER_BUTTON = 'SHOW_HEADER_BUTTON';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const RECEIVE_COMPANIES = 'RECEIVE_COMPANIES';
+export const INIT_POSTS = 'INIT_POSTS';
+export const GET_ME = 'GET_ME';

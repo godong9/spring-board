@@ -8,6 +8,9 @@
 <script>
   export default {
     name: 'title-header',
+    created() {
+      this.$store.dispatch('getMe');
+    },
     computed: {
       title() {
         return this.$store.getters.titleText;

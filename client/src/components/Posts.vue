@@ -49,7 +49,6 @@
 
   Vue.component('vueTypeahead', require('vuejs-autocomplete'));
 
-
   export default {
     name: 'posts',
     computed: {
@@ -65,19 +64,19 @@
         postId: '',
         suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
-        size: 20,
       };
     },
     created() {
       this.$store.dispatch('showHeaderButton');
-      this.$store.dispatch('getPosts', { page: 0, size: this.size });
+      this.$store.dispatch('initPosts');
+      this.$store.dispatch('getPosts', { page: 0 });
     },
     methods: {
       done(data) {
         console.log(data);
       },
       getPosts() {
-        this.$store.dispatch('getPosts', { page: this.page, size: this.size });
+        this.$store.dispatch('getPosts', { page: this.page });
       },
     },
   };
