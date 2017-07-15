@@ -133,6 +133,9 @@ public class UserService implements UserDetailsService {
     public User createUserEmail(UserDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail());
 
+        // 상장사인지 검사. 상장사 메일 주소 아닐 경우 예외 발생
+        companyService.getCompaniesByEmail(userDto.getEmail());
+
         // 유저가 존재하고 인증 안되었을 경우 인증메일 재발송
         if (!Objects.isNull(user) && !user.getEnabled()) {
             sendAuthEmail(user, "auth");
