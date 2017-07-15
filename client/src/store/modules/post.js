@@ -44,8 +44,9 @@ const mutations = {
     paramState.isComplete = postList.length < 1 || postList.length < paramState.size;
   },
   [types.INIT_POSTS](paramState) {
-    paramState.page += 1;
+    paramState.page = 0;
     paramState.posts = [];
+    paramState.isComplete = false;
   },
 };
 

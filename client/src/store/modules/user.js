@@ -4,7 +4,7 @@ import * as types from '../mutation-types';
 // initial state
 const state = {
   companies: [],
-  me: null,
+  me: {},
 };
 
 // getters

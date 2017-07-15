@@ -3,7 +3,6 @@
     <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목명 및 종목코드를 입력하세요"
-                       v-model="postId"
                        :default-suggestion="false"
                        :suggestion-template="suggestionTemplate"
                        :remote="autoCompleteUrl"
@@ -16,7 +15,7 @@
       </div>
     </div>
     <ul class="item-list">
-      <li class="item" v-for="item in posts">
+      <router-link v-bind:to="'/post/' + item.id" class="item" v-for="item in posts" tag="li" :key="item.id">
         <div class="content">
           <div class="title">
             {{ item.title }}
@@ -36,7 +35,7 @@
           </div>
         </div>
         <div class="line"></div>
-      </li>
+      </router-link>
     </ul>
     <div class="more-btn" v-on:click="getPosts">더보기</div>
   </div>
@@ -61,7 +60,7 @@
     data() {
       return {
         showDelete: false,
-        postId: '',
+        stockId: '',
         suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
       };
@@ -73,10 +72,12 @@
     },
     methods: {
       done(data) {
-        console.log(data);
+        this.stockId = data.id;
+        this.$store.dispatch('initPosts');
+        this.$store.dispatch('getPosts', { page: this.page, 'stock.id': this.stockId });
       },
       getPosts() {
-        this.$store.dispatch('getPosts', { page: this.page });
+        this.$store.dispatch('getPosts', { page: this.page, 'stock.id': this.stockId });
       },
     },
   };
