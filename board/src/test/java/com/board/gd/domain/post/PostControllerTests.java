@@ -148,19 +148,19 @@ public class PostControllerTests {
     @Test
     public void success_getPosts_orderBy_updatedAt() throws Exception {
         // given
-        Long boardId = 1L;
+        Long stockId = 1L;
         given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
 
         User testUser1 = TestHelper.getTestUser(1L);
-        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId(), boardId);
-        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser1.getId(), boardId);
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId(), stockId);
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser1.getId(), stockId);
         Post post1 = postService.create(testPostDto1);
         Thread.sleep(1000);
         Post post2 = postService.create(testPostDto2);
 
         // when
         mockMvc.perform(get("/posts")
-                .param("updated_at,desc", boardId.toString())
+                .param("updated_at,desc", stockId.toString())
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(2))

@@ -119,7 +119,7 @@ public class PostController {
      *
      * @apiParam {String} title 제목
      * @apiParam {String} content 내용
-     * @apiParam {Number} [stockId] 글 작성할 종목 ID
+     * @apiParam {Number} [stock_id] 글 작성할 종목 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체
@@ -190,7 +190,7 @@ public class PostController {
      *
      * @apiParam {String} [title] 제목
      * @apiParam {String} [content] 내용
-     * @apiParam {Number} [stockId] 글 작성할 게시판 ID
+     * @apiParam {Number} [stock_id] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체

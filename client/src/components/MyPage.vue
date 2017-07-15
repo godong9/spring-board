@@ -82,7 +82,7 @@
       <div class="license-cancel">
         이용권해지
       </div>
-      <div class="withdraw">
+      <div class="withdraw" v-on:click="withdraw">
         탈퇴하기
       </div>
     </div>
@@ -96,16 +96,10 @@
     created() {
       this.$store.dispatch('setTitle', '닉네임');
     },
-    beforeCreated() {
-      // 참고: https://github.com/pagekit/vue-resource/blob/develop/docs/recipes.md
-      this.$http.get('https://httpbin.org/get').then((response) => {
-        // get body data
-        this.bodyData = response.body;
-        console.log(this.bodyData);
-      }, (response) => {
-        this.errorData = response.body;
-        // error callback
-      });
+    methods: {
+      withdraw: function withdraw() {
+        this.$router.push('/mypage/1/withdraw'); // TODO: userId 숴정
+      },
     },
   };
 </script>
