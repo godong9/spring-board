@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by gd.godong9 on 2017. 4. 3.
@@ -167,14 +168,19 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
-     * @apiSuccess {String} data.email 유저 이메일
+     * @apiSuccess {String} data.company_name 회사 이름
+     * @apiSuccess {Boolean} data.is_paid 결제 여부
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
         User user = userService.getCurrentUser();
-        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+        List<UserRole> userRoleList = userService.getUserRoles(user.getId());
+        UserRole paidRole = userRoleList.stream()
+                .filter(userRole -> userRole.getRole() == UserRoleType.ROLE_PAID)
+                .findFirst().orElse(null);
+        return ServerResponse.success(UserResult.getUserResult(user, paidRole));
     }
 
     /**

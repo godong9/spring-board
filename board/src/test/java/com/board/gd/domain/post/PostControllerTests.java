@@ -4,6 +4,7 @@ import com.board.gd.TestHelper;
 import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.post.form.UpdateForm;
 import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockDto;
 import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
@@ -114,29 +115,30 @@ public class PostControllerTests {
     }
 
     @Test
-    public void success_getPosts_by_boardId() throws Exception {
+    public void success_getPosts_by_stockId() throws Exception {
         // given
-        Long boardId = 1L;
+        Long stockId = 1L;
         given(userService.findOne(1L)).willReturn(TestHelper.getTestUser(1L));
         given(userService.findOne(2L)).willReturn(TestHelper.getTestUser(2L));
+        given(stockService.findOne(1L)).willReturn(TestHelper.getTestStock(1L));
 
         User testUser1 = TestHelper.getTestUser(1L);
         User testUser2 = TestHelper.getTestUser(2L);
-        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId(), boardId);
-        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser2.getId(), boardId);
+        PostDto testPostDto1 = TestHelper.getTestPostDto(testUser1.getId(), stockId);
+        PostDto testPostDto2 = TestHelper.getTestPostDto(testUser2.getId(), stockId);
         postService.create(testPostDto1);
         postService.create(testPostDto2);
 
         // when
         mockMvc.perform(get("/posts")
-                .param("board.id", "2")
+                .param("stock.id", "2")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(0))
                 .andExpect(jsonPath("$.data", hasSize(0)));
 
         mockMvc.perform(get("/posts")
-                .param("board.id", boardId.toString())
+                .param("stock.id", stockId.toString())
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.count").value(2))

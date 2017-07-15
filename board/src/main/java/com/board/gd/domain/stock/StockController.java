@@ -53,6 +53,10 @@ public class StockController {
      */
     @GetMapping("/stocks")
     public ServerResponse getStockList(@RequestParam("name") String name) {
+        name = name.trim();
+        if (name.isEmpty()) {
+            return ServerResponse.success();
+        }
         List<Stock> stockList = stockService.findByName(name);
         return ServerResponse.success(StockResult.getStockResultList(stockList));
     }

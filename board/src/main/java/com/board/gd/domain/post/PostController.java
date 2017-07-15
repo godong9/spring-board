@@ -41,7 +41,7 @@ public class PostController {
      * @apiParam {Number} [page=0] 가져올 페이지
      * @apiParam {String="created_at,desc", "updated_at,desc"} [sort=created_at,desc] 정렬 조건
      * @apiParam {String} [user.id] user.id 가져올 유저 id
-     * @apiParam {String} [board.id] board.id 가져올 게시판 id
+     * @apiParam {String} [stock.id] stock.id 가져올 종목 id
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Number} count 포스트 개수
@@ -119,7 +119,7 @@ public class PostController {
      *
      * @apiParam {String} title 제목
      * @apiParam {String} content 내용
-     * @apiParam {Number} [boardId] 글 작성할 게시판 ID
+     * @apiParam {Number} [stockId] 글 작성할 종목 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체
@@ -190,7 +190,7 @@ public class PostController {
      *
      * @apiParam {String} [title] 제목
      * @apiParam {String} [content] 내용
-     * @apiParam {Number} [boardId] 글 작성할 게시판 ID
+     * @apiParam {Number} [stockId] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체

@@ -10,7 +10,7 @@ import lombok.Data;
 public class UpdateForm {
     private Long id;
     private Long userId;
-    private Long boardId;
+    private Long stockId;
     private String title;
     private String content;
 }
