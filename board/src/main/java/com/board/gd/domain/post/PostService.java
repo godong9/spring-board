@@ -24,6 +24,9 @@ import java.util.Objects;
 @Transactional(readOnly = true)
 @Service
 public class PostService {
+    private static final int MAX_TITLE_SIZE = 50;
+    private static final int MAX_CONTENT_SIZE = 10000;
+
     @Autowired
     private PostRepository postRepository;
 
@@ -120,6 +123,10 @@ public class PostService {
         Stock stock = null;
         if (!Objects.isNull(postDto.getStockId())) {
             stock = stockService.findOne(postDto.getStockId());
+        }
+
+        if (postDto.getTitle().length() > MAX_TITLE_SIZE || postDto.getContent().length() > MAX_CONTENT_SIZE) {
+            throw new PostException("Text size too long!");
         }
 
         return postRepository.save(Post.builder()

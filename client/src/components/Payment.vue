@@ -82,7 +82,7 @@
 
 <script>
   export default {
-    name: 'payment-terms',
+    name: 'payment',
     data() {
       return {
         msg: 'Signup page Message',

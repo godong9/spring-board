@@ -43,6 +43,9 @@ public class PostResult {
         User user = post.getUser();
         userResult.setId(user.getId());
         userResult.setName(user.getName());
+        if (!Objects.isNull(user.getCompany())) {
+            userResult.setCompanyName(user.getCompany().getCompanyName());
+        }
 
         PostResult postResult = new PostResult();
         postResult.setId(post.getId());
