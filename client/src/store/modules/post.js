@@ -17,8 +17,7 @@ const actions = {
     post.getPosts(items => commit(types.RECEIVE_POSTS, { items }));
   },
   writePost({ commit }, postData) {
-    post.writePost(postData)
-      .then(response => commit(types.WRITE_POST, { response }));
+    return post.writePost(postData);
   },
 };
 

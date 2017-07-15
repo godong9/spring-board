@@ -134,7 +134,12 @@ export default new Router({
       },
     },
     {
-      path: '/posts/:id',
+      path: '/posts/write',
+      name: 'PostWrite',
+      component: PostWrite,
+    },
+    {
+      path: '/posts',
       name: 'Posts',
       components: {
         default: Posts,
@@ -149,11 +154,6 @@ export default new Router({
         nav: TitleHeader,
         default: BoardDetail,
       },
-    },
-    {
-      path: '/posts/',
-      name: 'PostWrite',
-      component: PostWrite,
     },
     {
       path: '/mypage/:id',

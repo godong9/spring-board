@@ -41,10 +41,10 @@
         if (!self.classObject.active) {
           return;
         }
-        self.$http.post(self.getServerPath('/users/login'), { email: self.email, password: self.password }).then(() => {
-          self.$router.push('board');
-        }, (response) => {
-          self.errorHandler(response);
+        this.$store.dispatch('login', {
+          email: self.email, password: self.password,
+        }).then(() => {
+          this.$router.push('/posts');
         });
       },
     },

@@ -10,8 +10,9 @@
         <vue-typeahead placeholder="종목추가"
                        v-model="postId"
                        :default-suggestion="false"
-                       :suggestion-template="myTemplate"
-                       :local="companies"
+                       :suggestion-template="suggestionTemplate"
+                       :remote="autoCompleteUrl"
+                       responseWrapper="data"
                        display-key='name'
                        classes="search-input"
                        v-on:selected="done">
@@ -29,6 +30,7 @@
 
 <script>
   import Vue from 'vue';
+  import Api from '../utils/api';
 
   Vue.component('vueTypeahead', require('vuejs-autocomplete'));
 
@@ -39,11 +41,12 @@
         title: '',
         showDelete: false,
         postId: '',
-        myTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
-        companies: [{ code: '1111', name: '카카오', type: '코스닥' }, { code: '2222', name: 'SKT', type: '코스닥' }, { code: '9999', name: '이더리움', type: '코스닥' }],
+        suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
+        autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
       };
     },
     created() {
+
     },
     methods: {
       cancel: function cancel() {
@@ -70,10 +73,16 @@
           confirm('내용이 너무 깁니다. (공백 포함 최대 5000자)');
           return;
         }
-        this.$store.dispatch('writePost', {});
+        this.$store.dispatch('writePost', {
+          title: this.title,
+          content: contentElement.innerHTML,
+          boardId: this.boardId,
+        }).then(() => {
+          this.$router.push('/posts');
+        });
       },
       done: function done(data) {
-        console.log(data);
+        this.boardId = data.id;
       },
     },
   };

@@ -5,7 +5,8 @@ import createLogger from 'vuex/dist/logger';
 // import * as actions from './actions';
 // import * as getters from './getters';
 import header from './modules/header';
-import board from './modules/post';
+import post from './modules/post';
+import user from './modules/user';
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
   // getters,
   modules: {
     header,
-    board,
+    post,
+    user,
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],

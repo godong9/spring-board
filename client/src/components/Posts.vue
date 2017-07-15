@@ -3,10 +3,11 @@
     <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목명 및 종목코드를 입력하세요"
-                       v-model="value"
+                       v-model="postId"
                        :default-suggestion="false"
-                       :suggestion-template="myTemplate"
-                       :local="companies"
+                       :suggestion-template="suggestionTemplate"
+                       :remote="autoCompleteUrl"
+                       responseWrapper="data"
                        display-key='name'
                        classes="search-input"
                        v-on:selected="done">
@@ -44,6 +45,7 @@
 <script>
   import Vue from 'vue';
   import { mapGetters } from 'vuex';
+  import Api from '../utils/api';
 
   Vue.component('vueTypeahead', require('vuejs-autocomplete'));
 
@@ -56,9 +58,9 @@
     data() {
       return {
         showDelete: false,
-        value: '',
-        myTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
-        companies: [{ code: '1111', name: '카카오', type: '코스닥' }, { code: '2222', name: 'SKT', type: '코스닥' }, { code: '9999', name: '이더리움', type: '코스닥' }],
+        postId: '',
+        suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
+        autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
       };
     },
     created() {
