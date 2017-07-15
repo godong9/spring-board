@@ -12,6 +12,15 @@
 <script>
   export default {
     name: 'nav',
+    created() {
+      const self = this;
+      // TODO: 수정 필요
+      this.$http.get(self.getServerPath('/users/me'), {}).then((me) => {
+        console.log(me);
+      }, (response) => {
+        self.errorHandler(response);
+      });
+    },
     computed: {
       showButton() {
         return this.$store.getters.showHeaderButton;
