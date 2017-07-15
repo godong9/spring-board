@@ -3,6 +3,7 @@ package com.board.gd.domain.company;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by godong9 on 2017. 5. 14..
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "companies")
-public class Company {
+public class Company implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

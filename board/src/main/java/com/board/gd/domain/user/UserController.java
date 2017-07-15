@@ -174,7 +174,7 @@ public class UserController {
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
         User user = userService.getCurrentUser();
-        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+        return ServerResponse.success(UserResult.getUserResult(user));
     }
 
     /**

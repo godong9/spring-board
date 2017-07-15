@@ -12,4 +12,13 @@ public class UserResult {
     private String name;
     private String email;
     private String companyName;
+
+    public static UserResult getUserResult(User user) {
+        UserResult userResult = new UserResult();
+        userResult.setId(user.getId());
+        userResult.setName(user.getName());
+        userResult.setEmail(user.getEmail());
+        userResult.setCompanyName(user.getCompany().getCompanyName());
+        return userResult;
+    }
 }

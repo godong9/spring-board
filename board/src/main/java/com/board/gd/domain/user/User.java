@@ -53,7 +53,7 @@ public class User implements UserDetails {
     @Column(name = "auth_uuid")
     private String authUUID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
