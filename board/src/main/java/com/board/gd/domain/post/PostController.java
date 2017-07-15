@@ -40,8 +40,8 @@ public class PostController {
      * @apiParam {Number} [size=20] 가져올 개수
      * @apiParam {Number} [page=0] 가져올 페이지
      * @apiParam {String="created_at,desc", "updated_at,desc"} [sort=created_at,desc] 정렬 조건
-     * @apiParam {Number} [user.id] 가져올 유저 id
-     * @apiParam {Number} [board.id] 가져올 게시판 id
+     * @apiParam {String} [user.id] user.id 가져올 유저 id
+     * @apiParam {String} [board.id] board.id 가져올 게시판 id
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Number} count 포스트 개수
@@ -58,6 +58,8 @@ public class PostController {
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     * @apiSuccess {String} data.user.company_name 포스트 유저 회사명
+     * @apiSuccess {Object} [data.stock] 포스트 종목
      * @apiSuccess {Number} [data.stock.id] 포스트 종목 id
      * @apiSuccess {String} [data.stock.name] 포스트 종목 이름
      * @apiSuccess {String} [data.stock.code] 포스트 종목 코드
@@ -95,6 +97,7 @@ public class PostController {
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     * @apiSuccess {Object} [data.stock] 포스트 종목
      * @apiSuccess {Number} [data.stock.id] 포스트 종목 id
      * @apiSuccess {String} [data.stock.name] 포스트 종목 이름
      * @apiSuccess {String} [data.stock.code] 포스트 종목 코드
