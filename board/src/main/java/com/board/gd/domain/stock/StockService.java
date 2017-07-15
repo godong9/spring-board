@@ -26,6 +26,7 @@ public class StockService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
     public Stock findOne(Long id) {
         return stockRepository.findOne(id);
     }
@@ -35,7 +36,7 @@ public class StockService {
     }
 
     public List<Stock> findByName(String name) {
-        String sql = "SELECT * FROM stocks WHERE name LIKE ?";
+        String sql = "SELECT * FROM stocks WHERE name LIKE ? LIMIT 10";
         return jdbcTemplate.query(sql, new String[] {"%"+name+"%"}, new BeanPropertyRowMapper(Stock.class));
     }
 
