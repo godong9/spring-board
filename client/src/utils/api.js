@@ -5,7 +5,7 @@ const errorHandler = (error) => {
   if (error.status === 403) {
     window.vm.$router.push('/login');
   } else {
-    alert('요청에 실패 했습니다. 잠시후 다시 시도 해주세요.');
+    alert(error.body.error.message || '요청에 실패 했습니다. 잠시후 다시 시도 해주세요.');
   }
   return Promise.reject(error);
 };

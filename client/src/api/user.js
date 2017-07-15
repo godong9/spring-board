@@ -4,4 +4,10 @@ export default {
   login(data) {
     return Api.post('/users/login', data);
   },
+  signupEmail(data) {
+    return Api.post('/users/email', data);
+  },
+  signupUser(data) {
+    return Api.put('/users/data', data);
+  },
 };

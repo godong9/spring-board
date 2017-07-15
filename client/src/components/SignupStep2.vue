@@ -10,8 +10,8 @@
       <div class="select-company-wrapper">
         <select class="select-company" v-model="company">
           <option disabled value="">회사 선택</option>
-          <option v-for="option in companyOptions" v-bind:value="option.value">
-            {{ option.text }}
+          <option v-for="option in companies" v-bind:value="option.id">
+            {{ option.company_name }}
           </option>
         </select>
       </div>
@@ -30,30 +30,16 @@
 <script>
   export default {
     name: 'signup-step2',
+    created() {
+      this.$store.dispatch('getCompanies', { email: this.email });
+    },
     data() {
       const self = this;
       self.email = this.$route.query.email;
       self.userId = this.$route.query.id;
       self.uuid = this.$route.query.uuid;
-
-      /*eslint-disable */
-      if (self.email) {
-        const url = self.getServerPath('/companies?email=' + self.email);
-        this.$http.get(url).then((response) => {
-          let data = response.body.data;
-          self.companyOptions = data.map(function(obj) {
-            let rObj = {};
-            rObj['text'] = obj.company_name;
-            rObj['value'] = obj.id;
-            return rObj;
-          });
-        });
-      }
-      /*eslint-enable */
-
       return {
         email: self.email,
-        companyOptions: self.companyOptions,
         nickname: '',
         company: '',
         password: '',
@@ -61,15 +47,18 @@
       };
     },
     computed: {
-      classObject: function classObject() {
+      classObject() {
         return {
           active: this.email && this.nickname && this.company
           && this.password && this.passwordConfirm,
         };
       },
+      companies() {
+        return this.$store.getters.companies;
+      },
     },
     methods: {
-      complete: function complete() {
+      complete() {
         const self = this;
         if (!self.classObject.active) {
           return;
@@ -79,26 +68,22 @@
           return;
         }
 
-        /*eslint-disable */
         const params = {
           id: self.userId,
           uuid: self.uuid,
           name: self.nickname,
           password: self.password,
           email: self.email,
-          company_id: self.company
+          company_id: self.company,
         };
-        self.$http.put(self.getServerPath('/users/data'), params).then(() => {
-          alert('회원정보가 변경되었습니다.');
-          self.$router.push('need-purchase');
-        }, (response) => {
-          self.errorHandler(response);
-        });
-        /*eslint-enable */
-      },
-      validateData: function validateData() {
-        const self = this;
 
+        this.$store.dispatch('signupEmail', params).then(() => {
+          alert('회원정보가 변경되었습니다.');
+          this.$router.push('/need-purchase');
+        }).catch(() => this.$router.push('/login'));
+      },
+      validateData() {
+        const self = this;
         if (self.password !== self.passwordConfirm) {
           alert('패스워드를 확인해주세요!');
           return false;

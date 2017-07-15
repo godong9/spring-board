@@ -24,14 +24,14 @@
       };
     },
     computed: {
-      classObject: function classObject() {
+      classObject() {
         return {
           active: this.email,
         };
       },
     },
     methods: {
-      signup: function signup() {
+      signup() {
         const self = this;
         if (!self.classObject.active) {
           return;
@@ -41,10 +41,10 @@
           alert('올바른 이메일을 입력해주세요.');
           return;
         }
-        this.$http.post(self.getServerPath('/users/email'), { email: this.email }).then(() => {
-          self.$router.push('email-success?email=' + self.email);
-        }, (response) => {
-          self.errorHandler(response);
+        this.$store.dispatch('signupEmail', {
+          email: this.email,
+        }).then(() => {
+          this.$router.push(`email-success?email=${self.email}`);
         });
       },
     },
