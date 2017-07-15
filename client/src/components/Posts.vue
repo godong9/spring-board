@@ -52,10 +52,13 @@
 
   export default {
     name: 'posts',
-    computed: mapGetters({
-      posts: 'posts',
-      isComplete: 'isComplete',
-    }),
+    computed: {
+      ...mapGetters([
+        'posts',
+        'isComplete',
+        'page',
+      ]),
+    },
     data() {
       return {
         showDelete: false,
@@ -67,14 +70,14 @@
     },
     created() {
       this.$store.dispatch('showHeaderButton');
-      this.$store.dispatch('getPosts', { page: this.posts.length, size: this.size });
+      this.$store.dispatch('getPosts', { page: 0, size: this.size });
     },
     methods: {
       done(data) {
         console.log(data);
       },
       getPosts() {
-        this.$store.dispatch('getPosts', { page: this.posts.length, size: this.size });
+        this.$store.dispatch('getPosts', { page: this.page, size: this.size });
       },
     },
   };

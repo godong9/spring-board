@@ -16,7 +16,6 @@ export default new Vuex.Store({
   // actions,
   // getters,
   modules: {
-    namespaced: true,
     header,
     post,
     user,

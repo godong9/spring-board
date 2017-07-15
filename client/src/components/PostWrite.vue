@@ -8,7 +8,6 @@
     <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목추가"
-                       v-model="postId"
                        :default-suggestion="false"
                        :suggestion-template="suggestionTemplate"
                        :remote="autoCompleteUrl"
@@ -40,7 +39,7 @@
       return {
         title: '',
         showDelete: false,
-        postId: '',
+        stockId: '',
         suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
       };
@@ -76,13 +75,13 @@
         this.$store.dispatch('writePost', {
           title: this.title,
           content: contentElement.innerHTML,
-          boardId: this.boardId,
+          stock_id: this.stockId,
         }).then(() => {
           this.$router.push('/posts');
         });
       },
       done: function done(data) {
-        this.boardId = data.id;
+        this.stockId = data.id;
       },
     },
   };
