@@ -93,7 +93,7 @@ public class UserService implements UserDetailsService {
     public void upsertPaidRole(Long userId) {
         User user = userRepository.findOne(userId);
         UserRole paidRole = userRoleRepository.findByUserId(userId).stream()
-                .filter(userRole -> userRole.getRole() == UserRoleType.PAID)
+                .filter(userRole -> userRole.getRole() == UserRoleType.ROLE_PAID)
                 .findFirst().orElse(null);
 
         LocalDateTime expiredLdt = LocalDateTime.now().plusDays(chargePeriod);
@@ -101,7 +101,7 @@ public class UserService implements UserDetailsService {
         if (!Objects.isNull(paidRole)) {
             updateUserRole(paidRole, expiredDate);
         } else {
-            createUserRole(user, UserRoleType.PAID, expiredDate);
+            createUserRole(user, UserRoleType.ROLE_PAID, expiredDate);
         }
     }
 
@@ -183,7 +183,7 @@ public class UserService implements UserDetailsService {
 
         sendAuthEmail(user, "auth");
 
-        createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
+        createUserRole(user, UserRoleType.ROLE_USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         return user;
     }
@@ -208,6 +208,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = false)
+    public User withdraw(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.setEmail("withdraw." + user.getEmail());
+        user.setWithdrawn(true);
+        return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = false)
     public User updateUserData(UserDto userDto) {
         if (!Objects.isNull(userDto.getName()) && userDto.getName().length() < 2) {
             throw new UserException("잘못된 닉네임입니다.(2글자 이상)");
@@ -224,7 +232,7 @@ public class UserService implements UserDetailsService {
 
         update(userDto);
 
-        createUserRole(user, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
+        createUserRole(user, UserRoleType.ROLE_USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         return userRepository.save(user);
     }

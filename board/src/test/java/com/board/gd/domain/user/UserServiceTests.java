@@ -119,7 +119,7 @@ public class UserServiceTests {
         // then
         assertEquals(1, roles.size());
         roles
-                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
+                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.ROLE_USER.name()));
     }
 
     @Test
@@ -128,14 +128,14 @@ public class UserServiceTests {
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
         Date expiredDate = new Date(new Date().getTime() - (1000 * 60 * 60));
-        userService.createUserRole(testUser, UserRoleType.ADMIN, expiredDate);
+        userService.createUserRole(testUser, UserRoleType.ROLE_ADMIN, expiredDate);
         // when
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
         assertEquals(1, roles.size());
         roles
-                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
+                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.ROLE_USER.name()));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class UserServiceTests {
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
         Date notExpiredDate = new Date(new Date().getTime() + (1000 * 60 * 60));
-        userService.createUserRole(testUser, UserRoleType.ADMIN, notExpiredDate);
+        userService.createUserRole(testUser, UserRoleType.ROLE_ADMIN, notExpiredDate);
         // when
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
@@ -158,7 +158,7 @@ public class UserServiceTests {
         User testUser = null;
 
         // when
-        userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
+        userService.createUserRole(testUser, UserRoleType.ROLE_USER, DEFAULT_ROLE_EXPIRED_DATE);
     }
 
     @Test
@@ -167,10 +167,10 @@ public class UserServiceTests {
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
         // when
-        UserRole userRole = userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
+        UserRole userRole = userService.createUserRole(testUser, UserRoleType.ROLE_USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         // then
-        assertEquals(UserRoleType.USER, userRole.getRole());
+        assertEquals(UserRoleType.ROLE_USER, userRole.getRole());
     }
 
     @Test

@@ -153,7 +153,8 @@ public class UserController {
      */
     @PostMapping("/users/withdraw")
     public ServerResponse userWithdraw() {
-        // TODO: 탈퇴 처리
+        User user = userService.getCurrentUser();
+        userService.withdraw(user.getId());
         return ServerResponse.success();
     }
 
