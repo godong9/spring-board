@@ -269,7 +269,7 @@ public class UserService implements UserDetailsService {
             throw new UserException("Invalid UUID!");
         }
         user.setEnabled(true);
-        user.setAuthUUID("expired");
+        user.setAuthUUID(UUID.randomUUID().toString()); // 인증 후 새로 발급
         userRepository.save(user);
         return user;
     }
