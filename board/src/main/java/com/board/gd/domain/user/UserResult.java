@@ -12,13 +12,15 @@ public class UserResult {
     private String name;
     private String email;
     private String companyName;
+    private Boolean isPaid;
 
-    public static UserResult getUserResult(User user) {
+    public static UserResult getUserResult(User user, Boolean isPaid) {
         UserResult userResult = new UserResult();
         userResult.setId(user.getId());
         userResult.setName(user.getName());
         userResult.setEmail(user.getEmail());
         userResult.setCompanyName(user.getCompany().getCompanyName());
+        userResult.setIsPaid(isPaid);
         return userResult;
     }
 }
