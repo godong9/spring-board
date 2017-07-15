@@ -10,9 +10,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UserRoleType {
-    USER("기본유저"),
-    PAID("유료유저"),
-    ADMIN("어드민유저");
+    ROLE_USER("기본유저"),
+    ROLE_PAID("유료유저"),
+    ROLE_ADMIN("어드민유저");
 
     private String description;
 }

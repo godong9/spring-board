@@ -140,8 +140,7 @@ public class PostController {
      */
     @PostMapping("/posts")
     public ServerResponse postPost(@RequestBody @Valid CreateForm createForm) {
-//        createForm.setUserId(userService.getCurrentUser().getId());
-        createForm.setUserId(73L); // TODO: 테스트용
+        createForm.setUserId(userService.getCurrentUser().getId());
         Post post = postService.create(modelMapper.map(createForm, PostDto.class));
         return ServerResponse.success(PostResult.getPostResult(post));
     }

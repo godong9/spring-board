@@ -145,6 +145,20 @@ public class UserController {
     }
 
     /**
+     * @api {post} /users/withdraw Request User withdraw
+     * @apiName WithdrawUser
+     * @apiGroup User
+     *
+     * @apiSuccess {Number} status 상태코드
+     */
+    @PostMapping("/users/withdraw")
+    public ServerResponse userWithdraw() {
+        User user = userService.getCurrentUser();
+        userService.withdraw(user.getId());
+        return ServerResponse.success();
+    }
+
+    /**
      * @api {get} /users/me Request User me data
      * @apiName GetMeUser
      * @apiGroup User

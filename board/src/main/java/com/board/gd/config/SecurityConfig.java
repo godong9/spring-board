@@ -38,11 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/stocks/**").access("permitAll")
                 .antMatchers("/users/login", "/users/signup", "/users/email", "/users/*/auth", "/users/data").access("permitAll")
                 .antMatchers("/users/password", "/users/find/password").access("permitAll")
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/users/**").hasAuthority("USER")
-                .antMatchers("/payments/**").hasAuthority("USER")
-                .antMatchers("/boards/**").hasAuthority("PAID")
-                .antMatchers("/posts/**").hasAuthority("PAID")
-                .antMatchers("/comments/**").hasAuthority("PAID");
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/users/**").hasRole("USER")
+                .antMatchers("/payments/**").hasRole("USER")
+                .antMatchers("/boards/**").hasRole("PAID")
+                .antMatchers("/posts/**").hasRole("PAID")
+                .antMatchers("/comments/**").hasRole("PAID");
     }
 }

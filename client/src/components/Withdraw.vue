@@ -7,7 +7,7 @@
       &nbsp;&nbsp;지우고 싶은 내용은  탈퇴 전에 삭제해주세요. <br>
       - 탈퇴 후 재가입 시에는 재인증을 받아야 합니다.
     </div>
-    <div class="withdraw-button-wrapper"><button>탈퇴하기</button></div>
+    <div class="withdraw-button-wrapper" v-on:click="submit"><button>탈퇴하기</button></div>
   </div>
 </template>
 <script>
@@ -17,6 +17,17 @@
       this.$store.dispatch('setTitle', '탈퇴하기');
     },
     methods: {
+      submit: function submit() {
+        const self = this;
+        if (!confirm('정말 탈퇴하시겠습니까?')) {
+          return;
+        }
+        self.$http.post(self.getServerPath('/users/withdraw'), {}).then(() => {
+          self.$router.push('/login');
+        }, (response) => {
+          self.errorHandler(response);
+        });
+      },
     },
   };
 </script>

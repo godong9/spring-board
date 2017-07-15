@@ -47,6 +47,9 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "withdrawn")
+    private Boolean withdrawn;
+
     @Column(name = "auth_uuid")
     private String authUUID;
 

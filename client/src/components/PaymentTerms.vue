@@ -13,11 +13,6 @@
       <div class="line"></div>
     </div>
     <div class="info">
-      <div class="label">주문자</div>
-      <div class="value">올라라</div>
-      <div class="line"></div>
-    </div>
-    <div class="info">
       <div class="label">결제금액</div>
       <div class="value price">13,000원</div>
     </div>
@@ -25,13 +20,13 @@
       <div class="service-agreement">
         <div class="period-payment">
           <span>30일마다 자동 결제 되는 서비스임을 확인했습니다.</span>
-          <input type="checkbox">
+          <input type="checkbox" id="check1" value="check1" v-model="checkedItems">
         </div>
       </div>
       <div class="service-agreement">
         <div class="title">
           <span>서비스 이용약관에 동의합니다.</span>
-          <input type="checkbox">
+          <input type="checkbox" id="check2" value="check2" v-model="checkedItems">
         </div>
         <div class="line"></div>
         <div class="description">
@@ -46,7 +41,7 @@
       <div class="service-agreement">
         <div class="title">
           <span>해지, 환불 규정을 확인했습니다.</span>
-          <input type="checkbox">
+          <input type="checkbox" id="check3" value="check3" v-model="checkedItems">
         </div>
         <div class="line"></div>
         <div class="description">
@@ -60,7 +55,7 @@
         </div>
       </div>
     </div>
-    <div class="button-agreement-wrapper"><button>카드 정보 입력하기</button></div>
+    <div class="button-agreement-wrapper" v-bind:class="classObject" v-on:click="submit"><button>카드 정보 입력하기</button></div>
   </div>
 </template>
 
@@ -69,15 +64,24 @@
     name: 'payment-terms',
     data() {
       return {
-        msg: 'Signup page Message',
+        checkedItems: [],
       };
     },
-    beforeCreate() {
-      /* TODO:store pattern 구현 */
-      console.log('this', this);
+    computed: {
+      classObject: function classObject() {
+        return {
+          active: this.checkedItems.length >= 3,
+        };
+      },
     },
     methods: {
-
+      submit: function submit() {
+        const self = this;
+        if (!self.classObject.active) {
+          return;
+        }
+        self.$router.push('payment');
+      },
     },
   };
 </script>
