@@ -94,6 +94,8 @@ public class PostController {
      * @apiSuccess {Number} data.comment_count 포스트 댓글수
      * @apiSuccess {Number} data.post_like_count 포스트 좋아요수
      * @apiSuccess {Number} data.post_unlike_count 포스트 싫어요수
+     * @apiSuccess {Boolean} data.is_liked 포스트 좋아요 여부
+     * @apiSuccess {Boolean} data.is_unliked 포스트 싫어요 여부
      * @apiSuccess {Date} data.created_at 포스트 생성일
      * @apiSuccess {Date} data.updated_at 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
