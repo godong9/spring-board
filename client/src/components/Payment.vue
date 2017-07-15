@@ -10,46 +10,28 @@
     <div class="info">
       <div class="label">카드정보</div>
       <div class="card-number">
-        <input type="number">
-        <input type="number">
-        <input type="number">
-        <input type="number">
+        <input type="number" maxlength="4" max="9999" v-model="card1">
+        <input type="number" maxlength="4" max="9999" v-model="card2">
+        <input type="number" maxlength="4" max="9999" v-model="card3">
+        <input type="password" maxlength="4" v-model="card4">
       </div>
     </div>
-    <div class="card-number-error">잘못된 카드 번호입니다.</div>
     <div class="line"></div>
     <div class="info">
       <div class="label">유효기간</div>
       <div class="card-year">
-        <select class="month">
-          <option>MM</option>
-          <option>1월</option>
-          <option>2월</option>
-          <option>3월</option>
-          <option>4월</option>
-          <option>5월</option>
-          <option>6월</option>
-          <option>7월</option>
-          <option>8월</option>
-          <option>9월</option>
-          <option>10월</option>
-          <option>11월</option>
-          <option>12월</option>
+        <select class="month" v-model="month">
+          <option disabled value="">MM</option>
+          <option v-for="option in monthOptions" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
         </select>
         <span>/</span>
-        <select class="year">
-          <option>YYYY</option>
-          <option>1980년</option>
-          <option>1981년</option>
-          <option>1982년</option>
-          <option>1983년</option>
-          <option>1984년</option>
-          <option>1985년</option>
-          <option>1986년</option>
-          <option>1987년</option>
-          <option>1988년</option>
-          <option>1989년</option>
-          <option>1990년</option>
+        <select class="year" v-model="year">
+          <option disabled value="">YYYY</option>
+          <option v-for="option in yearOptions" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
         </select>
         <span class="description">월 2자리 / 년 4자리</span>
       </div>
@@ -58,7 +40,7 @@
     <div class="info">
       <div class="label">비밀번호</div>
       <div class="card-password">
-        <input type="password" maxlength="2">
+        <input type="password" maxlength="2" v-model="pwd2Digit">
         <span>* *</span>
         <span class="description">비밀번호 앞 2자리</span>
       </div>
@@ -67,16 +49,16 @@
     <div class="info">
       <div class="label">생년월일</div>
       <div class="birthday">
-        <input type="number">
+        <input type="number" max="999999" maxlength="6" v-model="birth">
         <span class="description">법정 생년 월일 6자리</span>
       </div>
     </div>
     <div class="line"></div>
     <div class="info">
       <div class="label">결제금액</div>
-      <div class="value price">13,000원</div>
+      <div class="value price">11,000원</div>
     </div>
-    <div class="button-payment-wrapper"><button>결제하기</button></div>
+    <div class="button-payment-wrapper" v-bind:class="classObject" v-on:click="subscribe"><button>결제하기</button></div>
   </div>
 </template>
 
@@ -85,15 +67,73 @@
     name: 'payment',
     data() {
       return {
-        msg: 'Signup page Message',
+        card1: '',
+        card2: '',
+        card3: '',
+        card4: '',
+        month: '',
+        year: '',
+        pwd2Digit: '',
+        birth: '',
+        monthOptions: [
+          { text: '1월', value: '01' },
+          { text: '2월', value: '02' },
+          { text: '3월', value: '03' },
+          { text: '4월', value: '04' },
+          { text: '5월', value: '05' },
+          { text: '6월', value: '06' },
+          { text: '7월', value: '07' },
+          { text: '8월', value: '08' },
+          { text: '9월', value: '09' },
+          { text: '10월', value: '10' },
+          { text: '11월', value: '11' },
+          { text: '12월', value: '12' },
+        ],
+        yearOptions: [
+          { text: '2017년', value: '2017' },
+          { text: '2018년', value: '2018' },
+          { text: '2019년', value: '2019' },
+          { text: '2020년', value: '2020' },
+          { text: '2021년', value: '2021' },
+          { text: '2022년', value: '2022' },
+          { text: '2023년', value: '2023' },
+          { text: '2024년', value: '2024' },
+          { text: '2025년', value: '2025' },
+          { text: '2026년', value: '2026' },
+          { text: '2027년', value: '2027' },
+        ],
       };
     },
-    beforeCreate() {
-      /* TODO:store pattern 구현 */
-      console.log('this', this);
+    computed: {
+      classObject: function classObject() {
+        return {
+          active: this.card1 && this.card2 && this.card3 && this.card4 &&
+          this.month && this.year && this.pwd2Digit && this.birth,
+        };
+      },
     },
     methods: {
+      subscribe: function subscribe() {
+        const self = this;
+        if (!self.classObject.active) {
+          return;
+        }
 
+        /*eslint-disable */
+        const params = {
+          card_number: self.card1 + "-" + self.card2 + "-" + self.card3 + "-" + self.card4,
+          expiry: self.year + "-" + self.month,
+          birth: self.birth,
+          pwd_2digit: self.pwd2Digit
+        };
+
+        self.$http.post(self.getServerPath('/payments/subscribe'), params).then(() => {
+          self.$router.push('complete-purchase');
+        }, (response) => {
+          self.errorHandler(response);
+        });
+        /*eslint-enable */
+      },
     },
   };
 </script>
