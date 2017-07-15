@@ -3,7 +3,7 @@
     <div class="blind-logo"></div>
     <div class="title">StockBlind</div>
     <div v-if="showButton" class="button-wrapper">
-      <a class="btn write"><i class="write"></i>글쓰기</a>
+      <router-link class="btn write" to="/posts/write"><i class="write"></i>글쓰기</router-link>
       <a class="btn"><i class="person"></i>My</a>
     </div>
   </div>
@@ -76,9 +76,6 @@
     line-height: 28px;
     vertical-align: middle;
     display: inline-block;
-  }
-  .btn.write {
-
   }
   i.write {
     background: url(../assets/write-ic.png) no-repeat;

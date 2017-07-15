@@ -77,7 +77,7 @@
           company_id: self.company,
         };
 
-        this.$store.dispatch('signupEmail', params).then(() => {
+        this.$store.dispatch('signupUser', params).then(() => {
           alert('회원정보가 변경되었습니다.');
           this.$router.push('/need-purchase');
         }).catch(() => this.$router.push('/login'));

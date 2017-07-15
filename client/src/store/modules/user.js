@@ -31,7 +31,7 @@ const actions = {
 // mutations
 const mutations = {
   [types.RECEIVE_COMPANIES](paramState, { companies }) {
-    paramState.companies = companies;
+    paramState.companies = companies.data;
   },
 };
 

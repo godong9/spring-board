@@ -16,29 +16,29 @@
       </div>
     </div>
     <ul class="item-list">
-      <li class="item" v-for="item in postItems">
+      <li class="item" v-for="item in posts">
         <div class="content">
           <div class="title">
             {{ item.title }}
           </div>
           <div class="info">
-            <span class="text">{{ item.user.name }}(회사명)</span>
+            <span class="text">{{ item.user.name }}({{ item.user.company_name }})</span>
             <span class="divider">|</span>
-            <span class="text">{{ moment(item.created_at).format('HH:MM') }}</span>
+            <span class="text">{{ diffDateFormat(item.created_at) }}</span>
             <span class="divider">|</span>
             <span class="text">조회 <span>{{ item.view_count }}</span></span>
           </div>
           <div class="count-info">
             <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">{{ item.post_like_count }}</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">{{ item.post_unlike_count }}</span></div>
             <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">{{ item.comment_count }}</span></div>
-            <div class="company-info">카카오</div>
+            <div class="company-info" v-if="item.stock">{{ item.stock.name }}</div>
           </div>
         </div>
         <div class="line"></div>
       </li>
     </ul>
-    <div class="more-btn">더보기</div>
+    <div class="more-btn" v-on:click="getPosts">더보기</div>
   </div>
 </template>
 
@@ -53,7 +53,8 @@
   export default {
     name: 'posts',
     computed: mapGetters({
-      postItems: 'postItems',
+      posts: 'posts',
+      isComplete: 'isComplete',
     }),
     data() {
       return {
@@ -61,15 +62,19 @@
         postId: '',
         suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
+        size: 20,
       };
     },
     created() {
       this.$store.dispatch('showHeaderButton');
-      this.$store.dispatch('getPosts');
+      this.$store.dispatch('getPosts', { page: this.posts.length, size: this.size });
     },
     methods: {
-      done: function done(data) {
+      done(data) {
         console.log(data);
+      },
+      getPosts() {
+        this.$store.dispatch('getPosts', { page: this.posts.length, size: this.size });
       },
     },
   };

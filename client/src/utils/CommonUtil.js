@@ -16,7 +16,14 @@ ServerPlugin.install = (Vue) => {
     return re.test(email);
   };
 
-  Vue.prototype.moment = moment;
+  Vue.prototype.diffDateFormat = (inputDate) => {
+    const today = moment().day();
+    const date = moment(inputDate).day();
+    if (today !== date) {
+      return moment(inputDate).format('YY.MM.DD HH:mm');
+    }
+    return moment(inputDate).format('HH:mm');
+  };
 };
 
 export default ServerPlugin;

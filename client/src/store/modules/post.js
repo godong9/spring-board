@@ -3,18 +3,24 @@ import * as types from '../mutation-types';
 
 // initial state
 const state = {
-  postItems: [],
+  posts: [],
+  isComplete: false,
 };
 
 // getters
 const getters = {
-  postItems: paramState => paramState.postItems,
+  posts: paramState => paramState.posts,
+  isComplete: paramState => paramState.isComplete,
 };
 
 // actions
 const actions = {
-  getPosts({ commit }) {
-    post.getPosts(items => commit(types.RECEIVE_POSTS, { items }));
+  getPosts({ commit }, params) {
+    if (state.isComplete) {
+      return;
+    }
+    post.getPosts(params)
+      .then(posts => commit(types.RECEIVE_POSTS, { posts }));
   },
   writePost({ commit }, postData) {
     return post.writePost(postData);
@@ -23,8 +29,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  [types.RECEIVE_POSTS](paramState, { items }) {
-    paramState.postItems = items;
+  [types.RECEIVE_POSTS](paramState, { posts }) {
+    const postList = posts.data || [];
+    paramState.posts = paramState.posts.concat(postList);
+    paramState.isComplete = postList.length < 1;
   },
 };
 
