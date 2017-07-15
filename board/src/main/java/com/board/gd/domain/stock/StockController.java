@@ -4,7 +4,10 @@ import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by godong9 on 2017. 5. 7..
@@ -31,5 +34,26 @@ public class StockController {
             log.error(e.getMessage());
         }
         return ServerResponse.success();
+    }
+
+    /**
+     * @api {get} /stocks Request Get stock list
+     * @apiName GetStocksByName
+     * @apiGroup Stock
+     *
+     * @apiDescription 주식 종목 코드 이름으로 조회
+     *
+     * @apiParam {String} name 종목 이름
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object[]} data 종목 리스트
+     * @apiSuccess {Number} data.id 종목 id
+     * @apiSuccess {String} data.name 종목 이름
+     * @apiSuccess {String} data.code 종목 코드
+     */
+    @GetMapping("/stocks")
+    public ServerResponse getStockList(@RequestParam("name") String name) {
+        List<Stock> stockList = stockService.findByName(name);
+        return ServerResponse.success(StockResult.getStockResultList(stockList));
     }
 }
