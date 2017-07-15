@@ -1,7 +1,7 @@
-var merge = require('webpack-merge')
-var prodEnv = require('./prod.env')
+const merge = require('webpack-merge');
+const prodEnv = require('./prod.env');
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  SERVER_HOST: '"http://localhost:9700"'
-})
+  SERVER_HOST: '"192.168.0.3:9700/api"',
+});

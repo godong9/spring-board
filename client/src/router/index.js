@@ -14,7 +14,7 @@ import ChangePassword from '@/components/ChangePassword';
 import Login from '@/components/Login';
 import Posts from '@/components/Posts';
 import BoardDetail from '@/components/BoardDetail';
-import Post from '@/components/Post';
+import PostWrite from '@/components/PostWrite';
 import Nav from '@/components/Nav';
 import TitleHeader from '@/components/TitleHeader';
 import Footer from '@/components/Footer';
@@ -143,7 +143,7 @@ export default new Router({
       },
     },
     {
-      path: '/board/:id/detail',
+      path: '/post/:id',
       name: 'BoardDetail',
       components: {
         nav: TitleHeader,
@@ -151,9 +151,9 @@ export default new Router({
       },
     },
     {
-      path: '/board/:id/post',
-      name: 'Post',
-      component: Post,
+      path: '/posts/',
+      name: 'PostWrite',
+      component: PostWrite,
     },
     {
       path: '/mypage/:id',

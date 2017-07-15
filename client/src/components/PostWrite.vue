@@ -8,7 +8,7 @@
     <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목추가"
-                       v-model="value"
+                       v-model="postId"
                        :default-suggestion="false"
                        :suggestion-template="myTemplate"
                        :local="companies"
@@ -20,7 +20,7 @@
       <i v-if="showDelete" class="delete-icon"></i><i class="search-icon"></i>
     </div>
     <div class="post-title-wrapper">
-      <input class="post-title" type="text" placeholder="제목을 입력하세요 (50자 이내)">
+      <input class="post-title" type="text" v-model="title" placeholder="제목을 입력하세요 (50자 이내)" maxlength="50">
     </div>
     <div class="line"></div>
     <div class="content" contenteditable="true" placeholder="내용을 입력하세요"></div>
@@ -36,20 +36,41 @@
     name: 'post',
     data() {
       return {
+        title: '',
         showDelete: false,
-        value: '',
+        postId: '',
         myTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         companies: [{ code: '1111', name: '카카오', type: '코스닥' }, { code: '2222', name: 'SKT', type: '코스닥' }, { code: '9999', name: '이더리움', type: '코스닥' }],
       };
     },
     created() {
-      this.$store.dispatch('setTitle', '글쓰기');
     },
     methods: {
       cancel: function cancel() {
         this.$router.back();
       },
       write: function write() {
+        /* 글자체크 */
+        if (this.title.trim().length < 1) {
+          alert('제목을 입력해주세요.');
+          return;
+        }
+
+        if (this.title.trim().length > 50) {
+          alert('제목이 너무 깁니다. (공백 포함 최대 50자)');
+          return;
+        }
+        const contentElement = this.$el.querySelector('.content');
+        const contentTxt = contentElement.innerText || contentElement.textContent || '';
+
+        if (contentTxt.trim().length < 1) {
+          alert('내용을 입력 해주세요');
+        }
+        if (contentTxt.length > 5000) {
+          confirm('내용이 너무 깁니다. (공백 포함 최대 5000자)');
+          return;
+        }
+        this.$store.dispatch('writePost', {});
       },
       done: function done(data) {
         console.log(data);

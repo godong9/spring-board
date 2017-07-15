@@ -1,3 +1,4 @@
 export const SET_HEADER_TEXT = 'SET_HEADER_TEXT';
 export const SHOW_HEADER_BUTTON = 'SHOW_HEADER_BUTTON';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const WRITE_POST = 'WRITE_POST';

@@ -1,3 +1,4 @@
+import Api from '../utils/api';
 /**
  * Mocking client-server processing
  */
@@ -37,5 +38,8 @@ const posts = [
 export default {
   getPosts(cb) {
     setTimeout(() => cb(posts), 100);
+  },
+  writePost(data) {
+    return Api.post('/posts', data);
   },
 };
