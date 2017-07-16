@@ -218,6 +218,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = false)
     public User withdraw(Long userId) {
+        clearAuthentication();
         User user = userRepository.findOne(userId);
         user.setEmail("withdraw." + user.getEmail());
         user.setWithdrawn(true);
