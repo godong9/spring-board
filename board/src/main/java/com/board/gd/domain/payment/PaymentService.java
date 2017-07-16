@@ -55,6 +55,11 @@ public class PaymentService {
     @Transactional(readOnly = false)
     public PaymentInfo createPaymentInfo(PaymentInfoDto paymentInfoDto) {
         User user = User.builder().id(paymentInfoDto.getUserId()).build();
+        PaymentInfo paymentInfo = paymentInfoRepository.findOne(user.getId());
+        if (!Objects.isNull(paymentInfo)) {
+            paymentInfo.setCardName(paymentInfoDto.getCardName());
+            return paymentInfoRepository.save(paymentInfo);
+        }
         return paymentInfoRepository.save(PaymentInfo.builder()
                 .cardName(paymentInfoDto.getCardName())
                 .customerUid(paymentInfoDto.getCustomerUid())
