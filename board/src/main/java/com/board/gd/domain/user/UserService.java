@@ -87,6 +87,14 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    public UserRole getPaidRole(Long userId) {
+        List<UserRole> userRoleList = getUserRoles(userId);
+        UserRole paidRole = userRoleList.stream()
+                .filter(userRole -> userRole.getRole() == UserRoleType.ROLE_PAID)
+                .findFirst().orElse(null);
+        return paidRole;
+    }
+
     public List<Long> findRolesExpiredSoon() {
         LocalDateTime expiredCriteriaLdt = LocalDateTime.now().plusDays(1);
         Date expiredCriteriaDate = Date.from(expiredCriteriaLdt.atZone(ZoneId.systemDefault()).toInstant());

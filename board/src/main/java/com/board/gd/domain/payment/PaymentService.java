@@ -58,6 +58,7 @@ public class PaymentService {
         PaymentInfo paymentInfo = paymentInfoRepository.findByUserId(user.getId());
         if (!Objects.isNull(paymentInfo)) {
             paymentInfo.setCardName(paymentInfoDto.getCardName());
+            paymentInfo.setEnabled(true);
             return paymentInfoRepository.save(paymentInfo);
         }
         return paymentInfoRepository.save(PaymentInfo.builder()
@@ -89,7 +90,7 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = false)
-    public void requestPayment(PaymentRequestDto paymentRequestDto) {
+    public String requestPayment(PaymentRequestDto paymentRequestDto) {
         Long userId = paymentRequestDto.getUserId();
         log.info("[PaymentService] Request payment userId: {}", userId);
         slackManager.sendPaymentMessage("[결제 요청] userId: " + userId);
@@ -127,6 +128,7 @@ public class PaymentService {
             slackManager.sendPaymentMessage("[결제 갱신] userId: " + userId);
             userService.upsertPaidRole(userId);
         }
+        return paymentResultDto.getMessage();
     }
 
     @Transactional(readOnly = false)
