@@ -7,6 +7,7 @@ import createLogger from 'vuex/dist/logger';
 import header from './modules/header';
 import post from './modules/post';
 import user from './modules/user';
+import comment from './modules/comment';
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     header,
     post,
     user,
+    comment,
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],

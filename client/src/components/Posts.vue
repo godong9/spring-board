@@ -53,8 +53,6 @@
     computed: {
       ...mapGetters([
         'posts',
-        'isComplete',
-        'page',
       ]),
     },
     data() {
@@ -68,16 +66,16 @@
     created() {
       this.$store.dispatch('showHeaderButton');
       this.$store.dispatch('initPosts');
-      this.$store.dispatch('getPosts', { page: 0 });
+      this.$store.dispatch('getPosts', {});
     },
     methods: {
       done(data) {
         this.stockId = data.id;
         this.$store.dispatch('initPosts');
-        this.$store.dispatch('getPosts', { page: this.page, 'stock.id': this.stockId });
+        this.$store.dispatch('getPosts', { 'stock.id': this.stockId });
       },
       getPosts() {
-        this.$store.dispatch('getPosts', { page: this.page, 'stock.id': this.stockId });
+        this.$store.dispatch('getPosts', { 'stock.id': this.stockId });
       },
     },
   };

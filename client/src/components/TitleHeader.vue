@@ -1,6 +1,6 @@
 <template>
   <div class="title-header">
-    <div class="back"><</div>
+    <div class="back" v-on:click="back"><</div>
     <div class="title">{{ title }}</div>
   </div>
 </template>
@@ -14,6 +14,11 @@
     computed: {
       title() {
         return this.$store.getters.titleText;
+      },
+    },
+    methods: {
+      back() {
+        this.$router.back();
       },
     },
   };

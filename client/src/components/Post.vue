@@ -1,31 +1,30 @@
 <template>
-  <div class="board-detail">
+  <div class="post-detail">
     <div class="wrapper">
       <div class="content-title">
-        <div class="company-wrapper">
-          <div class="company">#카카오</div>
+        <div class="company-wrapper" v-if="post.stock">
+          <div class="company">{{ post.stock.name }}</div>
         </div>
         <div class="title">
-          이제 막차 떠납니다. 월요일 쩜상 예약! 어서 월요일 쩜상 예약하세요!
+          {{ post.title }}
         </div>
         <div class="info">
-          <span class="text">닉네임(회사명)</span>
+          <span class="text" v-if="post.user">{{ post.user.name }}({{ post.user.company_name }})</span>
           <div class="date-query-count">
-            <span class="text">18:01</span>
+            <span class="text">{{ diffDateFormat(post.created_at) }}</span>
             <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
+            <span class="text">조회 <span>{{ post.view_count }}</span></span>
           </div>
         </div>
         <div class="line"></div>
       </div>
       <div class="content-wrapper">
         <div class="content-text">
-          추세가 살아있는 주식은 기관이 매수하면 따라 추매내지 홀딩.. 
-          기관매도에서 추세하락이면 매도. 뭐그리 분석이고 나발이고 고생함? 기관중 연기금 매매동향을 주시..
+          {{ post.content }}
         </div>
         <div class="content-info">
-          <a class="btn like"><i class="like"></i>999</a>
-          <a class="btn dislike"><i class="dislike"></i>999</a>
+          <a class="btn like" v-on:click="likePost(true)"><i class="like"></i>{{ post.post_like_count }}</a>
+          <a class="btn dislike"><i v-on:click="likePost(false)" class="dislike"></i>{{ post.post_unlike_count }}</a>
           <a class="text-btn list">목록</a>
           <a class="text-btn report">신고</a>
         </div>
@@ -37,10 +36,10 @@
         <div>댓글<span class="count">5</span></div>
       </div>
       <div class="write-area">
-        <textarea placeholder="댓글을 입력하세요 (최대 300자)"></textarea>
-        <div class="word-count-wrapper"> <span class="count">0</span> / 300</div>
+        <textarea v-model="commentText" maxlength="300" placeholder="댓글을 입력하세요 (최대 300자)"></textarea>
+        <div class="word-count-wrapper"> <span class="count">{{ commentText.length }}</span> / 300</div>
       </div>
-      <div class="write-btn-wrapper"><button>등록</button></div>
+      <div class="write-btn-wrapper"><button v-on:click="writeComment">등록</button></div>
     </div>
     <div class="comment-list">
       <div class="comment-item">
@@ -68,11 +67,47 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
-    name: 'board-detail',
+    name: 'post',
     created() {
       this.$store.dispatch('setTitle', '상세글보기');
       this.$store.dispatch('showHeaderButton');
+      this.$store.dispatch('getPost', this.$route.params.id);
+      this.$store.dispatch('getComments', { id: this.$route.params.id });
+    },
+    data() {
+      return {
+        commentText: '',
+        commentTextLength: 0,
+      };
+    },
+    computed: {
+      ...mapGetters([
+        'post',
+        'comments',
+      ]),
+    },
+    methods: {
+      likePost(like) {
+        if (this.post.is_liked) {
+          alert('이미 공감한 게시물입니다.');
+          return;
+        }
+        if (this.post.is_unliked) {
+          alert('이미 비공감한 게시물입니다.');
+          return;
+        }
+        if (like) {
+          this.$store.dispatch('likePost', this.post.id);
+        } else {
+          this.$store.dispatch('unlikePost', this.post.id);
+        }
+      },
+      writeComment() {
+        this.$store.dispatch('writeComment', { post_id: this.post.id, content: this.commentText });
+      },
     },
   };
 
@@ -80,10 +115,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .board-detail {
+  .post-detail {
     background-color: #151921;
   }
-  .board-detail .wrapper {
+  .post-detail .wrapper {
     padding: 0px 16px 0 16px;
   }
   .company-wrapper {
@@ -130,6 +165,7 @@
   .content-wrapper {
     background-color: #151921;
     display: inline-block;
+    width: 100%;
   }
   .content-text {
     margin: 10px 0 0 0;

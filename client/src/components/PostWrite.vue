@@ -8,6 +8,7 @@
     <div class="search-wrapper">
       <div class="search-bar">
         <vue-typeahead placeholder="종목추가"
+                       v-model="stockName"
                        :default-suggestion="false"
                        :suggestion-template="suggestionTemplate"
                        :remote="autoCompleteUrl"
@@ -17,7 +18,7 @@
                        v-on:selected="done">
         </vue-typeahead>
       </div>
-      <i v-if="showDelete" class="delete-icon"></i><i class="search-icon"></i>
+      <i v-if="showDelete" v-on:click="deleteStockId" class="delete-icon"></i><i class="search-icon"></i>
     </div>
     <div class="post-title-wrapper">
       <input class="post-title" type="text" v-model="title" placeholder="제목을 입력하세요 (50자 이내)" maxlength="50">
@@ -39,6 +40,7 @@
       return {
         title: '',
         showDelete: false,
+        stockName: '',
         stockId: '',
         suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
         autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
@@ -48,8 +50,15 @@
 
     },
     methods: {
-      cancel: function cancel() {
+      cancel() {
         this.$router.back();
+      },
+      deleteStockId() {
+        this.stockId = '';
+        this.stockName = '';
+        this.showDelete = false;
+        const element = this.$el.querySelector('.search-input.tt-input');
+        element.removeAttribute('disabled');
       },
       write: function write() {
         /* 글자체크 */
@@ -82,6 +91,9 @@
       },
       done: function done(data) {
         this.stockId = data.id;
+        this.showDelete = true;
+        const element = this.$el.querySelector('.search-input.tt-input');
+        element.setAttribute('disabled', 'disabled');
       },
     },
   };
@@ -205,8 +217,8 @@
   }
   .delete-icon {
     position: absolute;
-    top: 8px;
-    right: 18px;
+    top: 13px;
+    right: 45px;
     width:16px;
     height:16px;
     background: url(../assets/delete-tag-ic.png) no-repeat center;

@@ -1,4 +1,4 @@
-import user from '../../api/user';
+import User from '../../api/user';
 import company from '../../api/company';
 import * as types from '../mutation-types';
 // initial state
@@ -16,20 +16,20 @@ const getters = {
 // actions
 const actions = {
   login({ commit }, data) {
-    return user.login(data);
+    return User.login(data);
   },
   signupEmail({ commit }, data) {
-    return user.signupEmail(data);
+    return User.signupEmail(data);
   },
   signupUser({ commit }, data) {
-    return user.signupUser(data);
+    return User.signupUser(data);
   },
   getCompanies({ commit }, data) {
     return company.getCompanies(data)
       .then(companies => commit(types.RECEIVE_COMPANIES, { companies }));
   },
   getMe({ commit }) {
-    return user.getMe()
+    return User.getMe()
       .then(me => commit(types.GET_ME, { me }));
   },
 };

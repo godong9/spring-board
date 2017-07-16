@@ -1,37 +1,52 @@
-import post from '../../api/post';
+import Post from '../../api/post';
 import * as types from '../mutation-types';
 
 // initial state
 const state = {
   posts: [],
-  isComplete: false,
-  page: 0,
-  size: 20,
+  post: {},
+  isPostsComplete: false,
+  postsPage: 0,
+  postsSize: 20,
 };
 
 // getters
 const getters = {
   posts: paramState => paramState.posts,
-  isComplete: paramState => paramState.isComplete,
-  page: paramState => paramState.page,
-  size: paramState => paramState.size,
+  post: paramState => paramState.post,
+  isPostsComplete: paramState => paramState.isPostsComplete,
+  postsPage: paramState => paramState.postsPage,
+  postsSize: paramState => paramState.postsSize,
 };
 
 // actions
 const actions = {
+  initPosts({ commit }) {
+    commit(types.INIT_POSTS);
+  },
   getPosts({ commit }, params) {
-    if (state.isComplete) {
+    if (state.isPostsComplete) {
       return;
     }
-    params.size = state.size;
-    post.getPosts(params)
+    params.size = state.postsSize;
+    params.page = state.postsPage;
+    Post.getPosts(params)
       .then(posts => commit(types.RECEIVE_POSTS, { posts }));
   },
   writePost({ commit }, postData) {
-    return post.writePost(postData);
+    return Post.writePost(postData);
   },
-  initPosts({ commit }) {
-    commit(types.INIT_POSTS);
+  getPost({ commit }, params) {
+    return Post.getPost(params)
+      .then(post => commit(types.GET_POST, { post }));
+  },
+  likePost({ commit }, postId) {
+    return Post.likePost(postId)
+      .then(() => commit(types.LIKE_POST));
+  },
+  unlikePost({ commit }, postId) {
+    return Post.unlikePost(postId)
+      .then(() => commit(types.UNLIKE_POST));
   },
 };
 
@@ -39,14 +54,25 @@ const actions = {
 const mutations = {
   [types.RECEIVE_POSTS](paramState, { posts }) {
     const postList = posts.data || [];
-    paramState.page += 1;
+    paramState.postsPage += 1;
     paramState.posts = paramState.posts.concat(postList);
-    paramState.isComplete = postList.length < 1 || postList.length < paramState.size;
+    paramState.isPostsComplete = postList.length < 1 || postList.length < paramState.postsSize;
   },
   [types.INIT_POSTS](paramState) {
-    paramState.page = 0;
+    paramState.postsPage = 0;
     paramState.posts = [];
-    paramState.isComplete = false;
+    paramState.isPostsComplete = false;
+  },
+  [types.GET_POST](paramState, { post }) {
+    paramState.post = post.data;
+  },
+  [types.LIKE_POST](paramState) {
+    paramState.post.is_liked = true;
+    paramState.post.post_like_count += 1;
+  },
+  [types.UNLIKE_POST](paramState) {
+    paramState.post.is_unliked = true;
+    paramState.post.post_unlike_count += 1;
   },
 };
 

@@ -13,7 +13,7 @@ import ResetPassword from '@/components/ResetPassword';
 import ChangePassword from '@/components/ChangePassword';
 import Login from '@/components/Login';
 import Posts from '@/components/Posts';
-import BoardDetail from '@/components/BoardDetail';
+import Post from '@/components/Post';
 import PostWrite from '@/components/PostWrite';
 import Nav from '@/components/Nav';
 import TitleHeader from '@/components/TitleHeader';
@@ -147,10 +147,10 @@ export default new Router({
     },
     {
       path: '/post/:id',
-      name: 'BoardDetail',
+      name: 'Post',
       components: {
         nav: TitleHeader,
-        default: BoardDetail,
+        default: Post,
       },
     },
     {
