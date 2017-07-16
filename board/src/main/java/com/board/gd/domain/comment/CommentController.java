@@ -55,6 +55,7 @@ public class CommentController {
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름
+     * @apiSuccess {String} data.user.company_name 댓글 유저 회사명
      *
      * @apiSampleRequest http://localhost:9000/comments?page=1&size=10&sort=updatedAt,desc
      *

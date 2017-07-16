@@ -20,13 +20,13 @@ public class StockController {
     private StockService stockService;
 
     /**
-     * @api {get} /stocks/parse Request stock parse
+     * @api {get} /admin/stocks/parse Request stock parse
      * @apiName ParseStocks
      * @apiGroup Stock
      *
      * @apiDescription 주식 종목 코드, 이름 정보 파싱해서 저장
      */
-    @GetMapping("/stocks/parse")
+    @GetMapping("/admin/stocks/parse")
     public ServerResponse getStockParse() {
         try {
             stockService.parseStockHtmlAndSave();
