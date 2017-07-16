@@ -66,7 +66,17 @@ public class PostService {
 
     @Transactional(readOnly = false)
     public Post increaseViewCountAndFindOne(Long id) {
-        Post post = postRepository.findOne(id);
+        Post post = findOne(id);
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+        post.setViewCount(post.getViewCount() + 1);
+        return postRepository.save(post);
+    }
+
+    @Transactional(readOnly = false)
+    public Post increaseViewCountAndFindOne(Long id, Long userId) {
+        Post post = findOne(id, userId);
         if (Objects.isNull(post)) {
             throw new PostException("Not exist post!");
         }

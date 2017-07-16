@@ -76,7 +76,7 @@ public class CommentController {
      * @apiName CreateComment
      * @apiGroup Comment
      *
-     * @apiParam {Number} postId 제목
+     * @apiParam {Number} post_id 포스트 id
      * @apiParam {String} content 내용
      *
      * @apiSuccess {Number} status 상태코드

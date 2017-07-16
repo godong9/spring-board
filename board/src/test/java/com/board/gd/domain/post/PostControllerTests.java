@@ -4,7 +4,6 @@ import com.board.gd.TestHelper;
 import com.board.gd.domain.post.form.CreateForm;
 import com.board.gd.domain.post.form.UpdateForm;
 import com.board.gd.domain.stock.Stock;
-import com.board.gd.domain.stock.StockDto;
 import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;

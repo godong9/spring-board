@@ -47,13 +47,11 @@ public class IamportManager {
         ResponseEntity<SubscribeResponseDto> responseEntity = iamportRestTemplate.exchange(uriComponents.toUri(), HttpMethod.POST, entity, SubscribeResponseDto.class);
         SubscribeResponseDto subscribeResponseDto = responseEntity.getBody();
         log.info("[Iamport] 카드등록 응답 - code: {}, message: {}", subscribeResponseDto.getCode(), subscribeResponseDto.getMessage());
-        PaymentInfoDto paymentInfoDto = subscribeResponseDto.getResponse();
-
-        if (Objects.isNull(paymentInfoDto)) {
+        if (subscribeResponseDto.getCode() != 0) {
             log.error("[빌링키 발급 에러] userId: {}, message: {}", subscribeRequestDto.getCustomer_uid(), subscribeResponseDto.getMessage());
             throw new PaymentException("정기결제 등록 중 에러 발생");
         }
-        return paymentInfoDto;
+        return subscribeResponseDto.getResponse();
     }
 
     public void deleteUnsubscribeCustomer(String customerUid) {

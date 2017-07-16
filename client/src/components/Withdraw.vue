@@ -23,7 +23,7 @@
           return;
         }
         self.$http.post(self.getServerPath('/users/withdraw'), {}).then(() => {
-          self.$router.push('/login');
+          self.$router.push('/');
         }, (response) => {
           self.errorHandler(response);
         });

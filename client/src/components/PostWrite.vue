@@ -42,7 +42,7 @@
         showDelete: false,
         stockName: '',
         stockId: '',
-        suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span><span class="type">{{type}}</span></div>',
+        suggestionTemplate: '<div><span class="code">{{code}}</span><span class="name">{{name}}</span></div>',
         autoCompleteUrl: Api.getServerPath('/stocks') + '?name=%QUERY',
       };
     },

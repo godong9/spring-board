@@ -7,7 +7,7 @@
         <div class="notice">이용권 구매완료!</div>
         <div class="describe">구매 이용권으로<br><span class="duration">2017.05.31 까지</span> 입장 가능하며 <br>매달 1일에 자동결제 됩니다.</div>
         <div class="purchase-btn-wrapper">
-          <button>입장하기</button>
+          <button v-on:click="submit">입장하기</button>
         </div>
       </div>
     </div>
@@ -17,13 +17,10 @@
 <script>
   export default {
     name: 'need-purchase',
-    data() {
-      return {
-        msg: 'Signup page Message',
-      };
-    },
     methods: {
-
+      submit: function submit() {
+        this.$router.push('/posts');
+      },
     },
   };
 </script>

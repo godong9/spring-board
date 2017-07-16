@@ -15,6 +15,9 @@ import java.io.IOException;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
+    // TODO: 최종 배포시 주석 해제
+//    @Value("${client.host}")
+//    private String clientHost;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -26,7 +29,7 @@ public class CorsFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
 
         response.setHeader("Access-Control-Allow-Origin", "*");
-//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); // localhost만 허용
+//        response.setHeader("Access-Control-Allow-Origin", clientHost); // localhost만 허용
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Max-Age", "3600");

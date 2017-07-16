@@ -110,7 +110,7 @@ public class PostController {
      */
     @GetMapping("/posts/{id}")
     public ServerResponse getPost(@PathVariable @Valid Long id) {
-        Post post = postService.increaseViewCountAndFindOne(id);
+        Post post = postService.increaseViewCountAndFindOne(id, userService.getCurrentUser().getId());
         return ServerResponse.success(PostResult.getPostResult(post));
     }
 

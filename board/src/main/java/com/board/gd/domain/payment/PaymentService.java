@@ -55,6 +55,12 @@ public class PaymentService {
     @Transactional(readOnly = false)
     public PaymentInfo createPaymentInfo(PaymentInfoDto paymentInfoDto) {
         User user = User.builder().id(paymentInfoDto.getUserId()).build();
+        PaymentInfo paymentInfo = paymentInfoRepository.findByUserId(user.getId());
+        if (!Objects.isNull(paymentInfo)) {
+            paymentInfo.setCardName(paymentInfoDto.getCardName());
+            paymentInfo.setEnabled(true);
+            return paymentInfoRepository.save(paymentInfo);
+        }
         return paymentInfoRepository.save(PaymentInfo.builder()
                 .cardName(paymentInfoDto.getCardName())
                 .customerUid(paymentInfoDto.getCustomerUid())
@@ -74,17 +80,19 @@ public class PaymentService {
     public void requestSubscribe(SubscribeRequestDto subscribeRequestDto) {
         PaymentInfoDto paymentInfoDto = iamportManager.postSubscribeCustomer(subscribeRequestDto);
         paymentInfoDto.setUserId(Long.parseLong(subscribeRequestDto.getCustomer_uid()));
+        slackManager.sendPaymentMessage("[자동결제 등록] userId: " + subscribeRequestDto.getCustomer_uid());
         createPaymentInfo(paymentInfoDto);
     }
 
     @Transactional(readOnly = false)
     public void requestUnsubscribe(String customerUid) {
         iamportManager.deleteUnsubscribeCustomer(customerUid);
+        slackManager.sendPaymentMessage("[자동결제 해지] userId: " + customerUid);
         deletePaymentInfo(customerUid);
     }
 
     @Transactional(readOnly = false)
-    public void requestPayment(PaymentRequestDto paymentRequestDto) {
+    public String requestPayment(PaymentRequestDto paymentRequestDto) {
         Long userId = paymentRequestDto.getUserId();
         log.info("[PaymentService] Request payment userId: {}", userId);
         slackManager.sendPaymentMessage("[결제 요청] userId: " + userId);
@@ -122,6 +130,7 @@ public class PaymentService {
             slackManager.sendPaymentMessage("[결제 갱신] userId: " + userId);
             userService.upsertPaidRole(userId);
         }
+        return paymentResultDto.getMessage();
     }
 
     @Transactional(readOnly = false)

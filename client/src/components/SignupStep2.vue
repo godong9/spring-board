@@ -78,7 +78,7 @@
         };
 
         this.$store.dispatch('signupUser', params).then(() => {
-          alert('회원정보가 변경되었습니다.');
+          alert('회원가입이 완료됐습니다.');
           this.$router.push('/need-purchase');
         }).catch(() => this.$router.push('/login'));
       },

@@ -176,10 +176,7 @@ public class UserController {
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
         User user = userService.getCurrentUser();
-        List<UserRole> userRoleList = userService.getUserRoles(user.getId());
-        UserRole paidRole = userRoleList.stream()
-                .filter(userRole -> userRole.getRole() == UserRoleType.ROLE_PAID)
-                .findFirst().orElse(null);
+        UserRole paidRole = userService.getPaidRole(user.getId());
         return ServerResponse.success(UserResult.getUserResult(user, paidRole));
     }
 

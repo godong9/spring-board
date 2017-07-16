@@ -1,6 +1,7 @@
 package com.board.gd.domain.payment;
 
 import com.board.gd.domain.user.User;
+import com.board.gd.domain.user.UserRole;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PaymentException;
 import com.board.gd.iamport.SubscribeRequestDto;
@@ -53,10 +54,20 @@ public class PaymentController {
         subscribeRequestDto.setCustomer_email(user.getEmail());
         paymentService.requestSubscribe(subscribeRequestDto);
 
-        // 등록 후 바로 결제 요청
+        // 기존 이용권 해지했다가 다시 구매하는 경우 예외 처리
+        UserRole paidRole = userService.getPaidRole(user.getId());
+        if (!Objects.isNull(paidRole)) {
+            return ServerResponse.success();
+        }
+
+        // 등록 후 결제 유저가 아닐 경우 바로 결제 요청
         PaymentRequestDto paymentRequestDto = new PaymentRequestDto();
         paymentRequestDto.setUserId(user.getId());
-        paymentService.requestPayment(paymentRequestDto);
+
+        String errorMessage = paymentService.requestPayment(paymentRequestDto);
+        if (!Objects.isNull(errorMessage)) {
+            return ServerResponse.error(errorMessage);
+        }
 
         return ServerResponse.success();
     }

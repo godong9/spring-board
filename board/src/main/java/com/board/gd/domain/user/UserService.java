@@ -87,6 +87,14 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    public UserRole getPaidRole(Long userId) {
+        List<UserRole> userRoleList = getUserRoles(userId);
+        UserRole paidRole = userRoleList.stream()
+                .filter(userRole -> userRole.getRole() == UserRoleType.ROLE_PAID)
+                .findFirst().orElse(null);
+        return paidRole;
+    }
+
     public List<Long> findRolesExpiredSoon() {
         LocalDateTime expiredCriteriaLdt = LocalDateTime.now().plusDays(1);
         Date expiredCriteriaDate = Date.from(expiredCriteriaLdt.atZone(ZoneId.systemDefault()).toInstant());
@@ -132,6 +140,9 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = false)
     public User createUserEmail(UserDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail());
+
+        // 상장사인지 검사. 상장사 메일 주소 아닐 경우 예외 발생
+        companyService.getCompaniesByEmail(userDto.getEmail());
 
         // 유저가 존재하고 인증 안되었을 경우 인증메일 재발송
         if (!Objects.isNull(user) && !user.getEnabled()) {
@@ -215,6 +226,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = false)
     public User withdraw(Long userId) {
+        clearAuthentication();
         User user = userRepository.findOne(userId);
         user.setEmail("withdraw." + user.getEmail());
         user.setWithdrawn(true);
@@ -266,6 +278,7 @@ public class UserService implements UserDetailsService {
             throw new UserException("Invalid UUID!");
         }
         user.setEnabled(true);
+        user.setAuthUUID(UUID.randomUUID().toString()); // 인증 후 새로 발급
         userRepository.save(user);
         return user;
     }
