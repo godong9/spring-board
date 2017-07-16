@@ -33,7 +33,7 @@
     <div class="line"></div>
     <div class="write-wrapper">
       <div class="comment-label">
-        <div>댓글<span class="count">5</span></div>
+        <div>댓글<span class="count">{{comments.length}}</span></div>
       </div>
       <div class="write-area">
         <textarea v-model="commentText" maxlength="300" placeholder="댓글을 입력하세요 (최대 300자)"></textarea>
@@ -42,22 +42,13 @@
       <div class="write-btn-wrapper"><button v-on:click="writeComment">등록</button></div>
     </div>
     <div class="comment-list">
-      <div class="comment-item">
+      <div class="comment-item" v-for="comment in comments">
         <div class="comment-title">
-          <span>닉네임 (회사명) </span><span>|</span> <span>17.3.14</span>
-          <a class="delete-ic"><img src="../assets/delete-ic.png"></a>
+          <span>{{comment.user.name}} ({{comment.user.company_name}}) </span><span>|</span> <span>{{ diffDateFormat(comment.created_at)}}</span>
+          <a class="delete-ic" v-if="me.id === comment.user.id" v-on:click="deleteComment(comment.id)"><img src="../assets/delete-ic.png"></a>
         </div>
         <div class="comment-content">
-          초보인 제가 생각하기엔 30000~100000 초보인 제가 생각하기엔 30000~100000
-        </div>
-        <div class="line"></div>
-      </div>
-      <div class="comment-item">
-        <div class="comment-title">
-          <span>닉네임 (회사명) </span><span>|</span> <span>17.3.14</span>
-        </div>
-        <div class="comment-content">
-          초보인 제가 생각하기엔 30000~100000 초보인 제가 생각하기엔 30000~100000
+          {{ comment.content }}
         </div>
         <div class="line"></div>
       </div>
@@ -75,7 +66,7 @@
       this.$store.dispatch('setTitle', '상세글보기');
       this.$store.dispatch('showHeaderButton');
       this.$store.dispatch('getPost', this.$route.params.id);
-      this.$store.dispatch('getComments', { id: this.$route.params.id });
+      this.$store.dispatch('getComments', { 'post.id': this.$route.params.id });
     },
     data() {
       return {
@@ -87,6 +78,7 @@
       ...mapGetters([
         'post',
         'comments',
+        'me',
       ]),
     },
     methods: {
@@ -107,6 +99,9 @@
       },
       writeComment() {
         this.$store.dispatch('writeComment', { post_id: this.post.id, content: this.commentText });
+      },
+      deleteComment(id) {
+        this.$store.dispatch('deleteComment', id);
       },
     },
   };
