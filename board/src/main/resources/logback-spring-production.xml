@@ -11,6 +11,13 @@
         </encoder>
     </appender>
 
+    <appender name="SENTRY" class="com.getsentry.raven.logback.SentryAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <dsn>https://9019e91c1c1f46f498f9c403de69915e:47b53e50c98e46e2bd6b13aa1e9b3185@sentry.io/193672</dsn>
+    </appender>
+
     <root level="WARN">
         <appender-ref ref="FILE"/>
     </root>
