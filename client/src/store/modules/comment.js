@@ -46,10 +46,20 @@ const actions = {
       .then(comments => commit(types.RECEIVE_COMMENTS, { comments }));
   },
   writeComment({ commit }, commentData) {
-    return Comment.writeComment(commentData);
+    Comment.writeComment(commentData)
+      .then(() => {
+        commit(types.INIT_COMMENTS);
+        Comment.getComments({ 'post.id': commentData.post_id })
+          .then(comments => commit(types.RECEIVE_COMMENTS, { comments }));
+      });
   },
-  deleteComment({ commit }, commentId) {
-    return Comment.deleteComment(commentId);
+  deleteComment({ commit }, deleteData) {
+    Comment.deleteComment(deleteData.commentId)
+      .then(() => {
+        commit(types.INIT_COMMENTS);
+        Comment.getComments({ 'post.id': deleteData.postId })
+          .then(comments => commit(types.RECEIVE_COMMENTS, { comments }));
+      });
   },
 };
 
