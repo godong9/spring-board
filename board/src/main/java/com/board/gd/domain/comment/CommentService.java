@@ -88,7 +88,7 @@ public class CommentService {
     public void delete(CommentDto commentDto) {
         Comment comment = commentRepository.findOne(commentDto.getId());
         if (Objects.isNull(comment)) {
-            throw new CommentException("Not exist post!");
+            throw new CommentException("Not exist comment!");
         }
         if (ObjectUtils.notEqual(commentDto.getUserId(), comment.getUser().getId())) {
             throw new CommentException("Not allowed!");
