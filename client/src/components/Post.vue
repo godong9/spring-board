@@ -25,7 +25,7 @@
         <div class="content-info">
           <a class="btn like" v-bind:class="{ active: is_liked }" v-on:click="likePost(true)"><i class="like"></i>{{ post.post_like_count }}</a>
           <a class="btn dislike"><i v-on:click="likePost(false)" class="dislike" v-bind:class="{ active: is_unliked }"></i>{{ post.post_unlike_count }}</a>
-          <a class="text-btn list">목록</a>
+          <router-link v-bind:to="'/posts'" class="text-btn list">목록</router-link>
           <a class="text-btn report" v-on:click="reportPost()">신고</a>
         </div>
       </div>
@@ -99,9 +99,10 @@
       },
       writeComment() {
         this.$store.dispatch('writeComment', { post_id: this.post.id, content: this.commentText });
+        this.commentText = '';
       },
       deleteComment(id) {
-        this.$store.dispatch('deleteComment', id);
+        this.$store.dispatch('deleteComment', { commentId: id, postId: this.post.id });
       },
       reportPost() {
         this.$store.dispatch('reportPost', this.post.id);

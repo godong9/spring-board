@@ -24,7 +24,7 @@
   export default {
     name: 'main',
     created() {
-      this.$router.replace('board/main');
+      this.$router.replace('posts');
     },
   };
 </script>
