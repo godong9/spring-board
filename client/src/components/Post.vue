@@ -23,10 +23,10 @@
           {{ post.content }}
         </div>
         <div class="content-info">
-          <a class="btn like" v-on:click="likePost(true)"><i class="like"></i>{{ post.post_like_count }}</a>
-          <a class="btn dislike"><i v-on:click="likePost(false)" class="dislike"></i>{{ post.post_unlike_count }}</a>
+          <a class="btn like" v-bind:class="{ active: is_liked }" v-on:click="likePost(true)"><i class="like"></i>{{ post.post_like_count }}</a>
+          <a class="btn dislike"><i v-on:click="likePost(false)" class="dislike" v-bind:class="{ active: is_unliked }"></i>{{ post.post_unlike_count }}</a>
           <a class="text-btn list">목록</a>
-          <a class="text-btn report">신고</a>
+          <a class="text-btn report" v-on:click="reportPost()">신고</a>
         </div>
       </div>
     </div>
@@ -103,6 +103,9 @@
       deleteComment(id) {
         this.$store.dispatch('deleteComment', id);
       },
+      reportPost() {
+        this.$store.dispatch('reportPost', this.post.id);
+      },
     },
   };
 
@@ -120,14 +123,13 @@
     text-align: center;
     display: inline-block;
     margin: 11px 0 11px 0;
-    width: 68px;
+    min-width: 68px;
     height: 22px;
     border-radius: 2px;
     background-color: #0c0e13;
   }
   .company-wrapper .company {
     display: inline-block;
-    width: 48px;
     line-height: 22px;
     font-size: 12px;
     font-weight: bold;
@@ -180,9 +182,14 @@
     text-align: center;
     font-size: 14px;
   }
-  .content-info .btn.like{
+  .content-info .btn.dislike.active,
+  .content-info .btn.like.active {
     border: solid 1px #ff595f;
     color: #ff595f;
+  }
+  .content-info .btn.like{
+    border: solid 1px #6f7782;
+    color: #6f7782;
   }
   .content-info .btn.dislike{
     margin: 0 0 0 20px;

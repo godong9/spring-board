@@ -218,7 +218,7 @@
   }
 
   .item .content .info .divider {
-    color: #2d2d2d;
+    color: #3b4251;
   }
   .item .content .count-info {
     margin: 16px 0 0 0;
@@ -241,7 +241,11 @@
     font-size: 12px;
     font-weight: bold;
     color: #ff595f;
-    width: 68px;
+    min-width: 68px;
+    max-width: 230px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     height: 22px;
     line-height: 22px;
     text-align: center;

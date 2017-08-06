@@ -1,7 +1,9 @@
 <template>
   <div class="nav">
-    <div class="blind-logo"></div>
-    <div class="title">StockBlind</div>
+    <div class="blind-logo">
+    </div>
+    <div class="blind-logo-text">
+    </div>
     <div v-if="showHeaderButton" class="button-wrapper">
       <router-link class="btn write" to="/posts/write"><i class="write"></i>글쓰기</router-link>
       <router-link class="btn" v-bind:to="'mypage/'+me.id"><i class="person"></i>My</router-link>
@@ -34,18 +36,19 @@
     background-color: #ffffff;
   }
   .blind-logo {
-    width: 23px;
-    height: 23px;
-    background-color: #d8d8d8;
+    width: 31px;
+    height: 27px;
     display: inline-block;
-    vertical-align: middle;
-    margin: 0 0 5px  10px;
+    margin: 11px 0 0 15px;
+    background: url('../assets/jutu-logo-big.png') no-repeat center;
+    background-size: contain;
   }
-  .title {
+  .blind-logo-text {
+    width: 44px;
+    height: 26px;
     display: inline-block;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 50px;
+    background: url('../assets/jutu-logo-text-small.png') no-repeat center;
+    background-size: contain;
   }
   .button-wrapper {
     float: right;

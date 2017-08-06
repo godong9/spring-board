@@ -10,7 +10,7 @@
       <input type="password" v-model="password" placeholder="비밀번호를 입력하세요">
     </div>
     <div class="login-description">
-      <router-link to="reset-password">비밀번호를 잊어버리셨나요?</router-link>
+      비밀번호를 잊어버리셨나요? <router-link to="reset-password">비밀번호 찾기</router-link>
     </div>
     <div class="confirm-login-wrapper" v-bind:class="classObject" v-on:click="login"><button>로그인</button></div>
     <div class="signup-description">
@@ -87,8 +87,10 @@
     margin:5px 25px 25px 0;
   }
   .login-description a {
-    text-decoration: none;
-    color:#636b7d;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #ff595f;
   }
   .confirm-login-wrapper{
     margin:0px 25px 20px 25px

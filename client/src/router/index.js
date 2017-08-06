@@ -41,7 +41,10 @@ export default new Router({
     {
       path: '/',
       name: 'Main',
-      component: Main,
+      components: {
+        default: Main,
+        footer: Footer,
+      },
     },
     {
       path: '/signup-terms',
@@ -151,6 +154,7 @@ export default new Router({
       components: {
         nav: TitleHeader,
         default: Post,
+        footer: Footer,
       },
     },
     {

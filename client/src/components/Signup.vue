@@ -92,6 +92,7 @@
     text-align: center;
   }
   .sign-up-assistant a {
+    font-weight: bold;
     color: #ff595f;
   }
   .confirm-email-wrapper {
