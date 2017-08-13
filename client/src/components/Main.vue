@@ -21,10 +21,20 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'main',
     created() {
-      this.$router.replace('posts');
+      this.$store.dispatch('getMe', () => {})
+        .then(() => {
+          this.$router.push('/posts');
+        });
+    },
+    computed: {
+      ...mapGetters([
+        'me',
+      ]),
     },
   };
 </script>

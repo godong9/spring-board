@@ -4,69 +4,27 @@
       닉네임이 쓴 글
     </div>
     <ul class="item-list">
-      <li class="item">
+      <router-link v-bind:to="'/post/' + item.id" class="item" v-for="item in posts" tag="li" :key="item.id">
         <div class="content">
           <div class="title">
-            이제 막차떠납니다.
+            {{ item.title }}
           </div>
           <div class="info">
-            <span class="text">닉네임(회사명)</span>
+            <span class="text">{{ item.user.name }}({{ item.user.company_name }})</span>
             <span class="divider">|</span>
-            <span class="text">18:01</span>
+            <span class="text">{{ diffDateFormat(item.created_at) }}</span>
             <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
+            <span class="text">조회 <span>{{ item.view_count }}</span></span>
           </div>
           <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
+            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">{{ item.post_like_count }}</span></div>
+            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">{{ item.post_unlike_count }}</span></div>
+            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">{{ item.comment_count }}</span></div>
+            <div class="company-info" v-if="item.stock">{{ item.stock.name }}</div>
           </div>
         </div>
         <div class="line"></div>
-      </li>
-      <li class="item">
-        <div class="content">
-          <div class="title">
-            이제 막차떠납니다.
-          </div>
-          <div class="info">
-            <span class="text">닉네임(회사명)</span>
-            <span class="divider">|</span>
-            <span class="text">18:01</span>
-            <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
-          </div>
-          <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
-          </div>
-        </div>
-        <div class="line"></div>
-      </li>
-      <li class="item">
-        <div class="content">
-          <div class="title">
-            이제 막차떠납니다.
-          </div>
-          <div class="info">
-            <span class="text">닉네임(회사명)</span>
-            <span class="divider">|</span>
-            <span class="text">18:01</span>
-            <span class="divider">|</span>
-            <span class="text">조회 <span>67</span></span>
-          </div>
-          <div class="count-info">
-            <div class="count-wrapper"><img src="../assets/like-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/dislike-ic.png"><span class="count">100</span></div>
-            <div class="count-wrapper"><img src="../assets/comment-ic.png"><span class="count">100</span></div>
-            <div class="company-info">카카오톡</div>
-          </div>
-        </div>
-        <div class="line"></div>
-      </li>
+      </router-link>
     </ul>
     <div class="more-btn">더보기</div>
     <div class="license-info">
@@ -79,8 +37,8 @@
       </span>
     </div>
     <div class="button-wrapper">
-      <div class="license-cancel" v-on:click="unsubscribe">
-        이용권해지
+      <div class="logout" v-on:click="logout">
+        로그아웃
       </div>
       <div class="withdraw" v-on:click="withdraw">
         탈퇴하기
@@ -97,23 +55,27 @@
     name: 'mypage',
     created() {
       this.$store.dispatch('setTitle', '닉네임');
+      this.$store.dispatch('initPosts');
+      this.$store.dispatch('getPosts', { 'user.id': this.$route.params });
     },
     computed: {
       ...mapGetters([
         'me',
+        'posts',
       ]),
     },
     methods: {
+      logout() {
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/main');
+          });
+      },
       unsubscribe: function unsubscribe() {
-        const self = this;
         if (!confirm('정말 해지하시겠습니까?')) {
           return;
         }
-        self.$http.delete(self.getServerPath('/payments/subscribe'), {}).then(() => {
-          this.$router.push('/mypage/' + self.me.id);
-        }, (response) => {
-          self.errorHandler(response);
-        });
+        this.$store.dispatch('subscribe');
       },
       withdraw: function withdraw() {
         this.$router.push('/mypage/' + this.me.id + '/withdraw');
@@ -219,14 +181,14 @@
     margin: 30px 16px 30px 16px;
     font-weight: bold;
   }
-  .license-cancel {
+  .logout {
     width: 160px;
     height: 50px;
     border-radius: 2px;
-    border: solid 1px #ff595f;
+    border: solid 1px #3b4251;
     font-size: 16px;
     text-align: center;
-    color: #ff595f;
+    color: #969fa6;
     line-height: 50px;
     display: inline-block;
   }

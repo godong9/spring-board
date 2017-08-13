@@ -1,34 +1,45 @@
 import Vue from 'vue';
 
 const getServerPath = path => process.env.SERVER_HOST + path;
-const errorHandler = (error) => {
-  if (error.status === 403) {
-    window.vm.$router.push('/login');
-  } else {
-    alert((error && error.body && error.body.error && error.body.error.message) || '요청에 실패 했습니다. 잠시후 다시 시도 해주세요.');
-  }
-  return Promise.reject(error);
+const defaultHandler = (error) => {
+  alert((error && error.body && error.body.error && error.body.error.message) || '요청에 실패 했습니다. 잠시후 다시 시도 해주세요.');
 };
 export default {
   getServerPath,
-  get(url, request) {
+  get(url, request, handler) {
+    const errorHandler = handler || defaultHandler;
     return Vue.http.get(getServerPath(url), request)
       .then(response => Promise.resolve(response.body))
-      .catch(error => errorHandler(error));
+      .catch((error) => {
+        errorHandler(error);
+        return Promise.reject(error);
+      });
   },
-  post(url, request) {
+  post(url, request, handler) {
+    const errorHandler = handler || defaultHandler;
     return Vue.http.post(getServerPath(url), request)
       .then(response => Promise.resolve(response.body))
-      .catch(error => errorHandler(error));
+      .catch((error) => {
+        errorHandler(error);
+        return Promise.reject(error);
+      });
   },
-  put(url, request) {
+  put(url, request, handler) {
+    const errorHandler = handler || defaultHandler;
     return Vue.http.put(getServerPath(url), request)
       .then(response => Promise.resolve(response.body))
-      .catch(error => errorHandler(error));
+      .catch((error) => {
+        errorHandler(error);
+        return Promise.reject(error);
+      });
   },
-  delete(url, request) {
+  delete(url, request, handler) {
+    const errorHandler = handler || defaultHandler;
     return Vue.http.delete(getServerPath(url), request)
       .then(response => Promise.resolve(response.body))
-      .catch(error => errorHandler(error));
+      .catch((error) => {
+        errorHandler(error);
+        return Promise.reject(error);
+      });
   },
 };

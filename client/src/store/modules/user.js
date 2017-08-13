@@ -18,18 +18,24 @@ const actions = {
   login({ commit }, data) {
     return User.login(data);
   },
+  logout() {
+    return User.logout();
+  },
   signupEmail({ commit }, data) {
     return User.signupEmail(data);
   },
   signupUser({ commit }, data) {
     return User.signupUser(data);
   },
+  withdraw() {
+    return User.withdraw();
+  },
   getCompanies({ commit }, data) {
     return company.getCompanies(data)
       .then(companies => commit(types.RECEIVE_COMPANIES, { companies }));
   },
-  getMe({ commit }) {
-    return User.getMe()
+  getMe({ commit }, handler) {
+    return User.getMe(handler)
       .then(me => commit(types.GET_ME, { me }));
   },
 };

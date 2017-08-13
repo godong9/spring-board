@@ -1,9 +1,7 @@
 <template>
   <div class="nav">
-    <div class="blind-logo">
-    </div>
-    <div class="blind-logo-text">
-    </div>
+    <div class="blind-logo"></div>
+    <div class="blind-logo-text"></div>
     <div v-if="showHeaderButton" class="button-wrapper">
       <router-link class="btn write" to="/posts/write"><i class="write"></i>글쓰기</router-link>
       <router-link class="btn" v-bind:to="'mypage/'+me.id"><i class="person"></i>My</router-link>
@@ -17,7 +15,15 @@
   export default {
     name: 'nav',
     created() {
-      this.$store.dispatch('getMe');
+      const errorHandler = (error) => {
+        if (error.status === 403) {
+          this.$router.push('/login');
+        } else {
+          alert((error && error.body && error.body.error && error.body.error.message) || '요청에 실패 했습니다. 잠시후 다시 시도 해주세요.');
+        }
+      };
+
+      this.$store.dispatch('getMe', errorHandler);
     },
     computed: {
       ...mapGetters([

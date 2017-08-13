@@ -22,11 +22,10 @@
         if (!confirm('정말 탈퇴하시겠습니까?')) {
           return;
         }
-        self.$http.post(self.getServerPath('/users/withdraw'), {}).then(() => {
-          self.$router.push('/');
-        }, (response) => {
-          self.errorHandler(response);
-        });
+        this.$store.dispatch('withdraw')
+          .then(() => {
+            self.$router.push('/');
+          });
       },
     },
   };
