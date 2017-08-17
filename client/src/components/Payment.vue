@@ -114,25 +114,19 @@
     },
     methods: {
       subscribe: function subscribe() {
-        const self = this;
-        if (!self.classObject.active) {
+        if (!this.classObject.active) {
           return;
         }
-
-        /*eslint-disable */
         const params = {
-          card_number: self.card1 + "-" + self.card2 + "-" + self.card3 + "-" + self.card4,
-          expiry: self.year + "-" + self.month,
-          birth: self.birth,
-          pwd_2digit: self.pwd2Digit
+          card_number: `${this.card1}-${this.card2}-${this.card3}-${this.card4}`,
+          expiry: `${this.year}-${this.month}`,
+          birth: this.birth,
+          pwd_2digit: this.pwd2Digit,
         };
 
-        self.$http.post(self.getServerPath('/payments/subscribe'), params).then(() => {
-          self.$router.push('complete-purchase');
-        }, (response) => {
-          self.errorHandler(response);
+        this.$store.dispatch('subscribe', params).then(() => {
+          this.$router.push('complete-purchase');
         });
-        /*eslint-enable */
       },
     },
   };

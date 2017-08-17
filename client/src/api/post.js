@@ -16,4 +16,7 @@ export default {
   unlikePost(id) {
     return Api.post(`/posts/${id}/like`, { unlike: true });
   },
+  report(id, postData) {
+    return Api.post(`/posts/${id}/report`, postData);
+  },
 };

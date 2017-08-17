@@ -68,7 +68,7 @@
       logout() {
         this.$store.dispatch('logout')
           .then(() => {
-            this.$router.push('/main');
+            this.$router.push('/');
           });
       },
       unsubscribe: function unsubscribe() {

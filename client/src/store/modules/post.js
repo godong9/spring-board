@@ -48,6 +48,9 @@ const actions = {
     return Post.unlikePost(postId)
       .then(() => commit(types.UNLIKE_POST));
   },
+  report({ commit }, postId, postData) {
+    return Post.report(postId, postData);
+  },
 };
 
 // mutations

@@ -29,12 +29,10 @@
         this.$router.push('/payment-terms');
       },
       logout: function logout() {
-        const self = this;
-        this.$http.post(self.getServerPath('/users/logout'), {}).then(() => {
-          self.$router.push('/');
-        }, (response) => {
-          self.errorHandler(response);
-        });
+        this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/');
+          });
       },
     },
   };

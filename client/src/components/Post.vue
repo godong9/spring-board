@@ -105,7 +105,7 @@
         this.$store.dispatch('deleteComment', { commentId: id, postId: this.post.id });
       },
       reportPost() {
-        this.$store.dispatch('reportPost', this.post.id);
+        this.$store.dispatch('report', this.post.id, { content: 'TODO:신고하기' });
       },
     },
   };
