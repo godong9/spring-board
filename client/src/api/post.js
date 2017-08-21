@@ -2,6 +2,7 @@ import Api from '../utils/api';
 
 export default {
   getPosts(data) {
+    console.log('data', data);
     return Api.get('/posts', { params: data });
   },
   writePost(data) {

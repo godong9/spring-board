@@ -56,7 +56,7 @@
     created() {
       this.$store.dispatch('setTitle', '닉네임');
       this.$store.dispatch('initPosts');
-      this.$store.dispatch('getPosts', { 'user.id': this.$route.params });
+      this.$store.dispatch('getPosts', { 'user.id': this.$route.params.id });
     },
     computed: {
       ...mapGetters([
