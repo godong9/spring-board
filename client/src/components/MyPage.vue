@@ -27,15 +27,15 @@
       </router-link>
     </ul>
     <div class="more-btn">더보기</div>
-    <div class="license-info">
-      <span class="label">
-        이용권 (정기결제)
-      </span>
-      <br>
-      <span class="duration">
-        ~ {{ formatDate(me.paid_expired_at) }}까지
-      </span>
-    </div>
+    <!--<div class="license-info">-->
+      <!--<span class="label">-->
+        <!--이용권 (정기결제)-->
+      <!--</span>-->
+      <!--<br>-->
+      <!--<span class="duration">-->
+        <!--~ {{ formatDate(me.paid_expired_at) }}까지-->
+      <!--</span>-->
+    <!--</div>-->
     <div class="button-wrapper">
       <div class="logout" v-on:click="logout">
         로그아웃
