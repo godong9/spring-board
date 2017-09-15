@@ -41,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/stocks/**").hasRole("USER")
                 .antMatchers("/users/**").hasRole("USER")
                 .antMatchers("/payments/**").hasRole("USER")
-                .antMatchers("/boards/**").hasRole("PAID")
-                .antMatchers("/posts/**").hasRole("PAID")
-                .antMatchers("/comments/**").hasRole("PAID");
+                .antMatchers("/boards/**").hasRole("USER")
+                .antMatchers("/posts/**").hasRole("USER")
+                .antMatchers("/comments/**").hasRole("USER");
     }
 }
