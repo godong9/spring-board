@@ -310,11 +310,11 @@ public class UserService implements UserDetailsService {
         StringBuilder sb = new StringBuilder();
 
         if (type.equals("auth")) {
-            mailMessage.setSubject("[스탁블라인드] 인증 메일입니다.");
+            mailMessage.setSubject("[Jutu] 인증 메일입니다.");
             sb.append("링크를 클릭하면 인증이 완료됩니다!\n");
         }
         if (type.equals("password")) {
-            mailMessage.setSubject("[스탁블라인드] 비밀번호 초기화 메일입니다.");
+            mailMessage.setSubject("[Jutu] 비밀번호 초기화 메일입니다.");
             sb.append("링크를 클릭하면 비밀번호 재설정 페이지로 이동합니다!\n");
         }
         sb.append(serverHost);
