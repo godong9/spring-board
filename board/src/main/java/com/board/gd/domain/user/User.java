@@ -1,5 +1,6 @@
 package com.board.gd.domain.user;
 
+import com.board.gd.domain.company.Company;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -46,8 +47,15 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "withdrawn")
+    private Boolean withdrawn;
+
     @Column(name = "auth_uuid")
     private String authUUID;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)

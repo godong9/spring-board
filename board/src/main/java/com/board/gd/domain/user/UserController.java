@@ -1,8 +1,6 @@
 package com.board.gd.domain.user;
 
-import com.board.gd.domain.user.form.LoginForm;
-import com.board.gd.domain.user.form.SignupForm;
-import com.board.gd.domain.user.form.UpdateForm;
+import com.board.gd.domain.user.form.*;
 import com.board.gd.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -12,8 +10,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by gd.godong9 on 2017. 4. 3.
@@ -33,6 +33,9 @@ public class UserController {
 
     @Value("${spring.session.key}")
     private String sessionKey;
+
+    @Value("${client.host}")
+    private String clientHost;
 
     /**
      * @api {post} /users/signup Request User signup
@@ -54,6 +57,46 @@ public class UserController {
     public ServerResponse userSignup(@RequestBody @Valid SignupForm signupForm) {
         User user = userService.create(modelMapper.map(signupForm, UserDto.class));
         return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
+
+    /**
+     * @api {post} /users/email Request User email
+     * @apiName AuthUserEmail
+     * @apiGroup User
+     *
+     * @apiParam {String} email 이메일
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/users/email")
+    public ServerResponse postUserEmail(@RequestBody @Valid EmailForm emailForm) {
+        userService.createUserEmail(modelMapper.map(emailForm, UserDto.class));
+        return ServerResponse.success();
+    }
+
+    /**
+     * @api {post} /users/find/password Request User find password
+     * @apiName FindUserPassword
+     * @apiGroup User
+     *
+     * @apiParam {String} email 이메일
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/users/find/password")
+    public ServerResponse postUserFindPassword(@RequestBody @Valid EmailForm emailForm) {
+        userService.updateAuthInfo(modelMapper.map(emailForm, UserDto.class));
+        return ServerResponse.success();
     }
 
     /**
@@ -103,6 +146,20 @@ public class UserController {
     }
 
     /**
+     * @api {post} /users/withdraw Request User withdraw
+     * @apiName WithdrawUser
+     * @apiGroup User
+     *
+     * @apiSuccess {Number} status 상태코드
+     */
+    @PostMapping("/users/withdraw")
+    public ServerResponse userWithdraw() {
+        User user = userService.getCurrentUser();
+        userService.withdraw(user.getId());
+        return ServerResponse.success();
+    }
+
+    /**
      * @api {get} /users/me Request User me data
      * @apiName GetMeUser
      * @apiGroup User
@@ -111,12 +168,16 @@ public class UserController {
      * @apiSuccess {Object} data 유저 객체
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
+     * @apiSuccess {String} data.company_name 회사 이름
+     * @apiSuccess {Boolean} data.is_paid 결제 여부
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/users/me")
     public ServerResponse getUserMe() {
-        return ServerResponse.success(userService.getCurrentUser());
+        User user = userService.getCurrentUser();
+        UserRole paidRole = userService.getPaidRole(user.getId());
+        return ServerResponse.success(UserResult.getUserResult(user, paidRole));
     }
 
     /**
@@ -124,6 +185,7 @@ public class UserController {
      * @apiName GetAuthUser
      * @apiGroup User
      *
+     * @apiParam {String} type 이동할 페이지 구분 (auth: 인증, password: 패스워드 초기화)
      * @apiParam {String} uuid 인증을 위한 UUID
      *
      * @apiSuccess {Number} status 상태코드
@@ -131,14 +193,37 @@ public class UserController {
      * @apiSuccess {Number} data.id 유저 id
      * @apiSuccess {String} data.name 유저 이름
      *
-     * @apiSampleRequest http://localhost:9000/users/111/auth?uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
+     * @apiSampleRequest http://localhost:9700/users/111/auth?type=auth&uuid=3051a8d7-aea7-1801-e0bf-bc539dd60cf3
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/users/{id}/auth")
-    public ServerResponse getUserAuth(@PathVariable @Valid Long id, @RequestParam("uuid") String uuid) {
-        userService.authUser(id, uuid);
-        return ServerResponse.success();
+    public RedirectView getUserAuth(@PathVariable @Valid Long id, @RequestParam("type") String type, @RequestParam("uuid") String uuid) {
+        RedirectView redirectView = new RedirectView();
+        User user = userService.authUser(id, uuid);
+        StringBuilder sb = new StringBuilder();
+        sb.append(clientHost);
+        switch(type) {
+            case "auth":
+                sb.append("/signup-step2?id=");
+                sb.append(user.getId());
+                sb.append("&email=");
+                sb.append(user.getEmail());
+                sb.append("&uuid=");
+                sb.append(uuid);
+                break;
+            case "password":
+                sb.append("/change-password?id=");
+                sb.append(user.getId());
+                sb.append("&uuid=");
+                sb.append(uuid);
+                break;
+            default:
+                sb.append("error");
+                break;
+        }
+        redirectView.setUrl(sb.toString());
+        return redirectView;
     }
 
     /**
@@ -148,6 +233,7 @@ public class UserController {
      *
      * @apiParam {String} [name] 유저 이름
      * @apiParam {String} [password] 패스워드
+     * @apiParam {Number} [company_id] 회사 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 유저 객체
@@ -157,10 +243,55 @@ public class UserController {
      * @apiUse BadRequestError
      */
     @PutMapping("/users")
-    public ServerResponse PutUser(@RequestBody @Valid UpdateForm updateForm) {
+    public ServerResponse putUser(@RequestBody @Valid UpdateForm updateForm) {
         updateForm.setId(userService.getCurrentUser().getId());
         User user = userService.update(modelMapper.map(updateForm, UserDto.class));
-        return ServerResponse.success(user);
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
     }
 
+    /**
+     * @api {put} /users/data Request User data update
+     * @apiName UpdateUserData
+     * @apiGroup User
+     *
+     * @apiParam {Number} id 유저 id
+     * @apiParam {String} uuid 인증을 위한 uuid
+     * @apiParam {String} name 유저 이름
+     * @apiParam {String} password 패스워드
+     * @apiParam {Number} company_id 회사 ID
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PutMapping("/users/data")
+    public ServerResponse putUserData(@RequestBody @Valid UpdateDataForm updateDataForm) {
+        User user = userService.updateUserData(modelMapper.map(updateDataForm, UserDto.class));
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
+
+    /**
+     * @api {put} /users/password Request User password update
+     * @apiName UpdateUserPassword
+     * @apiGroup User
+     *
+     * @apiParam {Number} id 유저 id
+     * @apiParam {String} uuid 인증을 위한 uuid
+     * @apiParam {String} password 패스워드
+     *
+     * @apiSuccess {Number} status 상태코드
+     * @apiSuccess {Object} data 유저 객체
+     * @apiSuccess {Number} data.id 유저 id
+     * @apiSuccess {String} data.name 유저 이름
+     *
+     * @apiUse BadRequestError
+     */
+    @PutMapping("/users/password")
+    public ServerResponse putUserPassword(@RequestBody @Valid UpdateForm updateForm) {
+        User user = userService.updateUserData(modelMapper.map(updateForm, UserDto.class));
+        return ServerResponse.success(modelMapper.map(user, UserResult.class));
+    }
 }

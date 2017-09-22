@@ -4,7 +4,8 @@ package com.board.gd.domain.post;
  * Created by gd.godong9 on 2017. 4. 4.
  */
 
-import com.board.gd.domain.board.Board;
+import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockService;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.exception.PostException;
@@ -16,11 +17,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Transactional(readOnly = true)
 @Service
 public class PostService {
+    private static final int MAX_TITLE_SIZE = 50;
+    private static final int MAX_CONTENT_SIZE = 10000;
+
     @Autowired
     private PostRepository postRepository;
 
@@ -28,7 +33,13 @@ public class PostService {
     private PostLikeRepository postLikeRepository;
 
     @Autowired
+    private PostReportRepository postReportRepository;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private StockService stockService;
 
     public Post findOne(Long id) {
         return findOne(id, null);
@@ -39,16 +50,33 @@ public class PostService {
         if (Objects.isNull(userId)) {
             return post;
         }
-        PostLike postLike = postLikeRepository.findByPostIdAndUserId(id, userId);
-        if (!Objects.isNull(postLike)) {
-            post.setIsLiked(true);
+        List<PostLike> postLikes = postLikeRepository.findByPostIdAndUserId(id, userId);
+        if (postLikes.size() == 0) {
+            return post;
         }
+        postLikes.forEach(postLike -> {
+                    if (postLike.getUnlike()) {
+                        post.setIsUnliked(true);
+                    } else {
+                        post.setIsLiked(true);
+                    }
+                });
         return post;
     }
 
     @Transactional(readOnly = false)
     public Post increaseViewCountAndFindOne(Long id) {
-        Post post = postRepository.findOne(id);
+        Post post = findOne(id);
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+        post.setViewCount(post.getViewCount() + 1);
+        return postRepository.save(post);
+    }
+
+    @Transactional(readOnly = false)
+    public Post increaseViewCountAndFindOne(Long id, Long userId) {
+        Post post = findOne(id, userId);
         if (Objects.isNull(post)) {
             throw new PostException("Not exist post!");
         }
@@ -68,6 +96,18 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional(readOnly = false)
+    public void increasePostUnlikeCount(Post post) {
+        post.setPostUnlikeCount(post.getPostUnlikeCount() + 1);
+        postRepository.save(post);
+    }
+
+    @Transactional(readOnly = false)
+    public void blockPost(Post post) {
+        post.setBlocked(true);
+        postRepository.save(post);
+    }
+
     public Page<Post> findAll(Predicate predicate, Pageable pageable) {
         if (Objects.isNull(pageable)) {
             throw new PostException("Invalid pageable!");
@@ -82,11 +122,13 @@ public class PostService {
             throw new PostException("Not exist user!");
         }
 
-        Board board = null;
-        if (!Objects.isNull(postDto.getBoardId())) {
-            board = Board.builder()
-                    .id(postDto.getBoardId()) // 게시판 ID는 validation 체크 제외
-                    .build();
+        Stock stock = null;
+        if (!Objects.isNull(postDto.getStockId())) {
+            stock = stockService.findOne(postDto.getStockId());
+        }
+
+        if (postDto.getTitle().length() > MAX_TITLE_SIZE || postDto.getContent().length() > MAX_CONTENT_SIZE) {
+            throw new PostException("Text size too long!");
         }
 
         return postRepository.save(Post.builder()
@@ -96,9 +138,72 @@ public class PostService {
                 .viewCount(0L)
                 .commentCount(0L)
                 .postLikeCount(0L)
+                .postUnlikeCount(0L)
+                .blocked(false)
                 .user(user)
-                .board(board)
+                .stock(stock)
                 .build());
+    }
+
+    @Transactional(readOnly = false)
+    public PostLike createPostLike(PostLikeDto postLikeDto) {
+        User user = userService.findOne(postLikeDto.getUserId());
+        if (Objects.isNull(user)) {
+            throw new PostException("Not exist user!");
+        }
+
+        Post post = findOne(postLikeDto.getPostId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+
+        PostLike postLike = postLikeRepository.findByPostIdAndUserIdAndUnlike(post.getId(), user.getId(), postLikeDto.getUnlike());
+        if (!Objects.isNull(postLike)) {
+            throw new PostException("Already post like or unlike!");
+        }
+
+        if (postLikeDto.getUnlike()) {
+            increasePostUnlikeCount(post);
+        } else {
+            increasePostLikeCount(post);
+        }
+
+        return postLikeRepository.save(PostLike.builder()
+                .post(post)
+                .user(user)
+                .unlike(postLikeDto.getUnlike())
+                .build());
+    }
+
+    @Transactional(readOnly = false)
+    public PostReport createPostReport(PostReportDto postReportDto) {
+        User user = userService.findOne(postReportDto.getUserId());
+        if (Objects.isNull(user)) {
+            throw new PostException("Not exist user!");
+        }
+
+        Post post = findOne(postReportDto.getPostId());
+        if (Objects.isNull(post)) {
+            throw new PostException("Not exist post!");
+        }
+
+        PostReport postReport = postReportRepository.findByPostIdAndUserId(post.getId(), user.getId());
+        if (!Objects.isNull(postReport)) {
+            throw new PostException("Already post report!");
+        }
+
+        postReport = postReportRepository.save(PostReport.builder()
+                .post(post)
+                .user(user)
+                .content(postReportDto.getContent())
+                .build());
+
+        int reportCount = postReportRepository.countByPostId(post.getId());
+        if (reportCount > 2) { // 신고횟수가 3이상이면 블락 처리
+            blockPost(post);
+        }
+
+        return postReport;
     }
 
     @Transactional(readOnly = false)
@@ -119,10 +224,8 @@ public class PostService {
             post.setContent(postDto.getContent());
         }
 
-        if (!Objects.isNull(postDto.getBoardId())) {
-            post.setBoard(Board.builder()
-                    .id(postDto.getBoardId()) // 게시판 ID는 validation 체크 제외
-                    .build());
+        if (!Objects.isNull(postDto.getStockId())) {
+            post.setStock(stockService.findOne(postDto.getStockId()));
         }
 
         return postRepository.save(post);

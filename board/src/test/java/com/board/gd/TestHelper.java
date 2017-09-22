@@ -1,12 +1,10 @@
 package com.board.gd;
 
-import com.board.gd.domain.board.Board;
-import com.board.gd.domain.board.BoardDto;
 import com.board.gd.domain.comment.Comment;
 import com.board.gd.domain.comment.CommentDto;
-import com.board.gd.domain.post.Post;
-import com.board.gd.domain.post.PostDto;
-import com.board.gd.domain.post.PostType;
+import com.board.gd.domain.post.*;
+import com.board.gd.domain.stock.Stock;
+import com.board.gd.domain.stock.StockDto;
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserDto;
 
@@ -28,6 +26,14 @@ public class TestHelper {
                 .build();
     }
 
+    public static Stock getTestStock(Long id) {
+        return Stock.builder()
+                .id(id)
+                .name("testname" + id.toString())
+                .code("00000" + id.toString())
+                .build();
+    }
+
     public static UserDto getTestUserDto(String name) {
         UserDto userDto = new UserDto();
         userDto.setName(name);
@@ -40,13 +46,13 @@ public class TestHelper {
         return getTestPostDto(userId, null);
     }
 
-    public static PostDto getTestPostDto(Long userId, Long boardId) {
+    public static PostDto getTestPostDto(Long userId, Long stockId) {
         PostDto postDto = new PostDto();
         postDto.setType(PostType.FREE);
         postDto.setTitle("test title");
         postDto.setContent("test content");
         postDto.setUserId(userId);
-        postDto.setBoardId(boardId);
+        postDto.setStockId(stockId);
         return postDto;
     }
 
@@ -58,11 +64,19 @@ public class TestHelper {
         return commentDto;
     }
 
-    public static BoardDto getTestBoardDto(String code) {
-        BoardDto boardDto = new BoardDto();
-        boardDto.setTitle("test" + code);
-        boardDto.setCode(code);
-        return boardDto;
+    public static StockDto getTestStockDto(String name, String code) {
+        StockDto stockDto = new StockDto();
+        stockDto.setName(name);
+        stockDto.setCode(code);
+        return stockDto;
+    }
+
+    public static PostLikeDto getTestPostLikeDto(Long userId, Long postId, Boolean unlike) {
+        PostLikeDto postLikeDto = new PostLikeDto();
+        postLikeDto.setUserId(userId);
+        postLikeDto.setPostId(postId);
+        postLikeDto.setUnlike(unlike);
+        return postLikeDto;
     }
 
     public static void assertUserDtoAndUser(UserDto userDto, User user) {
@@ -96,11 +110,11 @@ public class TestHelper {
         assertNotNull(comment.getUpdatedAt());
     }
 
-    public static void assertBoardDtoAndBoard(BoardDto boardDto, Board board) {
-        assertEquals(boardDto.getTitle(), board.getTitle());
-        assertEquals(boardDto.getCode(), board.getCode());
-        assertNotNull(board.getId());
-        assertNotNull(board.getCreatedAt());
-        assertNotNull(board.getUpdatedAt());
+    public static void assertPostLikeDtoAndPostLike(PostLikeDto postLikeDto, PostLike postLike) {
+        assertEquals(postLikeDto.getPostId(), postLike.getPost().getId());
+        assertEquals(postLikeDto.getUserId(), postLike.getUser().getId());
+        assertNotNull(postLike.getId());
+        assertNotNull(postLike.getCreatedAt());
+        assertNotNull(postLike.getUpdatedAt());
     }
 }

@@ -42,8 +42,8 @@ public class CommentController {
      * @apiParam {Number} [size=20] 가져올 개수
      * @apiParam {Number} [page=0] 가져올 페이지
      * @apiParam {String="created_at,desc", "updated_at,desc"} [sort=created_at,desc] 정렬 조건
-     * @apiParam {Number} [post.id] 가져올 포스트 id
-     * @apiParam {Number} [user.id] 가져올 유저 id
+     * @apiParam {Number} [post.id] post.id 가져올 포스트 id
+     * @apiParam {Number} [user.id] user.id 가져올 유저 id
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Number} count 댓글 개수
@@ -55,6 +55,7 @@ public class CommentController {
      * @apiSuccess {Object} data.user 댓글 유저
      * @apiSuccess {Number} data.user.id 댓글 유저 id
      * @apiSuccess {String} data.user.name 댓글 유저 이름
+     * @apiSuccess {String} data.user.company_name 댓글 유저 회사명
      *
      * @apiSampleRequest http://localhost:9000/comments?page=1&size=10&sort=updatedAt,desc
      *
@@ -76,7 +77,7 @@ public class CommentController {
      * @apiName CreateComment
      * @apiGroup Comment
      *
-     * @apiParam {Number} postId 제목
+     * @apiParam {Number} post_id 포스트 id
      * @apiParam {String} content 내용
      *
      * @apiSuccess {Number} status 상태코드

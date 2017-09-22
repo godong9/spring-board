@@ -2,14 +2,13 @@ package com.board.gd.auth;
 
 import com.board.gd.domain.user.User;
 import com.board.gd.domain.user.UserService;
+import com.board.gd.exception.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,11 +32,16 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
         User user = userService.findByEmail(email);
 
         if (Objects.isNull(user)) {
-            throw new UsernameNotFoundException("Bad username");
+            throw new UserException("존재하지 않는 유저입니다.");
         }
 
         if (!userService.matchPassword(password, user.getPassword())) {
-            throw new BadCredentialsException("Bad credentials");
+            throw new UserException("비밀번호가 잘못되었습니다.");
+        }
+
+        if (!user.getEnabled()) {
+            userService.sendAuthEmail(user, "auth");
+            throw new UserException("인증되지 않은 유저입니다. 인증 메일을 확인해주세요.");
         }
 
         List<GrantedAuthority> roles = userService.findRolesByUserId(user.getId());

@@ -1,68 +1,94 @@
 <template>
   <div class="main">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <div>
-      {{ bodyData }}
+    <div class="logo">
+      <div>
+        <img class="logo-big" src="../assets/jutu-logo-big.png">
+      </div>
+      <div>
+        <img class="logo-big-text" src="../assets/jutu-text-logo-big.png">
+      </div>
     </div>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <div class="title">
+      상장사 직원들의 익명 주식 투자 커뮤니티
+    </div>
+    <div class="signup-wrapper">
+      <div class="signup"><router-link to="signup" tag="button">회사 이메일로 가입하기</router-link></div>
+      <div class="login-description">
+        기존 사용자이신가요? <router-link to="login" class="login-text">로그인</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'main',
-    data() {
-      return {
-        msg: 'Welcome to Main Page',
-        bodyData: null,
-      };
-    },
     created() {
-      // 참고: https://github.com/pagekit/vue-resource/blob/develop/docs/recipes.md
-      this.$http.get('https://httpbin.org/get').then((response) => {
-        // get body data
-        this.bodyData = response.body;
-        console.log(this.bodyData);
-      }, (response) => {
-        this.errorData = response.body;
-        // error callback
-      });
+      this.$store.dispatch('getMe', () => {})
+        .then(() => {
+          this.$router.push('/posts');
+        });
+    },
+    computed: {
+      ...mapGetters([
+        'me',
+      ]),
     },
   };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
+  .logo {
+    margin: 79px 0 0 0;
+    width: 100%;
+    text-align: center;
   }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
+  .logo .logo-big {
+    width: 56px;
   }
-
-  li {
+  .logo .logo-big-text {
+    width: 112px;
+    object-fit: contain;
+  }
+  .title {
+    text-align: center;
+    font-size: 16px;
+    color: #ededed;
+  }
+  .signup-wrapper {
+    background: url("../assets/bg-wave.png") center no-repeat;
+    background-size: contain;
+    height: 276px;
+    width: 100%;
+    margin: 85px 0 0 0;
     display: inline-block;
-    margin: 0 10px;
+  }
+  .signup{
+    margin:135px 25px 20px 25px
+  }
+  .signup button{
+    font-size: 16px;
+    color: #f0f2f5;
+    border: none;
+    width:100%;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #ff595f;
+    font-weight: bold;
+  }
+  .login-description {
+    text-align: center;
+    font-size: 14px;
+    color: #c2c7cb;
   }
 
-  a {
-    color: #42b983;
+  .login-description .login-text {
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #ff595f;
   }
 </style>

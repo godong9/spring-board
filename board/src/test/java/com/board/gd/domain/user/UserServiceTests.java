@@ -119,7 +119,7 @@ public class UserServiceTests {
         // then
         assertEquals(1, roles.size());
         roles
-                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
+                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.ROLE_USER.name()));
     }
 
     @Test
@@ -128,14 +128,14 @@ public class UserServiceTests {
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
         Date expiredDate = new Date(new Date().getTime() - (1000 * 60 * 60));
-        userService.createUserRole(testUser, UserRoleType.ADMIN, expiredDate);
+        userService.createUserRole(testUser, UserRoleType.ROLE_ADMIN, expiredDate);
         // when
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
         // then
         assertEquals(1, roles.size());
         roles
-                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.USER.name()));
+                .forEach(grantedAuthority -> assertEquals(grantedAuthority.toString(), UserRoleType.ROLE_USER.name()));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class UserServiceTests {
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
         Date notExpiredDate = new Date(new Date().getTime() + (1000 * 60 * 60));
-        userService.createUserRole(testUser, UserRoleType.ADMIN, notExpiredDate);
+        userService.createUserRole(testUser, UserRoleType.ROLE_ADMIN, notExpiredDate);
         // when
         List<GrantedAuthority> roles = userService.findRolesByUserId(testUser.getId());
 
@@ -158,7 +158,7 @@ public class UserServiceTests {
         User testUser = null;
 
         // when
-        userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
+        userService.createUserRole(testUser, UserRoleType.ROLE_USER, DEFAULT_ROLE_EXPIRED_DATE);
     }
 
     @Test
@@ -167,10 +167,69 @@ public class UserServiceTests {
         UserDto testUserDto = TestHelper.getTestUserDto("test1");
         User testUser = userService.create(testUserDto);
         // when
-        UserRole userRole = userService.createUserRole(testUser, UserRoleType.USER, DEFAULT_ROLE_EXPIRED_DATE);
+        UserRole userRole = userService.createUserRole(testUser, UserRoleType.ROLE_USER, DEFAULT_ROLE_EXPIRED_DATE);
 
         // then
-        assertEquals(UserRoleType.USER, userRole.getRole());
+        assertEquals(UserRoleType.ROLE_USER, userRole.getRole());
+    }
+
+    @Test
+    public void success_createUserEmail() {
+        // given
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail("test@test.com");
+        // when
+        User testUser = userService.createUserEmail(testUserDto);
+
+        // then
+        assertEquals(testUser.getEmail(), "test@test.com");
+        assertEquals(testUser.getName(), "");
+        assertEquals(testUser.getPassword(), null);
+    }
+
+    @Test
+    public void success_updateAuthInfo() {
+        // given
+        UserDto userDto = TestHelper.getTestUserDto("test1");
+        User beforeTestUser = userService.create(userDto);
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail(beforeTestUser.getEmail());
+        String beforeEmail = beforeTestUser.getEmail();
+        String beforeUUID = beforeTestUser.getAuthUUID();
+
+        // when
+        User afterTestUser = userService.updateAuthInfo(testUserDto);
+
+        // then
+        assertEquals(afterTestUser.getEmail(), beforeEmail);
+        assertNotEquals(afterTestUser.getAuthUUID(), beforeUUID);
+    }
+
+
+    @Test
+    public void success_createUserEmail_when_already_exist_user() {
+        // given
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail("test@test.com");
+        User beforeTestUser = userService.createUserEmail(testUserDto);
+
+        // when
+        User afterTestUser = userService.createUserEmail(testUserDto);
+
+        // then
+        assertEquals(afterTestUser.getId(), beforeTestUser.getId());
+    }
+
+    @Test(expected = UserException.class)
+    public void fail_createUserEmail_when_already_auth() {
+        // given
+        UserDto testUserDto = new UserDto();
+        testUserDto.setEmail("test@test.com");
+        User testUser = userService.createUserEmail(testUserDto);
+        userService.authUser(testUser.getId(), testUser.getAuthUUID());
+
+        // when
+        userService.createUserEmail(testUserDto);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -326,7 +385,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void success_sendSignupEmail() {
+    public void success_sendAuthEmail() {
         // given
         User testUser = User.builder()
                 .id(1L)
@@ -336,6 +395,6 @@ public class UserServiceTests {
                 .build();
 
         // when
-        userService.sendSignupEmail(testUser);
+        userService.sendAuthEmail(testUser, "auth");
     }
 }

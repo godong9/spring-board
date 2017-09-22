@@ -1,14 +1,17 @@
-
 <template>
-  <div class="signup">
-    <h1>{{ msg }}</h1>
-    <h2>Signup Page</h2>
-    <div>
-      <input type="text" v-model="name" placeholder="Name">
-      <input type="text" v-model="email" placeholder="Email">
-      <input type="password" v-model="password" placeholder="Password">
-      <button v-on:click="clickSignup">Signup</button>
+  <div class="sign-up">
+    <div class="title-label">
+      회원가입
     </div>
+    <div class="input-sign-up-wrapper">
+      <input type="text" v-model="email" placeholder="회사 이메일을 입력">
+    </div>
+    <div class="sign-up-description">
+      상장사 직원임을 판별 할 수있는 최소한의 정보로 <br>회사 이메일을 활용합니다.
+    </div>
+    <div class="confirm-email-wrapper" v-bind:class="classObject" v-on:click="signup"><button>인증 메일 받기</button></div>
+    <div class="sign-up-assistant">회원가입이 안되시나요? <a href="mailto:jutu.kr@gmail.com">문의하기</a></div>
+
   </div>
 </template>
 
@@ -17,21 +20,31 @@
     name: 'signup',
     data() {
       return {
-        msg: 'Signup page Message',
-        name: '',
         email: '',
-        password: '',
       };
     },
+    computed: {
+      classObject() {
+        return {
+          active: this.email,
+        };
+      },
+    },
     methods: {
-      clickSignup: function clickSignup() {
-        this.$http.post('http://localhost:9000/users/signup', { name: this.name, email: this.email, password: this.password }).then((response) => {
-          // get body data
-          this.bodyData = response.body;
-          console.log(this.bodyData);
-        }, (response) => {
-          this.errorData = response.body;
-          // error callback
+      signup() {
+        const self = this;
+        if (!self.classObject.active) {
+          return;
+        }
+
+        if (!self.validateEmail(self.email)) {
+          alert('올바른 이메일을 입력해주세요.');
+          return;
+        }
+        this.$store.dispatch('signupEmail', {
+          email: this.email,
+        }).then(() => {
+          this.$router.push(`email-success?email=${self.email}`);
         });
       },
     },
@@ -40,9 +53,59 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-    font-size: 50px;
+  .sign-up {
+
+  }
+  .title-label {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #f0f2f5;
+    margin: 53px 0 30px 0;
   }
 
+  .input-sign-up-wrapper {
+    margin: 11px 0 0 0;
+    padding:0 25px 0 25px;
+  }
+
+  .input-sign-up-wrapper input {
+    font-size:14px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 50px;
+    border-radius: 4px;
+    background-color: rgba(31, 37, 51, 0.88);
+    border: solid 1px #3b4251;
+    padding: 0 14px 0 14px;
+    color:#f6f6f6;
+  }
+  .sign-up-description {
+    font-size: 14px;
+    color: #636b7d;
+    margin: 10px 0 0 0;
+    padding: 0 25px 0 25px;
+  }
+  .sign-up-assistant {
+    font-size: 14px;
+    color: #c2c7cb;
+    text-align: center;
+  }
+  .sign-up-assistant a {
+    font-weight: bold;
+    color: #ff595f;
+  }
+  .confirm-email-wrapper {
+    margin:85px 25px 20px 25px
+  }
+  .confirm-email-wrapper button{
+    font-size: 16px;
+    color: #f0f2f5;
+    border: none;
+    width:100%;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #ff595f;
+    font-weight: bold;
+  }
 </style>

@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - "./board.sql:/docker-entrypoint-initdb.d/board.sql"
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "stock-blind-test"
+    ports:
+      - "3306:3306"
+  web:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    extra_hosts:
+      - "client:10.211.248.127"
+    ports:
+      - "80:80"
+

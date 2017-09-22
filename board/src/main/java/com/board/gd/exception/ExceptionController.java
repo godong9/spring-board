@@ -3,10 +3,14 @@ package com.board.gd.exception;
 import com.board.gd.response.ServerResponse;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.stream.Collectors;
 
 /**
  * @apiDefine BadRequestError
@@ -53,6 +57,21 @@ public class ExceptionController {
     public ResponseEntity<ServerResponse> handleCommentException(CommentException exception) throws Exception {
         String message = exception.getMessage();
         log.warn("[CommentException] {}\n{}", message, Throwables.getStackTraceAsString(exception));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<ServerResponse> handlePaymentException(PaymentException exception) throws Exception {
+        String message = exception.getMessage();
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ServerResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) throws Exception {
+        String message = exception.getBindingResult().getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("\n"));
+        log.warn("[MethodArgumentNotValidException] : {}\n{}", message, Throwables.getStackTraceAsString(exception));
         return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(ServerResponse.error(message));
     }
 }

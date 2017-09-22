@@ -1,8 +1,6 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.post.form.CreateForm;
-import com.board.gd.domain.post.form.DeleteForm;
-import com.board.gd.domain.post.form.UpdateForm;
+import com.board.gd.domain.post.form.*;
 import com.board.gd.domain.user.UserService;
 import com.board.gd.response.ServerResponse;
 import com.querydsl.core.types.Predicate;
@@ -42,8 +40,8 @@ public class PostController {
      * @apiParam {Number} [size=20] 가져올 개수
      * @apiParam {Number} [page=0] 가져올 페이지
      * @apiParam {String="created_at,desc", "updated_at,desc"} [sort=created_at,desc] 정렬 조건
-     * @apiParam {Number} [user.id] 가져올 유저 id
-     * @apiParam {Number} [board.id] 가져올 게시판 id
+     * @apiParam {String} [user.id] user.id 가져올 유저 id
+     * @apiParam {String} [stock.id] stock.id 가져올 종목 id
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Number} count 포스트 개수
@@ -54,13 +52,20 @@ public class PostController {
      * @apiSuccess {Number} data.view_count 포스트 조회수
      * @apiSuccess {Number} data.comment_count 포스트 댓글수
      * @apiSuccess {Number} data.post_like_count 포스트 좋아요수
+     * @apiSuccess {Number} data.post_unlike_count 포스트 싫어요수
+     * @apiSuccess {Boolean} data.blocked 포스트 숨김 처리 여부 (true: 신고된 글. 숨김 처리)
      * @apiSuccess {Date} data.created_at 포스트 생성일
      * @apiSuccess {Date} data.updated_at 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     * @apiSuccess {String} data.user.company_name 포스트 유저 회사명
+     * @apiSuccess {Object} [data.stock] 포스트 종목
+     * @apiSuccess {Number} [data.stock.id] 포스트 종목 id
+     * @apiSuccess {String} [data.stock.name] 포스트 종목 이름
+     * @apiSuccess {String} [data.stock.code] 포스트 종목 코드
      *
-     * @apiSampleRequest http://localhost:9000/posts?page=1&size=10&sort=updatedAt,desc
+     * @apiSampleRequest http://localhost:9700/posts?page=1&size=10&sort=updatedAt,desc
      *
      * @apiUse BadRequestError
      */
@@ -88,17 +93,24 @@ public class PostController {
      * @apiSuccess {Number} data.view_count 포스트 조회수
      * @apiSuccess {Number} data.comment_count 포스트 댓글수
      * @apiSuccess {Number} data.post_like_count 포스트 좋아요수
+     * @apiSuccess {Number} data.post_unlike_count 포스트 싫어요수
+     * @apiSuccess {Boolean} data.is_liked 포스트 좋아요 여부
+     * @apiSuccess {Boolean} data.is_unliked 포스트 싫어요 여부
      * @apiSuccess {Date} data.created_at 포스트 생성일
      * @apiSuccess {Date} data.updated_at 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
      * @apiSuccess {Number} data.user.id 포스트 유저 id
      * @apiSuccess {String} data.user.name 포스트 유저 이름
+     * @apiSuccess {Object} [data.stock] 포스트 종목
+     * @apiSuccess {Number} [data.stock.id] 포스트 종목 id
+     * @apiSuccess {String} [data.stock.name] 포스트 종목 이름
+     * @apiSuccess {String} [data.stock.code] 포스트 종목 코드
      *
      * @apiUse BadRequestError
      */
     @GetMapping("/posts/{id}")
     public ServerResponse getPost(@PathVariable @Valid Long id) {
-        Post post = postService.increaseViewCountAndFindOne(id);
+        Post post = postService.increaseViewCountAndFindOne(id, userService.getCurrentUser().getId());
         return ServerResponse.success(PostResult.getPostResult(post));
     }
 
@@ -109,7 +121,7 @@ public class PostController {
      *
      * @apiParam {String} title 제목
      * @apiParam {String} content 내용
-     * @apiParam {Number} [boardId] 글 작성할 게시판 ID
+     * @apiParam {Number} [stock_id] 글 작성할 종목 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체
@@ -119,6 +131,7 @@ public class PostController {
      * @apiSuccess {Number} data.view_count 포스트 조회수
      * @apiSuccess {Number} data.comment_count 포스트 댓글수
      * @apiSuccess {Number} data.post_like_count 포스트 좋아요수
+     * @apiSuccess {Number} data.post_unlike_count 포스트 싫어요수
      * @apiSuccess {Date} data.created_at 포스트 생성일
      * @apiSuccess {Date} data.updated_at 포스트 수정일
      * @apiSuccess {Object} data.user 포스트 유저
@@ -135,13 +148,51 @@ public class PostController {
     }
 
     /**
+     * @api {post} /posts/:id/like Request Post like
+     * @apiName LikePost
+     * @apiGroup Post
+     *
+     * @apiParam {Boolean} unlike 좋아요: false, 싫어요: true
+     *
+     * @apiSuccess {Number} status 상태코드
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/posts/{id}/like")
+    public ServerResponse postPostLike(@PathVariable @Valid Long id, @RequestBody @Valid PostLikeForm postLikeForm) {
+        postLikeForm.setPostId(id);
+        postLikeForm.setUserId(userService.getCurrentUser().getId());
+        postService.createPostLike(modelMapper.map(postLikeForm, PostLikeDto.class));
+        return ServerResponse.success();
+    }
+
+    /**
+     * @api {post} /posts/:id/report Request Post report
+     * @apiName ReportPost
+     * @apiGroup Post
+     *
+     * @apiParam {String} content 신고 내용
+     *
+     * @apiSuccess {Number} status 상태코드
+     *
+     * @apiUse BadRequestError
+     */
+    @PostMapping("/posts/{id}/report")
+    public ServerResponse postPostReport(@PathVariable @Valid Long id, @RequestBody @Valid PostReportForm postReportForm) {
+        postReportForm.setPostId(id);
+        postReportForm.setUserId(userService.getCurrentUser().getId());
+        postService.createPostReport(modelMapper.map(postReportForm, PostReportDto.class));
+        return ServerResponse.success();
+    }
+
+    /**
      * @api {put} /posts/:id Request Post update
      * @apiName UpdatePost
      * @apiGroup Post
      *
      * @apiParam {String} [title] 제목
      * @apiParam {String} [content] 내용
-     * @apiParam {Number} [boardId] 글 작성할 게시판 ID
+     * @apiParam {Number} [stock_id] 글 작성할 게시판 ID
      *
      * @apiSuccess {Number} status 상태코드
      * @apiSuccess {Object} data 포스트 객체

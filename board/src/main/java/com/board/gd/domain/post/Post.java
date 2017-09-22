@@ -1,6 +1,6 @@
 package com.board.gd.domain.post;
 
-import com.board.gd.domain.board.Board;
+import com.board.gd.domain.stock.Stock;
 import com.board.gd.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -48,13 +48,19 @@ public class Post {
     @Column(name = "post_like_count")
     private Long postLikeCount;
 
+    @Column(name = "post_unlike_count")
+    private Long postUnlikeCount;
+
+    @Column(name = "blocked")
+    private Boolean blocked;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "board_id", nullable = true)
-    private Board board;
+    @JoinColumn(name = "stock_id", nullable = true)
+    private Stock stock;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -68,4 +74,7 @@ public class Post {
 
     @Transient
     private Boolean isLiked = false;
+
+    @Transient
+    private Boolean isUnliked = false;
 }
